@@ -15,7 +15,7 @@ import {QuestionMultiplechoice} from './questionmc';
 })
 export class UserComponent implements OnInit{
 
-  points: number;
+  points: number = null;
   gameRunning: boolean;
   sessionID: string;
   progressCount: number;
@@ -121,7 +121,10 @@ export class UserComponent implements OnInit{
          * If server transmitted valid points the userscore gets initialized
          */
         if(!isNullOrUndefined(data['points'])){
-          this.points = data['points'];
+          if(isNullOrUndefined(this.points)) {
+            this.points = data['points'];
+            console.log('got points from server', data['points']);
+          }
         }
 
         /**

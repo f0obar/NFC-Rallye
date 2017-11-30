@@ -1,10 +1,31 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
+import {animate, keyframes, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-user-progress',
   templateUrl: './progress.component.html',
-  styleUrls: ['./progress.component.css']
+  styleUrls: ['./progress.component.css'],
+  animations: [
+    trigger('popOverState', [
+      state('show', style({
+        opacity: 0,
+        transform: 'translateY(-100%) translateX(0px)',
+      })),
+      state('hide',   style({
+        opacity: 0,
+        transform: 'translateY(-100%) translateX(0px)',
+      })),
+      transition('show => hide', animate('0ms ease-out')),
+      transition('hide => show',
+        animate(1000, keyframes([
+          style({opacity: 0, transform: 'translateY(-100%) translateX(25px)', offset: 0}),
+          style({opacity: 1, transform: 'translateY(0) translateX(25px)', offset: 0.3}),
+          style({opacity: 1, transform: 'translateY(0) translateX(25px)', offset: 0.7}),
+          style({opacity: 0, transform: 'translateY(0) translateX(0px)', offset: 1})
+        ])))
+    ])
+  ]
 })
 export class UserProgressComponent implements OnInit {
 
@@ -15,9 +36,15 @@ export class UserProgressComponent implements OnInit {
   @Input() points: number;
 
   parsedTime: string;
+  showPointAnimation = false;
+  pointIncrease: number;
 
   constructor() {
     this.points = 0;
+  }
+
+  get stateName() {
+    return this.showPointAnimation ? 'show' : 'hide';
   }
 
   ngOnInit() {
@@ -27,6 +54,7 @@ export class UserProgressComponent implements OnInit {
     if(this.endDate === null) {
       IntervalObservable.create(1000).subscribe(n => this.parsedTime = this.parseTime());
     }
+    this.showPointAnimation = false;
   }
 
   /**
@@ -34,8 +62,13 @@ export class UserProgressComponent implements OnInit {
    * @param {number} amount
    */
   increasePoints(amount: number): void{
-    this.points += amount;
-    console.log('Points got increased by',amount);
+    this.pointIncrease = amount;
+    this.showPointAnimation = true;
+    setTimeout(()=>{
+      this.showPointAnimation = false;
+      this.points += amount;
+      console.log('Points got increased by',amount);
+    }, 1000);
   }
 
   /**
