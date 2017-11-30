@@ -15,7 +15,7 @@ import {QuestionMultiplechoice} from './questionmc';
 })
 export class UserComponent implements OnInit{
 
-  points: number = null;
+  points = 0;
   gameRunning: boolean;
   sessionID: string;
   progressCount: number;
@@ -36,6 +36,9 @@ export class UserComponent implements OnInit{
     this.sessionID = '';
     this.progressDone = 0;
     this.progressCount = 1;
+    if(!isNullOrUndefined(localStorage.getItem('points'))) {
+      this.points = Number(localStorage.getItem('points'));
+    }
 
     if(localStorage.getItem('sessionID') !== null){
       this.sessionID = localStorage.getItem('sessionID');
@@ -57,10 +60,6 @@ export class UserComponent implements OnInit{
     } else {
       return false;
     }
-  }
-
-  increasePoints(amount: number) {
-    this.progress.increasePoints(amount);
   }
 
   handleScannedTag() {
@@ -121,10 +120,7 @@ export class UserComponent implements OnInit{
          * If server transmitted valid points the userscore gets initialized
          */
         if(!isNullOrUndefined(data['points'])){
-          if(isNullOrUndefined(this.points)) {
-            this.points = data['points'];
-            console.log('got points from server', data['points']);
-          }
+          this.setPoints(data['points']);
         }
 
         /**
@@ -178,6 +174,22 @@ export class UserComponent implements OnInit{
         }
       }
     );
+  }
+
+  /**
+   * points get stored in local storage to check if a new animations needs to be played,
+   * when the page refreshes.
+   * @param {number} amount
+   */
+  setPoints(amount: number){
+    console.log('setPoints called');
+    if (amount < this.points){
+      this.points = amount;
+    }
+    if (amount > Number(localStorage.getItem('points'))){
+      this.progress.increasePoints(amount - this.points);
+    }
+    localStorage.setItem('points',''+amount);
   }
 
   /**
