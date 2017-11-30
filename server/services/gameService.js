@@ -1,5 +1,6 @@
 const Config = require('../models/config');
 const PlaySession = require('../models/playSession');
+const Tag = require('../models/tag');
 
 async function getGameState(sessionID) {
   const session = await PlaySession.findById(sessionID)
@@ -37,6 +38,30 @@ async function getGameState(sessionID) {
   }
 }
 
+async function checkLocation(sessionID, tagID) {
+  const session = await PlaySession.findById(sessionID);
+  if (!session) {
+    throw new Error('Invalid session');
+  }
+  session.lastUpdated = new Date();
+
+  if (session.task !== 'findLocation') {
+    throw new Error('Not the time to solve riddles.');
+  }
+  const tag = await Tag.findOne({'tagID': tagID});
+  if (!tag) {
+    throw new Error('Invalid tag');
+  }
+  if (session.location.equals(tag.location)) {
+    // Correct location, lets update the session then
+    session.task = 'solveRiddle';
+    await session.save();
+    return {correctLocation: true};
+  } else {
+    return {correctLocation: false};
+  }
+}
+
 function filterObject(obj, keys) {
   const filteredObj = {};
   keys.forEach(function (key) {
@@ -46,5 +71,6 @@ function filterObject(obj, keys) {
 }
 
 module.exports = {
-  getGameState
+  getGameState,
+  checkLocation
 };

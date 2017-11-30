@@ -363,50 +363,14 @@ function updateHeat(location, change, callback) {
 }
 
 // Will check if the location is right. if it is, will allow to solve riddle
-function checkLocation(req, res, next) {
+async function checkLocation(req, res, next) {
   const sessionID = req.params.sessionid;
   const tagID = req.body.tagID;
-  PlaySession.findById(sessionID, function (err, session) {
-    if (err) {
-      res.send(err);
-      return;
-    }
-    if (!session) {
-      res.send(new Error('Invalid session'));
-      return;
-    }
-    session.lastUpdated = new Date();
-    if (session.task !== 'findLocation') {
-      res.send(new Error('Not the time to solve riddles.'));
-      return;
-    }
-
-    Tag.findOne({'tagID': tagID}, function (err, tag) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-      if (!session || !tag) {
-        res.send({'ERROR': 'Please check your parameters :/'});
-        return;
-      }
-      if (session.location.equals(tag.location)) {
-
-        // Correct locaction, lets update the session then
-        session.task = 'solveRiddle';
-        session.save(function (err) {
-          if (err) {
-            res.send(err);
-            return;
-          }
-
-          res.send({correctLocation: true});
-        });
-      } else {
-        res.send({correctLocation: false});
-      }
-    });
-  });
+  try {
+    res.send(await gameService.checkLocation(sessionID, tagID));
+  } catch (err) {
+    res.send(err);
+  }
 }
 
 //cleanup and stuff
