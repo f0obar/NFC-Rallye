@@ -324,10 +324,10 @@ function solveRiddle(req, res, next) {
             solvedRiddle.points = _getPoints(riddle, solvedRiddle);
             session.points += solvedRiddle.points;
             advanceState(session, res, function () {
-              res.send({correctAnswer: true, points: solvedRiddle.points});
+              res.send({correctAnswer: true, points: session.points});
             });
           } else {
-            res.send({correctAnswer: false, points: solvedRiddle.points});
+            res.send({correctAnswer: false, points: session.points});
           }
         }
         _saveSolvedRiddles(solvedRiddle, res);
