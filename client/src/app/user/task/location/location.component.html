@@ -2,10 +2,8 @@
   <mat-card>
     <mat-card-title class="centered"><h2 class="mat-h2">Finde folgenden Ort:</h2></mat-card-title>
     <div id="image">
-    <span>
     <img mat-card-image class="img-responsive"
          src="data:{{location?.getImage().filetype}};base64,{{location?.getImage().base64}}">
-  </span>
     </div>
     <mat-card-content class="centered"><h1 class="mat-h1">{{location?.getName()}}</h1></mat-card-content>
   </mat-card>
