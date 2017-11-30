@@ -1,7 +1,7 @@
 #progress {
-  text-align: center;
   width: 100%;
 }
+
 
 #header {
   position: fixed;
@@ -11,8 +11,33 @@
   width: 100%;
 }
 
-.spacer {
-  flex: 1 1 auto;
+.container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+.item {
+  align-items: center;
+  display: flex;
+}
 
+@media only screen and (min-width: 768px) {
+  /* For tablets: */
+
+
+  .container {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  /* For desktop: */
+
+
+  .container {
+    padding-left: 96px;
+    padding-right: 96px;
+  }
+}

@@ -49,6 +49,8 @@ import {UserLocationCameraPopupComponent} from './user/task/location/location-ca
 import {UserQuizHintPopupComponent} from './user/task/quiz/quiz-hint-popup/quiz-hint-popup.component';
 import {MatCardModule} from '@angular/material/card';
 import {HttpModule} from '@angular/http';
+import {MatIconModule} from '@angular/material/icon';
+
 
 const routes: Routes = [
   {
@@ -175,7 +177,8 @@ const routes: Routes = [
     MatPaginatorModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatListModule
+    MatListModule,
+    MatIconModule
   ],
   entryComponents: [
     SharedSimpleDialogComponent,

@@ -1,14 +1,14 @@
 <div id="header">
   <mat-toolbar>
     <form id="progress">
-      <section class="progress-header">
-        <i class="material-icons">gmi_home</i>{{progressDone}}/{{progressCount}}
-        <span class="spacer"></span>
-        <i class="material-icons">gmi_star</i>{{points}}
-        <span class="spacer"></span>
-        <i class="material-icons">gmi_access_time</i>{{parsedTime}}
-        <mat-progress-bar id="bar" [value]="(progressDone / progressCount)*100"></mat-progress-bar>
-      </section>
+      <div class="container">
+        <div class="item"><i class="material-icons">home</i>{{progressDone}}/{{progressCount}}</div>
+        <div class="item"><i class="material-icons">star</i>{{points}}</div>
+        <div class="item"><i class="material-icons">access_time</i>{{parsedTime}}</div>
+      </div>
+      <mat-progress-bar id="bar" [value]="(progressDone / progressCount)*100"></mat-progress-bar>
     </form>
   </mat-toolbar>
 </div>
+
+
