@@ -366,8 +366,9 @@ function updateHeat(location, change, callback) {
 async function checkLocation(req, res, next) {
   const sessionID = req.params.sessionid;
   const tagID = req.body.tagID;
+  const skip = req.body.skip;
   try {
-    res.send(await gameService.checkLocation(sessionID, tagID));
+    res.send(await gameService.checkLocation(sessionID, tagID, skip));
   } catch (err) {
     res.send(err);
   }

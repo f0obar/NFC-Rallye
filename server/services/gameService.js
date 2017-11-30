@@ -40,7 +40,7 @@ async function getGameState(sessionID) {
   }
 }
 
-async function checkLocation(sessionID, tagID) {
+async function checkLocation(sessionID, tagID, skip) {
   const session = await PlaySession.findById(sessionID);
   if (!session) {
     throw new Error('Invalid session');
@@ -50,18 +50,26 @@ async function checkLocation(sessionID, tagID) {
   if (session.task !== 'findLocation') {
     throw new Error('Not the time to solve riddles.');
   }
-  const tag = await Tag.findOne({'tagID': tagID});
-  if (!tag) {
-    throw new Error('Invalid tag');
-  }
-  if (session.location.equals(tag.location)) {
-    // Correct location, lets update the session then
+
+  if (!skip) {
+    const tag = await Tag.findOne({'tagID': tagID});
+    if (!tag) {
+      throw new Error('Invalid tag');
+    }
+    if (session.location.equals(tag.location)) {
+      // Correct location, lets update the session then
+      session.task = 'solveRiddle';
+      session.points += LOCATION_VISIT_POINTS;
+      await session.save();
+      return {correctLocation: true, points: session.points};
+    } else {
+      return {correctLocation: false, points: session.points};
+    }
+  } else {
+    // Skipped location.
     session.task = 'solveRiddle';
-    session.points += LOCATION_VISIT_POINTS;
     await session.save();
     return {correctLocation: true, points: session.points};
-  } else {
-    return {correctLocation: false, points: session.points};
   }
 }
 
