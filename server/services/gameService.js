@@ -23,7 +23,8 @@ async function getGameState(sessionID) {
     dates: {
       startDate: session.startDate,
       endDate: session.endDate
-    }
+    },
+    points: session.points
   };
 
   if (session.task === 'won') {
@@ -33,7 +34,6 @@ async function getGameState(sessionID) {
     if (!session.location) {
       throw new Error("location not found, session is invalid");
     }
-    result.points = session.points;
     result.location = filterObject(session.location, ['name', 'image']);
     result.riddle = filterObject(session.riddle, ['name', 'choices', 'description', 'hint', 'image']);
     return result;
