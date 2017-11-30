@@ -7,33 +7,24 @@ const ConfigSchema = new mongoose.Schema({
 
 const Model = mongoose.model('Config', ConfigSchema);
 
-function set(key, value, callback) {
+async function set(key, value) {
   console.log('invoking setter');
-  Model.findOneAndUpdate({_id: key}, {value: value}, {upsert: true}, function (err) {
-    callback(err);
-  });
+  await Model.findOneAndUpdate({_id: key}, {value: value}, {upsert: true}).exec();
 }
 
-function get(key, callback) {
+async function get(key) {
   console.log('invoking getter');
-  Model.findById(key, function (err, res) {
-    console.log(key, err, res);
-    callback(err, (res ? res.value : ""));
-  })
+  const result = await Model.findById(key).exec();
+  return result ? result.value : ""
 }
 
-function getLoginData(callback) {
-  Model.find({_id: {$in: ['username', 'password']}}, function (err, data) {
-    if (err) {
-      callback(err, data);
-      return;
-    }
-    var dataObject = {};
-    data.forEach(function (field) {
-      dataObject[field._id] = field.value;
-    });
-    callback(err, dataObject);
+async function getLoginData() {
+  const result = await Model.find({_id: {$in: ['username', 'password']}}).exec();
+  const dataObject = {};
+  result.forEach(function (field) {
+    dataObject[field._id] = field.value;
   });
+  return dataObject;
 }
 
 module.exports = {

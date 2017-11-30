@@ -24,13 +24,8 @@ async function getGameState(sessionID) {
   };
 
   if (session.task === 'won') {
-    Config.get('winText', function (err, winText) {
-      if (err) {
-        throw err;
-      }
-      result.winText = winText;
-      return result;
-    })
+    result.winText = await Config.get('winText');
+    return result;
   } else {
     if (!session.location) {
       throw new Error("location not found, session is invalid");

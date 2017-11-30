@@ -1,97 +1,70 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var bcrypt = require('bcryptjs');
-var crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
-var Config = require('../models/config');
+const Config = require('../models/config');
 
 router.post('/', createSession);
 router.delete('/:token', deleteSession);
 
-function createSession(req, res, next) {
-    console.log(req.body);
-    var username = req.body.username;
-    var password = req.body.password;
+async function createSession(req, res, next) {
+  console.log(req.body);
+  const username = req.body.username;
+  const password = req.body.password;
 
-    if (!username || !password) {
+  if (!username || !password) {
+    res.status(401);
+    res.end();
+    return;
+  }
+
+  try {
+    const data = await Config.getLoginData();
+    console.log(data);
+    if (!data.username && !data.password) {
+      // empty db, lets fill it
+      await Config.set('username', 'admin');
+      await Config.set('password', '$2a$10$PmhJPXOKQFCZqvMZKF0Y2.oT1HKg4oSWIEJn4Z4fhqN81xrZVEgDO');
+      await createSession(req, res, next);
+    } else {
+      if (data.username === username && bcrypt.compareSync(password, data.password)) {
+        const token = crypto.randomBytes(64).toString('hex');
+        await Config.set('token', token);
+        res.send({token: token});
+      } else {
         res.status(401);
-        res.end();
-        return;
+        res.send('Wrong username/password combination');
+      }
     }
-
-    Config.getLoginData(function (err, data) {
-        if (err) {
-            res.status(500);
-            res.send(err);
-            return;
-        }
-        console.log(data);
-        if (!data.username && !data.password) {
-            // empty db, lets fill it
-            Config.set('username', 'admin', function (err) {
-                if (err) {
-                    res.status(500);
-                    res.send(err);
-                    return;
-                }
-                Config.set('password',bcrypt.hashSync('passwort1337'), function (err) {
-                    if (err) {
-                        res.status(500);
-                        res.send(err);
-                        return;
-                    }
-                    //now everything is set, lets just restart
-                    createSession(req, res, next);
-                });
-            });
-        }else{
-            if (data.username == username && bcrypt.compareSync(password, data.password)) {
-                var token = crypto.randomBytes(64).toString('hex');
-                Config.set('token', token, function(err){
-                    if (err) {
-                        res.status(500);
-                        res.send(err);
-                        return;
-                    }
-                    res.send({token: token});
-                });
-            }else{
-                res.status(401);
-                res.send('Wrong username/password combination');
-            }
-        }
-    });
+  } catch (err) {
+    res.status(500);
+    res.send(err);
+  }
 }
 
-function deleteSession(req, res, next) {
-    var token = req.params.token;
-    if(!token){
-        res.status(401);
-        res.send('wrong token');
-        return;
+async function deleteSession(req, res, next) {
+  const token = req.params.token;
+  if (!token) {
+    res.status(401);
+    res.send('wrong token');
+    return;
+  }
+
+  try {
+    const dbToken = await Config.get('token');
+    if (token === dbToken) {
+      await Config.set('token', '');
+      res.send('SUCCESS');
+    } else {
+      res.status(403);
+      res.send('wrong token');
     }
-    Config.get('token', function(err, dbToken){
-        if (err) {
-            res.status(500);
-            res.send(err);
-            return;
-        }
-        if(token == dbToken){
-            Config.set('token', '', function(err){
-                if (err) {
-                    res.status(500);
-                    res.send(err);
-                    return;
-                }
-                res.send('SUCCESS');
-            });
-        }else{
-            res.status(403);
-            res.send('wrong token');
-            return;
-        }
-    })
+  } catch (err) {
+    res.status(500);
+    res.send(err);
+  }
 }
 
 module.exports = router;
