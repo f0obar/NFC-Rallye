@@ -96,22 +96,34 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
    * skips the current question
    */
   skipQuestion(): void {
-    console.log('skipping question');
-    this.http.post('/api/game/sessions/' + this.sessionID + '/riddle', {skip: 'true'}).subscribe(
-      (data) => {
-          this.snackBar.open('Quiz übersprungen!', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-          if (!isNullOrUndefined(data['points'])) {
-            this.quizPointEmitter.emit(data['points']);
-          }
-          this.quizOutput.emit();
-      },
-      (err) => {
-        console.log('skip error', err);
+    const d = this.dialog.open(SharedSimpleDialogComponent, {
+      data: {
+        title: 'Quiz Überspringen',
+        message: 'Möchtest du wirklich dieses Quiz überspringen? Du kannst nicht zurück kehren, und erhälst keine Punkte.',
+        button1: 'Überspringen',
+        button2: 'Abbrechen'
       }
-    );
+    });
+    d.afterClosed().subscribe(result => {
+      if (result === 'b1') {
+        console.log('skipping question');
+        this.http.post('/api/game/sessions/' + this.sessionID + '/riddle', {skip: 'true'}).subscribe(
+          (data) => {
+            this.snackBar.open('Quiz übersprungen!', null, {
+              duration: 2000,
+              horizontalPosition: 'center'
+            });
+            if (!isNullOrUndefined(data['points'])) {
+              this.quizPointEmitter.emit(data['points']);
+            }
+            this.quizOutput.emit();
+          },
+          (err) => {
+            console.log('skip error', err);
+          }
+        );
+      }
+    });
   }
 
   /**
