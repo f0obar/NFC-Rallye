@@ -17,12 +17,7 @@
       </ng-container>
 
       <div class="form-group" *ngFor="let entry of question.choices">
-        <!--
-        <mat-form-field>
-          <input matInput placeholder="Antwort" type="text" #answer ng-model="riddle.answer">
-        </mat-form-field>
-        -->
-        <button mat-raised-button color="primary" (click)="solveQuestion(entry)">{{entry}}</button>
+        <button mat-button color="secondary" (click)="solveQuestion(entry)">{{entry}}</button>
       </div>
     </mat-card>
   </div>
