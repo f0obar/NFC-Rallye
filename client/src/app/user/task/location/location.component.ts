@@ -6,6 +6,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {CameraConfig} from './camera-config';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-user-location',
@@ -14,6 +15,7 @@ import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-
 })
 export class UserLocationComponent implements OnInit {
   @Input() location: Location;
+  @Input() sessionID: string;
 
   backCamera: boolean = null;
   frontCamera: boolean = null;
@@ -24,7 +26,10 @@ export class UserLocationComponent implements OnInit {
   @Output()
   locationLogout: EventEmitter<any> = new EventEmitter();
 
-  constructor(public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
+  @Output()
+  locationSkip: EventEmitter<any> = new EventEmitter();
+
+  constructor(private http: HttpClient,public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
   }
 
   ngOnInit() {
@@ -112,6 +117,39 @@ export class UserLocationComponent implements OnInit {
 
   checkFrontCamera(): Promise<MediaStream> {
     return navigator.mediaDevices.getUserMedia(CameraConfig.frontConstraints);
+  }
+
+  /**
+   * skips the current location
+   */
+  skip(): void {
+    const d = this.dialog.open(SharedSimpleDialogComponent, {
+      data: {
+        title: 'Ort Überspringen',
+        message: 'Möchtest du wirklich diesen Ort überspringen? Du kannst nicht zurück kehren, und erhälst keine Punkte.',
+        button1: 'Überspringen',
+        button2: 'Abbrechen'
+      }
+    });
+    d.afterClosed().subscribe(result => {
+      if (result === 'b1') {
+        console.log('skipping location');
+        this.http.post('/api/game/sessions/' + this.sessionID + '/location', {skip: 'true'}).subscribe(
+          (data) => {
+            this.snackBar.open('Ort übersprungen!', null, {
+              duration: 2000,
+              horizontalPosition: 'center'
+            });
+            this.locationSkip.emit();
+          },
+          (err) => {
+            this.snackBar.open('Es ist ein Fehler aufgetreten.', null, {
+              duration: 2000,
+              horizontalPosition: 'center'
+            });
+          });
+      }
+    });
   }
 
   openMap() {

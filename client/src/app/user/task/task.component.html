@@ -7,5 +7,5 @@
   </ng-container>
 </div>
 <div *ngIf="isUnsolvedQuiz() == false">
-    <app-user-location [location]="location" (locationLogout)="loggedOut()"></app-user-location>
+    <app-user-location [location]="location" [sessionID]="sessionID" (locationLogout)="loggedOut()" (locationSkip)="solvedQuiz()"></app-user-location>
 </div>
