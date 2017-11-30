@@ -2,6 +2,8 @@ const Config = require('../models/config');
 const PlaySession = require('../models/playSession');
 const Tag = require('../models/tag');
 
+const LOCATION_VISIT_POINTS = 5;
+
 async function getGameState(sessionID) {
   const session = await PlaySession.findById(sessionID)
     .populate('location')
@@ -55,10 +57,11 @@ async function checkLocation(sessionID, tagID) {
   if (session.location.equals(tag.location)) {
     // Correct location, lets update the session then
     session.task = 'solveRiddle';
+    session.points += LOCATION_VISIT_POINTS;
     await session.save();
-    return {correctLocation: true};
+    return {correctLocation: true, points: session.points};
   } else {
-    return {correctLocation: false};
+    return {correctLocation: false, points: session.points};
   }
 }
 

@@ -322,7 +322,7 @@ function solveRiddle(req, res, next) {
 
           if (riddle.answer.toLowerCase().trim() === answer.toLowerCase().trim()) {
             solvedRiddle.points = _getPoints(riddle, solvedRiddle);
-            session.points = session.points + solvedRiddle.points;
+            session.points += solvedRiddle.points;
             advanceState(session, res, function () {
               res.send({correctAnswer: true, points: solvedRiddle.points});
             });
