@@ -4,7 +4,7 @@
       <div class="container">
         <div class="item home"><i class="material-icons">home</i>{{progressDone}}/{{progressCount}}</div>
         <div>
-          <div class="item star" id="child_1"><i class="material-icons" >star</i>{{points}}</div>
+          <div class="item star" id="child_1"><i class="material-icons" >star</i><p id="points">{{points}}</p></div>
           <div id="child_2" [@popOverState]="stateName">+{{pointIncrease}}</div>
         </div>
         <div class="item time"><i class="material-icons">access_time</i>{{parsedTime}}</div>

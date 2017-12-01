@@ -22,6 +22,7 @@
         "styles.css"
       ],
       "scripts": [
+        "assets/js/countup/countUp.js",
         "assets/js/qrcode/grid.js",
         "assets/js/qrcode/version.js",
         "assets/js/qrcode/detector.js",

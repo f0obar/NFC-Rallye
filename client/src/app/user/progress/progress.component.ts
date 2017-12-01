@@ -2,6 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 import {animate, keyframes, state, style, transition, trigger} from '@angular/animations';
 
+declare const CountUp: any;
+
 @Component({
   selector: 'app-user-progress',
   templateUrl: './progress.component.html',
@@ -10,23 +12,24 @@ import {animate, keyframes, state, style, transition, trigger} from '@angular/an
     trigger('popOverState', [
       state('show', style({
         opacity: 0,
-        transform: 'translateY(-100%) translateX(0px)',
+        transform: 'translateX(0px)',
       })),
       state('hide',   style({
         opacity: 0,
-        transform: 'translateY(-100%) translateX(0px)',
+        transform: 'translateX(0px)',
       })),
       transition('show => hide', animate('0ms ease-out')),
       transition('hide => show',
         animate(1000, keyframes([
-          style({opacity: 0, transform: 'translateY(-100%) translateX(25px)', offset: 0}),
-          style({opacity: 1, transform: 'translateY(0) translateX(25px)', offset: 0.3}),
-          style({opacity: 1, transform: 'translateY(0) translateX(25px)', offset: 0.7}),
-          style({opacity: 0, transform: 'translateY(0) translateX(0px)', offset: 1})
+          style({opacity: 0, transform: 'translateX(0)', offset: 0}),
+          style({opacity: 1, transform: 'translateX(25px)', offset: 0.3}),
+          style({opacity: 1, transform: 'translateX(25px)', offset: 0.7}),
+          style({opacity: 0, transform: 'translateX(0px)', offset: 1})
         ])))
     ])
   ]
 })
+
 export class UserProgressComponent implements OnInit {
 
   @Input() progressCount: number;
@@ -38,6 +41,8 @@ export class UserProgressComponent implements OnInit {
   parsedTime: string;
   showPointAnimation = false;
   pointIncrease: number;
+
+
 
   constructor() {
     this.points = 0;
@@ -64,6 +69,14 @@ export class UserProgressComponent implements OnInit {
   increasePoints(amount: number): void{
     this.pointIncrease = amount;
     this.showPointAnimation = true;
+
+    const numAnim = new CountUp('points', this.points, this.points+amount);
+    if (!numAnim.error) {
+      numAnim.start();
+    } else {
+      console.error(numAnim.error);
+    }
+
     setTimeout(()=>{
       this.showPointAnimation = false;
       this.points += amount;
