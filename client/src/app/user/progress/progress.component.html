@@ -2,10 +2,12 @@
   <mat-toolbar>
     <form id="progress">
       <div class="container">
-        <div class="item"><i class="material-icons">home</i>{{progressDone}}/{{progressCount}}</div>
-        <div class="item"><i class="material-icons">star</i>{{points}}</div>
-        <div [@popOverState]="stateName">+{{pointIncrease}}</div>
-        <div class="item"><i class="material-icons">access_time</i>{{parsedTime}}</div>
+        <div class="item home"><i class="material-icons">home</i>{{progressDone}}/{{progressCount}}</div>
+        <div>
+          <div class="item star" id="child_1"><i class="material-icons" >star</i>{{points}}</div>
+          <div id="child_2" [@popOverState]="stateName">+{{pointIncrease}}</div>
+        </div>
+        <div class="item time"><i class="material-icons">access_time</i>{{parsedTime}}</div>
       </div>
       <mat-progress-bar id="bar" [value]="(progressDone / progressCount)*100"></mat-progress-bar>
     </form>

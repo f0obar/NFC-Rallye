@@ -2,6 +2,17 @@
   width: 100%;
 }
 
+.star{
+  color: #3f3f3f;
+}
+
+.time {
+  color: #3f3f3f;
+}
+
+.home{
+  color: #3f51b5;
+}
 
 #header {
   position: fixed;
@@ -9,6 +20,24 @@
   top: 0;
   left: 0;
   width: 100%;
+}
+
+mat-toolbar{
+  height: 80px;
+  /*background-color: #fbd663;*/
+  background-color: white;
+}
+
+#child_1{
+  position: relative;
+  z-index: 1;
+  top: 16px;
+}
+
+ #child_2{
+  position: relative;
+   z-index: 2;
+   top: 16px;
 }
 
 .container{
