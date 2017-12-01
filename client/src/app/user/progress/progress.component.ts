@@ -77,6 +77,11 @@ export class UserProgressComponent implements OnInit {
       console.error(numAnim.error);
     }
 
+    const audio = new Audio();
+    audio.src = '../../assets/sounds/pointincrease.mp3';
+    audio.load();
+    audio.play();
+
     setTimeout(()=>{
       this.showPointAnimation = false;
       this.points += amount;
