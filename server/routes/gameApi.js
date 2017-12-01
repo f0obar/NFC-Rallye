@@ -123,6 +123,7 @@ async function _finishAdvanceState(playSession) {
     const solvedRiddle = new SolvedRiddle();
     solvedRiddle.riddle = playSession.riddle;
     solvedRiddle.tries = 0;
+    solvedRiddle.startDate = new Date();
     SolvedRiddle.create(solvedRiddle);
 
     playSession.solvedRiddles.push(solvedRiddle);
@@ -209,6 +210,7 @@ async function solveRiddle(req, res, next) {
   if (skip) {
     solvedRiddle.skipped = true;
     solvedRiddle.points = 0;
+    solvedRiddle.endDate = new Date();
     await advanceState(session);
     await _saveSolvedRiddles(solvedRiddle);
     res.send({correctAnswer: true, points: solvedRiddle.points});
@@ -218,6 +220,7 @@ async function solveRiddle(req, res, next) {
 
     if (riddle.answer.toLowerCase().trim() === answer.toLowerCase().trim()) {
       solvedRiddle.points = _getPoints(riddle, solvedRiddle);
+      solvedRiddle.endDate = new Date();
       session.points += solvedRiddle.points;
       await advanceState(session);
       await _saveSolvedRiddles(solvedRiddle);
