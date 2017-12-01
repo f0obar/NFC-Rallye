@@ -55,17 +55,17 @@
       </mat-select>
     </mat-form-field>
   </div>
-</div>
-<div class="form-group">
-  <div>
-    <mat-checkbox [(ngModel)]="data.currentQuiz.isActive">Rätsel aktiv?</mat-checkbox>
+  <div class="form-group">
+    <div>
+      <mat-checkbox [(ngModel)]="data.currentQuiz.isActive">Rätsel aktiv?</mat-checkbox>
+    </div>
   </div>
-</div>
-<div class="form-group">
-  <label class="control-label">Bild auswählen</label>
-  <input class="form-control" accept="image/*" type="file" (change)="handleFileSelect($event)">
-  <br/>
+  <div class="form-group">
+    <label class="control-label">Bild auswählen</label>
+    <input class="form-control" accept="image/*" type="file" (change)="handleFileSelect($event)">
+    <br/>
     <img *ngIf="isImageAvailable()" class="img-responsive center-block" src="data:{{data.currentQuiz.image.filetype}};base64,{{data.currentQuiz.image.base64}}">
+  </div>
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button color="primary" tabindex="2" (click)="submit()">Speichern</button>
