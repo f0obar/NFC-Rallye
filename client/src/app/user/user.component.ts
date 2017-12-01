@@ -186,8 +186,13 @@ export class UserComponent implements OnInit{
     if (amount < this.points){
       this.points = amount;
     }
-    if (amount > Number(localStorage.getItem('points'))){
-      this.progress.increasePoints(amount - this.points);
+    if (amount > Number(localStorage.getItem('points')) && amount > this.points){
+      if(this.points > Number(localStorage.getItem('points'))){
+        this.progress.increasePoints(amount - this.points);
+      } else {
+        this.progress.increasePoints(amount - Number(localStorage.getItem('points')));
+      }
+
     }
     localStorage.setItem('points',''+amount);
   }
