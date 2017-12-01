@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../../locations/admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatSlideToggleModule, MatSlideToggle} from '@angular/material';
 import {AdminQuiz} from '../admin-quiz';
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-admin-quiz-detail',
@@ -183,6 +184,7 @@ export class AdminQuizDetailComponent implements OnInit {
     console.log('filesize', file.size);
     console.log('filetype', file.type);
 
+    this.data.currentQuiz.image = new Object();
     this.data.currentQuiz.image.filename = file.name;
     this.data.currentQuiz.image.filesize = file.size;
     this.data.currentQuiz.image.filetype = file.type;
@@ -227,5 +229,12 @@ export class AdminQuizDetailComponent implements OnInit {
    if(!mc && this.type !== 'singleAnswer') {
       this.convertToSingleAnswer();
    }
+  }
+
+  /**
+   * checks if there is a valid image
+   */
+  isImageAvailable():boolean {
+    return !isNullOrUndefined(this.data.currentQuiz.image) && !isNullOrUndefined(this.data.currentQuiz.image.filetype);
   }
 }

@@ -18,8 +18,8 @@
     <label class="control-label">Bild auswählen</label>
     <input class="form-control" accept="image/*" type="file" (change)="handleFileSelect($event)">
     <br/>
-    <img class="img-responsive center-block" src="data:{{data.currentLocation.image.filetype}};base64,{{data.currentLocation.image.base64}}">
-  </div>
+      <img *ngIf="isImageAvailable()" class="img-responsive center-block" src="data:{{data.currentLocation.image.filetype}};base64,{{data.currentLocation.image.base64}}">
+    </div>
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button color="primary" tabindex="2" (click)="submit()">Speichern</button>

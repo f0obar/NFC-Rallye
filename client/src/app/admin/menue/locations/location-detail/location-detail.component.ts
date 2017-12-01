@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-admin-location-detail',
@@ -102,6 +103,7 @@ export class AdminLocationDetailComponent implements OnInit {
     console.log('filesize', file.size);
     console.log('filetype', file.type);
 
+    this.data.currentLocation.image = new Object();
     this.data.currentLocation.image.filename = file.name;
     this.data.currentLocation.image.filesize = file.size;
     this.data.currentLocation.image.filetype = file.type;
@@ -116,5 +118,12 @@ export class AdminLocationDetailComponent implements OnInit {
   _handleReaderLoaded(readerEvt) {
     const binaryString = readerEvt.target.result;
     this.data.currentLocation.image.base64 = btoa(binaryString);
+  }
+
+  /**
+   * checks if there is a valid image
+   */
+  isImageAvailable():boolean {
+    return  !isNullOrUndefined(this.data.currentLocation.image) &&!isNullOrUndefined(this.data.currentLocation.image.filetype);
   }
 }
