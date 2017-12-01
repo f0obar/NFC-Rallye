@@ -40,117 +40,48 @@ function uniqueFilter(property) {
 }
 
 // Will return the sessionid of the playsession
-function startPlaySession(req, res, next) {
-  const handler = new ResponseHandler(res);
-  let locationCount = 0;
-
-  Tag.find()
-    .populate('location')
-    .exec(function (err, tags) {
-      if (err) {
-        handler.error(err);
-        return;
-      }
-
-      const activeTags = tags.filter(function (tag) {
-        return (tag.location != undefined && tag.location.isActive == true);
-      }).filter(uniqueFilter('location'));
-
-      console.log("activeTags", activeTags);
-
-      locationCount = activeTags.length;
-
-      Riddle.find()
-        .populate('location')
-        .exec(function (err, riddles) {
-          if (err) {
-            handler.error(err);
-            return;
-          }
-
-          const nonLocationRiddles = riddles.filter(function (riddle) {
-            return ((riddle.location == undefined || riddle.location == null) && riddle.isActive);
-          });
-
-          const locationRiddles = riddles.filter(function (riddle) {
-            return (riddle.location != undefined && riddle.location.isActive == true && riddle.isActive);
-          });
-
-          /**
-           * selects all inactive quizzes
-           */
-          const inactiveRiddles = riddles.filter(function (riddle) {
-            return (!riddle.isActive);
-          });
-
-          // console.log("nonLocationRiddles", nonLocationRiddles);
-          // console.log("locationRiddles", locationRiddles);
-          // console.log("inactiveRiddles", inactiveRiddles);
-
-          const riddlecount = nonLocationRiddles.length + locationRiddles.length;
-          //TODO way more complicated then this
-          /**
-           * starts new session only when enough quizzes are available
-           */
-          if (locationCount > 0 && riddlecount >= locationCount) {
-            const groupName = req.body.groupName;
-            const playSession = new PlaySession();
-            playSession.groupName = groupName;
-            playSession.startDate = new Date();
-            advanceState(playSession, res, function (savedPlaySession) {
-              res.send(savedPlaySession._id);
-            });
-          } else {
-            res.status(503);
-            res.end();
-          }
-        });
-    });
-
+async function startPlaySession(req, res, next) {
+  try {
+    const session = await gameService.createSession(req.body.groupName);
+    await advanceState(session);
+    res.send(session._id)
+  } catch (err) {
+    res.status(400);
+    res.send({"error": "Group name already exists"});
+  }
 }
 
-function advanceState(playSession, res, callback) {
-  const handler = new ResponseHandler(res);
+async function advanceState(playSession) {
+  console.log("playSession", playSession);
   playSession.lastUpdated = new Date();
   playSession.task = 'findLocation';
 
-  Tag.find()
-    .populate('location')
-    .exec(function (err, tags) {
-      if (err) {
-        handler.error(err);
-        return;
-      }
+  const tags = await Tag.find().populate('location').exec();
+  const activeTags = tags.filter(function (tag) {
+    return (tag.location && tag.location.isActive === true);
+  }).filter(uniqueFilter('location'));
 
-      const activeTags = tags.filter(function (tag) {
-        return (tag.location != undefined && tag.location.isActive == true);
-      }).filter(uniqueFilter('location'));
-
-      if (!playSession.locationCount) {
-        playSession.locationCount = activeTags.length;
-        playSession.locationsToVisit = activeTags.map(function (tag) {
-          return tag.location._id;
-        });
-      }
-
-      if (playSession.locationsToVisit.length === 0) {
-        playSession.task = 'won';
-        playSession.endDate = new Date();
-        _finishAdvanceState(playSession, res, callback);
-      } else {
-        const locations = activeTags.map(function (tag) {
-          return tag.location;
-        });
-        _getLocationID(playSession, locations, function (res) {
-          playSession.location = res;
-          _finishAdvanceState(playSession, res, callback);
-        });
-      }
+  if (!playSession.locationCount) {
+    playSession.locationCount = activeTags.length;
+    playSession.locationsToVisit = activeTags.map(function (tag) {
+      return tag.location._id;
     });
+  }
+
+  if (playSession.locationsToVisit.length === 0) {
+    playSession.task = 'won';
+    playSession.endDate = new Date();
+    await _finishAdvanceState(playSession);
+  } else {
+    const locations = activeTags.map(function (tag) {
+      return tag.location;
+    });
+    playSession.location = await _getLocationID(playSession, locations);
+    await _finishAdvanceState(playSession);
+  }
 }
 
-function _getLocationID(session, locations, callback) {
-
+async function _getLocationID(session, locations) {
   const objLocationsToVisit = locations.filter(function (location) {
     return session.locationsToVisit.indexOf(location._id) !== -1;
   });
@@ -162,22 +93,12 @@ function _getLocationID(session, locations, callback) {
   })[0];
 
   session.locationsToVisit.splice(session.locationsToVisit.indexOf(result._id), 1);
-
-  updateHeat(result, 1, function () {
-    callback(result._id);
-  })
+  await updateHeat(result, 1);
+  return result._id;
 }
 
-function _saveState(playSession, res, callback) {
-  playSession.save(function (err, savedPlaySession) {
-    if (err) {
-      res.send(err);
-      return;
-    }
-    if (callback) {
-      callback(savedPlaySession);
-    }
-  });
+async function _saveState(playSession) {
+  await playSession.save();
 }
 
 function _saveSolvedRiddles(solvedRiles, res, callback) {
@@ -192,33 +113,21 @@ function _saveSolvedRiddles(solvedRiles, res, callback) {
   });
 }
 
-function _finishAdvanceState(playSession, res, callback) {
-  const handler = new ResponseHandler(res);
-
+async function _finishAdvanceState(playSession) {
   if (playSession.task !== 'won') {
-    Riddle.find().exec(function (err, riddles) {
-      if (err) {
+    const riddles = await Riddle.find().exec();
+    if (!riddles || riddles.length === 0) {
+      throw new Error('no Riddles in database');
+    }
+    playSession.riddle = _getRiddleID(playSession, riddles);
+    const solvedRiddle = new SolvedRiddle();
+    solvedRiddle.riddle = playSession.riddle;
+    solvedRiddle.tries = 0;
+    SolvedRiddle.create(solvedRiddle);
 
-        handler.error(err);
-        return;
-      }
-      if (!riddles || riddles.length === 0) {
-        handler.error(new Error('no Riddles in database'));
-        return;
-      }
-      playSession.riddle = _getRiddleID(playSession, riddles);
-      const solvedRiddle = new SolvedRiddle();
-      solvedRiddle.riddle = playSession.riddle;
-      solvedRiddle.tries = 0;
-      SolvedRiddle.create(solvedRiddle);
-
-      playSession.solvedRiddles.push(solvedRiddle);
-      _saveState(playSession, res, callback);
-    });
-  } else {
-    _saveState(playSession, res, callback);
+    playSession.solvedRiddles.push(solvedRiddle);
   }
-
+  await _saveState(playSession);
 }
 
 function _getRiddleID(session, riddles) {
@@ -228,11 +137,11 @@ function _getRiddleID(session, riddles) {
   });
 
   const nonLocationRiddles = unusedRiddles.filter(function (riddle) {
-    return ((riddle.location == undefined || riddle.location == null) && riddle.isActive);
+    return ((!riddle.location || riddle.location == null) && riddle.isActive);
   });
 
   const locationRiddles = unusedRiddles.filter(function (riddle) {
-    return (riddle.location != undefined && riddle.location.equals(session.location) && riddle.isActive);
+    return (riddle.location && riddle.location.equals(session.location) && riddle.isActive);
   });
 
   if (locationRiddles.length > 0) {
@@ -266,14 +175,13 @@ async function getState(req, res, next) {
   try {
     const result = await gameService.getGameState(sessionID);
     handler.success(result);
-  } catch(err) {
+  } catch (err) {
     handler.error(err)
   }
 }
 
 // Will return whether the sent solution was right
-// TODO: check for gamestate
-function solveRiddle(req, res, next) {
+async function solveRiddle(req, res, next) {
   const sessionID = req.params.sessionid;
   const answer = req.body.answer;
   const skip = req.body.skip;
@@ -285,56 +193,40 @@ function solveRiddle(req, res, next) {
     }
   }
 
-  PlaySession.findById(sessionID, function (err, session) {
-    if (err) {
-      res.send(err);
-      return;
-    }
-    if (!session) {
-      res.send(new Error('Invalid session'));
-      return;
-    }
-    session.lastUpdated = new Date();
-    if (session.task !== 'solveRiddle') {
-      res.send(new Error('Not the time to solve riddles.'));
-      return;
-    }
+  const session = await PlaySession.findById(sessionID).exec();
+  if (!session) {
+    throw new Error('Invalid session');
+  }
 
-    Riddle.findById(session.riddle, function (err, riddle) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-      SolvedRiddle.findById(session.solvedRiddles[session.solvedRiddles.length - 1], function (err, solvedRiddle) {
-        if (err) {
-          res.send(err);
-        }
+  session.lastUpdated = new Date();
+  if (session.task !== 'solveRiddle') {
+    throw new Error('Not the time to solve riddles.');
+  }
 
-        if (skip) {
-          solvedRiddle.skipped = true;
-          solvedRiddle.points = 0;
-          advanceState(session, res, function () {
-            res.send({correctAnswer: true, points: solvedRiddle.points});
-          });
-        } else {
-          solvedRiddle.skipped = false;
-          solvedRiddle.tries++;
+  const riddle = await Riddle.findById(session.riddle).exec();
+  const solvedRiddle = await SolvedRiddle.findById(session.solvedRiddles[session.solvedRiddles.length - 1]).exec();
 
-          if (riddle.answer.toLowerCase().trim() === answer.toLowerCase().trim()) {
-            solvedRiddle.points = _getPoints(riddle, solvedRiddle);
-            session.points += solvedRiddle.points;
-            advanceState(session, res, function () {
-              res.send({correctAnswer: true, points: session.points});
-            });
-          } else {
-            res.send({correctAnswer: false, points: session.points});
-          }
-        }
-        _saveSolvedRiddles(solvedRiddle, res);
-        console.log("SolvedRiddle:", solvedRiddle);
-      });
-    });
-  });
+  if (skip) {
+    solvedRiddle.skipped = true;
+    solvedRiddle.points = 0;
+    await advanceState(session);
+    await _saveSolvedRiddles(solvedRiddle);
+    res.send({correctAnswer: true, points: solvedRiddle.points});
+  } else {
+    solvedRiddle.skipped = false;
+    solvedRiddle.tries++;
+
+    if (riddle.answer.toLowerCase().trim() === answer.toLowerCase().trim()) {
+      solvedRiddle.points = _getPoints(riddle, solvedRiddle);
+      session.points += solvedRiddle.points;
+      await advanceState(session);
+      await _saveSolvedRiddles(solvedRiddle);
+      res.send({correctAnswer: true, points: session.points});
+    } else {
+      await _saveSolvedRiddles(solvedRiddle);
+      res.send({correctAnswer: false, points: session.points});
+    }
+  }
 }
 
 function _getPoints(riddle, solvedRiddle) {
@@ -345,20 +237,10 @@ function _getPoints(riddle, solvedRiddle) {
   }
 }
 
-function updateHeat(location, change, callback) {
-
+async function updateHeat(location, change) {
   if (location.heat + change >= 0) {
     location.heat += change;
-    location.save(function (err) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-
-      callback();
-    });
-  } else {
-    callback();
+    await location.save();
   }
 }
 
@@ -375,18 +257,11 @@ async function checkLocation(req, res, next) {
 }
 
 //cleanup and stuff
-function heatCountdown() {
-  Location.find(function (err, locations) {
-    if (err) {
-      return;
-    }
-    locations.forEach(function (location) {
-      updateHeat(location, -1, function (err) {
-        if (err) {
-          console.log('ERROR: ' + err);
-        }
-      });
-    });
+async function heatCountdown() {
+  const locations = await Location.find();
+
+  await locations.forEach(async function (location) {
+    await updateHeat(location, -1);
   });
 }
 

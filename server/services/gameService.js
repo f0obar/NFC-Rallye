@@ -1,6 +1,7 @@
 const Config = require('../models/config');
 const PlaySession = require('../models/playSession');
 const Tag = require('../models/tag');
+const Riddle = require('../models/riddle');
 
 const LOCATION_VISIT_POINTS = 5;
 
@@ -73,6 +74,63 @@ async function checkLocation(sessionID, tagID, skip) {
   }
 }
 
+async function createSession(groupName) {
+  const tags = await Tag.find().populate('location').exec();
+
+  const activeTags = tags.filter(function (tag) {
+    return (tag.location && tag.location.isActive === true);
+  }).filter(uniqueFilter('location'));
+
+  console.log("activeTags", activeTags);
+  let locationCount = activeTags.length;
+
+  const riddles = await Riddle.find().populate('location').exec();
+
+  const nonLocationRiddles = riddles.filter(function (riddle) {
+    return ((!riddle.location || riddle.location == null) && riddle.isActive);
+  });
+
+  const locationRiddles = riddles.filter(function (riddle) {
+    return (riddle.location && riddle.location.isActive === true && riddle.isActive);
+  });
+
+  /**
+   * selects all inactive quizzes
+   */
+  const inactiveRiddles = riddles.filter(function (riddle) {
+    return (!riddle.isActive);
+  });
+
+  // console.log("nonLocationRiddles", nonLocationRiddles);
+  // console.log("locationRiddles", locationRiddles);
+  // console.log("inactiveRiddles", inactiveRiddles);
+
+  const riddlecount = nonLocationRiddles.length + locationRiddles.length;
+  //TODO way more complicated then this
+  /**
+   * starts new session only when enough quizzes are available
+   */
+  if (locationCount > 0 && riddlecount >= locationCount) {
+    const playSession = new PlaySession();
+    playSession.groupName = groupName;
+    playSession.startDate = new Date();
+    return playSession;
+  } else {
+    throw new Error('Not enough riddles in the database');
+  }
+}
+
+function uniqueFilter(property) {
+  const foundElements = {};
+  return function (el) {
+    if (foundElements.hasOwnProperty(el[property])) {
+      return false;
+    }
+    foundElements[el[property]] = true;
+    return true;
+  }
+}
+
 function filterObject(obj, keys) {
   const filteredObj = {};
   keys.forEach(function (key) {
@@ -83,5 +141,6 @@ function filterObject(obj, keys) {
 
 module.exports = {
   getGameState,
-  checkLocation
+  checkLocation,
+  createSession
 };
