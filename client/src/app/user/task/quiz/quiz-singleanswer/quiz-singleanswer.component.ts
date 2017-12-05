@@ -144,9 +144,9 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges {
    */
   abbrechen() {
     const deleteSession = this.dialog.open(SharedSimpleDialogComponent, {data: {
-      title: 'Schnitzeljagd löschen',
-      message: 'Möchtest du deine aktuelle Schnitzeljagd wirklich (permanent) löschen?',
-      button1: 'JA LÖSCHEN',
+      title: 'Schnitzeljagd beenden',
+      message: 'Möchtest du die Schnitzeljagd wirklich beenden?',
+      button1: 'JA BEENDEN',
       button2: 'Abbrechen'
     }});
     deleteSession.afterClosed().subscribe(result => {
