@@ -31,6 +31,9 @@ export class UserComponent implements OnInit{
 
   constructor(private http: HttpClient, private router: Router, private dialog: MatDialog,  public snackBar: MatSnackBar) { }
 
+  /**
+   * initializes gamesession and checks for sessionID in local storage. If there is no session id the login page gets displayed.
+   */
   ngOnInit() {
     this.gameRunning = false;
     this.sessionID = '';
@@ -53,6 +56,10 @@ export class UserComponent implements OnInit{
     }
   }
 
+  /**
+   * checks if the current url contains a valid tag for a location
+   * @returns {boolean}
+   */
   urlContainsTag():boolean {
     const url = this.router.url;
     if(url.startsWith('/tag#/')) {
@@ -62,6 +69,9 @@ export class UserComponent implements OnInit{
     }
   }
 
+  /**
+   * informs the server about the newly scanned tag in order to advance game state
+   */
   handleScannedTag() {
     let url = this.router.url;
     url = url.slice(6);

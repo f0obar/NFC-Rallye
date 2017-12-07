@@ -29,6 +29,10 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     this.loadTagsFromServer();
   }
 
+  /**
+   * for the material table search function
+   * @param {string} filterValue
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
@@ -69,6 +73,9 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     );
   }
 
+  /**
+   * opens new popup dialog
+   */
   addTag() {
     console.log('add location');
     const edit = this.dialog.open(AdminTagDetailComponent, {
@@ -82,6 +89,10 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * opens new popup dialog with existing tag
+   * @param {AdminTag} tag
+   */
   editTag(tag: AdminTag) {
     console.log('edit tag', tag._id);
     const edit = this.dialog.open(AdminTagDetailComponent, {

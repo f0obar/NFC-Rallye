@@ -16,6 +16,9 @@ export class AdminComponent implements OnInit {
     this.adminToken = '';
   }
 
+  /**
+   * checks local storage for an old admin token
+   */
   ngOnInit() {
     if(localStorage.getItem('admintoken') !== null){
       this.adminToken = localStorage.getItem('admintoken');
@@ -23,7 +26,10 @@ export class AdminComponent implements OnInit {
     }
   }
 
-
+  /**
+   * sets admin token in the local storage and changes from login screen to menue
+   * @param data
+   */
   loggedIn(data: any) {
     console.log('setting token:',data['token']);
     if(data['keep'] === true){
@@ -33,6 +39,9 @@ export class AdminComponent implements OnInit {
     this.authenticated = true;
   }
 
+  /**
+   * removes admin token from local storage if the session could be successfully deleted in the backend
+   */
   logout(): void{
     console.log('logout');
     this.http.delete('/api/admin/session/' + this.adminToken,{headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(

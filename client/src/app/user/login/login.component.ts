@@ -18,6 +18,10 @@ export class UserLoginComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * sends the teamname to the server and closes the login screen if the registration was successful.
+   * @param {string} teamname
+   */
   submitLogin(teamname: string) {
     console.log('clicked login button',teamname);
     if (teamname.length > 3) {

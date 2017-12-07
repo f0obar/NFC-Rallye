@@ -25,6 +25,10 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
 
   public quizzes: Array<AdminQuiz>;
 
+  /**
+   * for the material table search function
+   * @param {string} filterValue
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches

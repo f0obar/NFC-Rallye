@@ -30,6 +30,10 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
     this.loadLocationsFromServer();
   }
 
+  /**
+   * for the material table search function
+   * @param {string} filterValue
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
@@ -45,6 +49,9 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  /**
+   * loads all locations from the server
+   */
   loadLocationsFromServer() {
     console.log('loading current locations from server');
     this.http.get('/api/admin/locations', {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
@@ -70,6 +77,9 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
     );
   }
 
+  /**
+   * opens a new popup dialog
+   */
   addLocation() {
     console.log('add location');
     const edit = this.dialog.open(AdminLocationDetailComponent, {
@@ -83,6 +93,10 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * opens a new popup dialog with an existing location
+   * @param {AdminLocation} location
+   */
   editLocation(location: AdminLocation) {
     console.log('edit location', location._id);
     const edit = this.dialog.open(AdminLocationDetailComponent, {
@@ -96,6 +110,10 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * deletes a location from the database.
+   * @param {AdminLocation} location
+   */
   deleteLocation(location: AdminLocation) {
     const d = this.dialog.open(SharedSimpleDialogComponent, {
       data: {

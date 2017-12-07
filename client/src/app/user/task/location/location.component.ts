@@ -38,6 +38,10 @@ export class UserLocationComponent implements OnInit {
     }
   }
 
+  /**
+   * changes the current url and refreshes site in order to advance state.
+   * @param {string} tag
+   */
   scannedTag(tag: string): void {
     const suffix = tag.slice(tag.indexOf('/tag/'), tag.length);
     console.log('suffix=', suffix);
@@ -78,6 +82,9 @@ export class UserLocationComponent implements OnInit {
     }
   }
 
+  /**
+   * checks accessible cameras on the device
+   */
   checkCameras(): void {
     const backCamera: Promise<MediaStream> = this.checkBackCamera();
     backCamera.then(response => {
@@ -160,6 +167,9 @@ export class UserLocationComponent implements OnInit {
     });
   }
 
+  /**
+   * opens popup dialog for emitting logout output.
+   */
   abbrechen() {
     const deleteSession = this.dialog.open(SharedSimpleDialogComponent, {data: {
       title: 'Schnitzeljagd beenden',

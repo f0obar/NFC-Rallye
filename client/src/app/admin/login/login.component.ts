@@ -17,6 +17,12 @@ export class AdminLoginComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * sends password and username to the server. If server responds with an ok the output emitter fires.
+   * @param name
+   * @param password
+   * @param keeploggedin
+   */
   submitLogin(name: string, password: string, keeploggedin: boolean) {
     console.log('admin login', name, password);
     this.http.post('/api/admin/session/', {username: name, password: password}).subscribe(

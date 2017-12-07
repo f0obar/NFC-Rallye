@@ -63,7 +63,7 @@ export class UserProgressComponent implements OnInit {
   }
 
   /**
-   *
+   * Increases the Points and Plays Animation and Sound.
    * @param {number} amount
    */
   increasePoints(amount: number): void{

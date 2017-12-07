@@ -86,12 +86,21 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
     );
   }
 
+  /**
+   * for the material table search function
+   * @param {string} filterValue
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
 
+  /**
+   * converts start date timestamp to the actual running time (and the complete time if there is an end date)
+   * @param {PlaySession} session
+   * @returns {string}
+   */
   parseTimeSession(session: PlaySession): string {
     if(session.startDate !== null) {
       let currentTime: Date;
@@ -119,6 +128,11 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
     return '';
   }
 
+  /**
+   * converts Date to Hours-Minutes-Seconds for representation on the GUI
+   * @param {Date} interval
+   * @returns {string}
+   */
   parseTimeToString(interval: Date): string{
       let time = '';
 
