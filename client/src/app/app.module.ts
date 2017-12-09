@@ -4,6 +4,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // Material
 import {
   MatButtonModule,
+  MatSortModule,
   MatCheckboxModule,
   MatDialogModule,
   MatInputModule,
@@ -50,6 +51,7 @@ import {UserQuizHintPopupComponent} from './user/task/quiz/quiz-hint-popup/quiz-
 import {MatCardModule} from '@angular/material/card';
 import {HttpModule} from '@angular/http';
 import {MatIconModule} from '@angular/material/icon';
+import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 
 
 const routes: Routes = [
@@ -119,6 +121,10 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'scoreboard',
+    component: ScoreboardComponent
+  },
+  {
     path: 'tag',
     component: UserComponent
   },
@@ -152,7 +158,8 @@ const routes: Routes = [
     UserLocationCameraPopupComponent,
     UserQuizHintPopupComponent,
     UserQuizMultiplechoiceComponent,
-    UserQuizSingleanswerComponent
+    UserQuizSingleanswerComponent,
+    ScoreboardComponent
 
   ],
   imports: [
@@ -178,7 +185,8 @@ const routes: Routes = [
     MatFormFieldModule,
     MatSelectModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatSortModule
   ],
   entryComponents: [
     SharedSimpleDialogComponent,
