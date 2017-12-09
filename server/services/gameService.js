@@ -3,7 +3,9 @@ const PlaySession = require('../models/playSession');
 const Tag = require('../models/tag');
 const Riddle = require('../models/riddle');
 
-const LOCATION_VISIT_POINTS = 5;
+const bcrypt = require('bcryptjs');
+
+const LOCATION_VISIT_POINTS = 20;
 
 async function getGameState(sessionID) {
   const session = await PlaySession.findById(sessionID)
@@ -74,9 +76,12 @@ async function checkLocation(sessionID, tagID, skip) {
   }
 }
 
-async function createSession(groupName) {
-  const tags = await Tag.find().populate('location').exec();
+async function createSession(groupName, password) {
+  if (!groupName) {
+    throw new Error('No Group Name provided');
+  }
 
+  const tags = await Tag.find().populate('location').exec();
   const activeTags = tags.filter(function (tag) {
     return (tag.location && tag.location.isActive === true);
   }).filter(uniqueFilter('location'));
@@ -111,9 +116,29 @@ async function createSession(groupName) {
    * starts new session only when enough quizzes are available
    */
   if (locationCount > 0 && riddlecount >= locationCount) {
+
+    const oldSession = await PlaySession.findOne({"groupName": groupName});
+    if (oldSession) {
+      if (password) {
+        if (bcrypt.compareSync(password, oldSession.password)) {
+          console.log("Restoring old Session: " + oldSession._id);
+          oldSession.passwordTries = 0;
+          oldSession.save();
+          return oldSession;
+        } else {
+          oldSession.passwordTries++;
+          oldSession.save();
+          throw new Error("Wrong password");
+        }
+      } else {
+        throw new Error("Group name already exists");
+      }
+    }
     const playSession = new PlaySession();
     playSession.groupName = groupName;
+    playSession.password = bcrypt.hashSync(password, 10);
     playSession.startDate = new Date();
+    console.log("Generate new PlaySession: " + playSession._id);
     return playSession;
   } else {
     throw new Error('Not enough riddles in the database');

@@ -24,7 +24,7 @@ const setter = {
       return true;
     },
     function (input) {
-      return bcrypt.hashSync(input);
+      return bcrypt.hashSync(input, 10);
     }
   )
 };

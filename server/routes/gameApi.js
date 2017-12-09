@@ -42,17 +42,17 @@ function uniqueFilter(property) {
 // Will return the sessionid of the playsession
 async function startPlaySession(req, res, next) {
   try {
-    const session = await gameService.createSession(req.body.groupName);
+    const session = await gameService.createSession(req.body.groupName, req.body.password);
     await advanceState(session);
     res.send(session._id)
   } catch (err) {
     res.status(400);
-    res.send({"error": "Group name already exists"});
+    res.send({"error": err.message});
   }
 }
 
 async function advanceState(playSession) {
-  console.log("playSession", playSession);
+  console.log("Advance state of session:", playSession._id);
   playSession.lastUpdated = new Date();
   playSession.task = 'findLocation';
 

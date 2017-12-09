@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const PlaySessionSchema = new Schema({
   lastUpdated: Date,
   groupName: {type: String, unique : true},
+  password: String,
   startDate: Date,
   endDate: Date,
   points: {type: Number, default: 0},
