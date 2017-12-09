@@ -22,10 +22,10 @@ export class UserLoginComponent implements OnInit {
    * sends the teamname to the server and closes the login screen if the registration was successful.
    * @param {string} teamname
    */
-  submitLogin(teamname: string) {
+  submitLogin(teamname: string, password: string ) {
     console.log('clicked login button',teamname);
     if (teamname.length > 3) {
-      this.http.post('/api/game/sessions', {groupName: teamname}).subscribe(
+      this.http.post('/api/game/sessions', {groupName: teamname, password: password}).subscribe(
         (data) => {
           console.log('loginPost data', data);
           this.snackBar.open('Viel Spaß! :)',null, {
