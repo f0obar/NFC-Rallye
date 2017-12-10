@@ -67,10 +67,10 @@ export class UserProgressComponent implements OnInit {
    * @param {number} amount
    */
   increasePoints(amount: number): void{
-    this.pointIncrease = amount;
+    this.pointIncrease = amount - this.points;
     this.showPointAnimation = true;
 
-    const numAnim = new CountUp('points', this.points, this.points+amount);
+    const numAnim = new CountUp('points', this.points, amount);
     if (!numAnim.error) {
       numAnim.start();
     } else {
@@ -84,7 +84,7 @@ export class UserProgressComponent implements OnInit {
 
     setTimeout(()=>{
       this.showPointAnimation = false;
-      this.points += amount;
+      this.points = amount;
       console.log('Points got increased by',amount);
     }, 1000);
   }

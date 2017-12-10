@@ -47,6 +47,7 @@ export class UserComponent implements OnInit{
       this.sessionID = localStorage.getItem('sessionID');
       this.gameRunning = true;
     }
+
     if(this.gameRunning === true){
       if(this.urlContainsTag()){
         this.handleScannedTag();
@@ -192,19 +193,17 @@ export class UserComponent implements OnInit{
    * @param {number} amount
    */
   setPoints(amount: number){
-    console.log('setPoints called');
-    if (amount < this.points){
-      this.points = amount;
-    }
-    if (amount > Number(localStorage.getItem('points')) && amount > this.points){
-      if(this.points > Number(localStorage.getItem('points'))){
-        this.progress.increasePoints(amount - this.points);
-      } else {
-        this.progress.increasePoints(amount - Number(localStorage.getItem('points')));
+      console.log('setPoints called');
+      if (amount < this.points) {
+        this.points = amount;
       }
-
-    }
-    localStorage.setItem('points',''+amount);
+      else if (amount > this.points && amount > Number(localStorage.getItem('points'))) {
+        console.log('DEBUG', this.points, localStorage.getItem('points'), amount);
+        this.progress.increasePoints(amount);
+      }
+      console.log('SETTING', amount);
+      localStorage.setItem('points', '' + amount);
+      console.log('123')
   }
 
   /**

@@ -116,9 +116,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges {
               duration: 2000,
               horizontalPosition: 'center'
             });
-            if (!isNullOrUndefined(data['points'])) {
-              this.quizPointEmitter.emit(data['points']);
-            }
             this.quizOutput.emit();
           },
           (err) => {

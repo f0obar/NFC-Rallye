@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {QuestionSingleanswer} from '../../../questionsingleanswer';
 import {QuestionMultiplechoice} from '../../../questionmc';
 import {HttpClient} from '@angular/common/http';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatButtonBase, MatDialog, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
 import {UserQuizHintPopupComponent} from '../quiz-hint-popup/quiz-hint-popup.component';
 import {UserLocationMapPopupComponent} from '../../location/location-map-popup/location-map-popup.component';
@@ -28,6 +28,7 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
   @Output()
   quizPointEmitter: EventEmitter<any> = new EventEmitter();
 
+  usedAnswers = [];
 
 
   constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog) {
@@ -83,6 +84,7 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
               duration: 2000,
               horizontalPosition: 'center'
             });
+            this.usedAnswers.push(answer);
           }
         },
         (err) => {
@@ -91,6 +93,11 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
       );
     }
   }
+
+  isAnswerUsed(answer: string): boolean {
+    return this.usedAnswers.indexOf(answer) > -1;
+  }
+
 
   /**
    * skips the current question
@@ -113,9 +120,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
               duration: 2000,
               horizontalPosition: 'center'
             });
-            if (!isNullOrUndefined(data['points'])) {
-              this.quizPointEmitter.emit(data['points']);
-            }
             this.quizOutput.emit();
           },
           (err) => {
