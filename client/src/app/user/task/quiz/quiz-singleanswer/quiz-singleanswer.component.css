@@ -12,9 +12,10 @@ mat-toolbar{
   background-color: #3f51b5;
 }
 
-.material-icons{
+.container_bottom{
   color: white;
 }
+
 
 .spacer {
   flex: 1 1 auto;

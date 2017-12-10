@@ -19,19 +19,19 @@
         <mat-form-field>
           <input matInput placeholder="Antwort" type="text" #answer ng-model="riddle.answer">
         </mat-form-field>
+        <i class="material-icons" id="hint" style="color: #333333" (click)="toggleHint()">info</i>
       </div>
     </mat-card>
   </div>
 </div>
 
-
 <div id="bottom">
   <mat-toolbar class="container_bottom">
     <i class="material-icons" (click)="abbrechen()">exit_to_app</i>
     <span class="spacer"></span>
-    <i class="material-icons" (click)="openMap()">location_on</i>
+    <i class="material-icons" (click)="help()" >help_outline</i>
     <span class="spacer"></span>
-    <i class="material-icons" (click)="toggleHint()">info</i>
+    <i class="material-icons" (click)="openMap()">location_on</i>
     <span class="spacer"></span>
     <i class="material-icons" (click)="skipQuestion()">skip_next</i>
     <span class="spacer"></span>

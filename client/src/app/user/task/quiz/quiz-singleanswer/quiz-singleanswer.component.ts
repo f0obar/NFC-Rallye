@@ -7,6 +7,7 @@ import {UserLocationMapPopupComponent} from '../../location/location-map-popup/l
 import {Location} from '../../../location';
 import {UserQuizHintPopupComponent} from '../quiz-hint-popup/quiz-hint-popup.component';
 import {SharedSimpleDialogComponent} from '../../../../shared/simple-dialog/simple-dialog.component';
+import {UserQuizHelpPopupComponent} from '../quiz-help-popup/quiz-help-popup.component';
 
 
 @Component({
@@ -156,4 +157,12 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges {
       }
     });
   }
+
+
+  help() {
+    const d = this.dialog.open(UserQuizHelpPopupComponent, {
+
+    });
+  }
+
 }

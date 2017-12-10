@@ -52,6 +52,7 @@ import {MatCardModule} from '@angular/material/card';
 import {HttpModule} from '@angular/http';
 import {MatIconModule} from '@angular/material/icon';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
+import {UserQuizHelpPopupComponent} from './user/task/quiz/quiz-help-popup/quiz-help-popup.component';
 
 
 const routes: Routes = [
@@ -157,6 +158,7 @@ const routes: Routes = [
     UserLocationMapPopupComponent,
     UserLocationCameraPopupComponent,
     UserQuizHintPopupComponent,
+    UserQuizHelpPopupComponent,
     UserQuizMultiplechoiceComponent,
     UserQuizSingleanswerComponent,
     ScoreboardComponent
@@ -195,7 +197,8 @@ const routes: Routes = [
     AdminTagDetailComponent,
     UserLocationMapPopupComponent,
     UserLocationCameraPopupComponent,
-    UserQuizHintPopupComponent
+    UserQuizHintPopupComponent,
+    UserQuizHelpPopupComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

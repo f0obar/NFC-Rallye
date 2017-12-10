@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {CameraConfig} from './camera-config';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {HttpClient} from '@angular/common/http';
+import {UserQuizHelpPopupComponent} from '../quiz/quiz-help-popup/quiz-help-popup.component';
 
 @Component({
   selector: 'app-user-location',
@@ -182,6 +183,12 @@ export class UserLocationComponent implements OnInit {
         console.log('user deleted session');
         this.locationLogout.emit();
       }
+    });
+  }
+
+  help() {
+    const d = this.dialog.open(UserQuizHelpPopupComponent, {
+
     });
   }
 }
