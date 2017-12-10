@@ -24,6 +24,7 @@ async function startPlaySession(req, res, next) {
     const session = await gameService.createSession(req.body.groupName, req.body.password);
     res.send(session.token)
   } catch (err) {
+    console.log(err);
     res.status(400);
     res.send({"error": err.message});
   }

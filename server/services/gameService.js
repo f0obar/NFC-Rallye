@@ -98,8 +98,8 @@ async function checkLocation(token, tagID, skip) {
 }
 
 async function createSession(groupName, password) {
-  if (!groupName) {
-    throw new Error('No Group Name provided');
+  if (!groupName || !password) {
+    throw new Error('No group name or password provided');
   }
 
   const tags = await Tag.find().populate('location').exec();
@@ -143,7 +143,7 @@ async function createSession(groupName, password) {
       if (password) {
         if (bcrypt.compareSync(password, oldSession.password)) {
           console.log("Restoring old Session: " + oldSession._id);
-          oldSession.token = generateToken();
+          oldSession.token = await generateToken();
           oldSession.save();
           return oldSession;
         } else {
@@ -156,7 +156,7 @@ async function createSession(groupName, password) {
     const playSession = new PlaySession();
     playSession.groupName = groupName;
     playSession.password = bcrypt.hashSync(password, 10);
-    playSession.token = generateToken();
+    playSession.token = await generateToken();
     playSession.startDate = new Date();
     console.log("Generate new PlaySession: " + playSession._id);
     await advanceState(playSession);
