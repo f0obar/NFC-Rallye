@@ -145,6 +145,10 @@ async function createSession(groupName, password) {
   }
 }
 
+async function destroySession(sessionID) {
+  await PlaySession.remove({_id: sessionID});
+}
+
 function uniqueFilter(property) {
   const foundElements = {};
   return function (el) {
@@ -167,5 +171,6 @@ function filterObject(obj, keys) {
 module.exports = {
   getGameState,
   checkLocation,
-  createSession
+  createSession,
+  destroySession
 };

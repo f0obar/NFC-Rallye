@@ -151,22 +151,14 @@ function _getRiddleID(session, riddles) {
   return getAndRemoveRandomElement(nonLocationRiddles)._id;
 }
 
-function deletePlaySession(req, res, next) {
+async function deletePlaySession(req, res, next) {
   const id = req.params.sessionid;
-
-  destroySession(id, res);
-}
-
-function destroySession(sessionID, res) {
-  PlaySession.remove({
-    _id: sessionID
-  }, function (err, entry) {
-    if (err) {
-      res.send(err);
-      return;
-    }
+  try {
+    await gameService.destroySession(id);
     res.send({deleted: true});
-  });
+  } catch (err) {
+    res.send(err);
+  }
 }
 
 async function getState(req, res, next) {
