@@ -22,9 +22,8 @@ const MULTI_ANSWER_POINTS = 20;
 async function startPlaySession(req, res, next) {
   try {
     const session = await gameService.createSession(req.body.groupName, req.body.password);
-    res.send(session.token)
+    res.send({token: session.token})
   } catch (err) {
-    console.log(err);
     res.status(400);
     res.send({"error": err.message});
   }
