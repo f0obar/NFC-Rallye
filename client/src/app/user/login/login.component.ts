@@ -27,12 +27,12 @@ export class UserLoginComponent implements OnInit {
     if (teamname.length > 3) {
       this.http.post('/api/game/sessions', {groupName: teamname, password: password}).subscribe(
         (data) => {
-          console.log('loginPost data', data);
+          console.log('loginPost data', data['token']);
           this.snackBar.open('Viel Spaß! :)',null, {
             duration: 2000,
             horizontalPosition: 'center'
           });
-          this.loginOutput.emit('' + data);
+          this.loginOutput.emit('' + data['token']);
         },
         (err) => {
           console.log('loginPost error', err);
