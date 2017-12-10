@@ -5,6 +5,7 @@ const Riddle = require('../models/riddle');
 const SolvedRiddle = require('../models/solvedRiddle');
 
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 const LOCATION_VISIT_POINTS = 20;
 
@@ -27,8 +28,8 @@ function uniqueFilter(property) {
   }
 }
 
-async function getGameState(sessionID) {
-  const session = await PlaySession.findById(sessionID)
+async function getGameState(token) {
+  const session = await PlaySession.findOne({"token": token})
     .populate('location')
     .populate('riddle')
     .exec();
@@ -63,8 +64,8 @@ async function getGameState(sessionID) {
   }
 }
 
-async function checkLocation(sessionID, tagID, skip) {
-  const session = await PlaySession.findById(sessionID);
+async function checkLocation(token, tagID, skip) {
+  const session = await PlaySession.findOne({"token": token});
   if (!session) {
     throw new Error('Invalid session');
   }
@@ -142,12 +143,10 @@ async function createSession(groupName, password) {
       if (password) {
         if (bcrypt.compareSync(password, oldSession.password)) {
           console.log("Restoring old Session: " + oldSession._id);
-          oldSession.passwordTries = 0;
+          oldSession.token = generateToken();
           oldSession.save();
           return oldSession;
         } else {
-          oldSession.passwordTries++;
-          oldSession.save();
           throw new Error("Wrong password");
         }
       } else {
@@ -157,6 +156,7 @@ async function createSession(groupName, password) {
     const playSession = new PlaySession();
     playSession.groupName = groupName;
     playSession.password = bcrypt.hashSync(password, 10);
+    playSession.token = generateToken();
     playSession.startDate = new Date();
     console.log("Generate new PlaySession: " + playSession._id);
     await advanceState(playSession);
@@ -166,8 +166,17 @@ async function createSession(groupName, password) {
   }
 }
 
-async function destroySession(sessionID) {
-  await PlaySession.remove({_id: sessionID});
+async function generateToken() {
+  let token = crypto.randomBytes(64).toString('hex');
+  // Be sure we don't have two equal tokens
+  while (await PlaySession.findOne({"token": token})) {
+    token = crypto.randomBytes(64).toString('hex');
+  }
+  return token;
+}
+
+async function destroySession(token) {
+  await PlaySession.remove({"token": token});
 }
 
 async function advanceState(playSession) {

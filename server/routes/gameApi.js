@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Location = require('../models/location');
 const Riddle = require('../models/riddle');
 const SolvedRiddle = require('../models/solvedRiddle');
-const Tag = require('../models/tag');
 const PlaySession = require('../models/playSession');
 
 const ResponseHandler = require('../util/responsehandler');
@@ -12,19 +10,19 @@ const ResponseHandler = require('../util/responsehandler');
 const gameService = require('../services/gameService');
 
 router.post('/sessions', startPlaySession);
-router.delete('/sessions/:sessionid', deletePlaySession);
-router.get('/sessions/:sessionid', getState);
-router.post('/sessions/:sessionid/riddle', solveRiddle);
-router.post('/sessions/:sessionid/location', checkLocation);
+router.delete('/sessions/:token', deletePlaySession);
+router.get('/sessions/:token', getState);
+router.post('/sessions/:token/riddle', solveRiddle);
+router.post('/sessions/:token/location', checkLocation);
 
 const SINGLE_ANSWER_POINTS = 20;
 const MULTI_ANSWER_POINTS = 20;
 
-// Will return the sessionid of the playsession
+// Will return the access token of the session
 async function startPlaySession(req, res, next) {
   try {
     const session = await gameService.createSession(req.body.groupName, req.body.password);
-    res.send(session._id)
+    res.send(session.token)
   } catch (err) {
     res.status(400);
     res.send({"error": err.message});
@@ -44,9 +42,8 @@ function _saveSolvedRiddles(solvedRiles, res, callback) {
 }
 
 async function deletePlaySession(req, res, next) {
-  const id = req.params.sessionid;
   try {
-    await gameService.destroySession(id);
+    await gameService.destroySession(req.params.token);
     res.send({deleted: true});
   } catch (err) {
     res.send(err);
@@ -55,10 +52,9 @@ async function deletePlaySession(req, res, next) {
 
 async function getState(req, res, next) {
   const handler = ResponseHandler(res);
-  const sessionID = req.params.sessionid;
 
   try {
-    const result = await gameService.getGameState(sessionID);
+    const result = await gameService.getGameState(req.params.token);
     handler.success(result);
   } catch (err) {
     handler.error(err)
@@ -67,7 +63,7 @@ async function getState(req, res, next) {
 
 // Will return whether the sent solution was right
 async function solveRiddle(req, res, next) {
-  const sessionID = req.params.sessionid;
+  const token = req.params.token;
   const answer = req.body.answer;
   const skip = req.body.skip;
   console.log("solveRiddle:", req.body);
@@ -78,7 +74,7 @@ async function solveRiddle(req, res, next) {
     }
   }
 
-  const session = await PlaySession.findById(sessionID).exec();
+  const session = await PlaySession.findOne({"token": token}).exec();
   if (!session) {
     throw new Error('Invalid session');
   }
@@ -126,11 +122,11 @@ function _getPoints(riddle, solvedRiddle) {
 
 // Will check if the location is right. if it is, will allow to solve riddle
 async function checkLocation(req, res, next) {
-  const sessionID = req.params.sessionid;
+  const token = req.params.token;
   const tagID = req.body.tagID;
   const skip = req.body.skip;
   try {
-    res.send(await gameService.checkLocation(sessionID, tagID, skip));
+    res.send(await gameService.checkLocation(token, tagID, skip));
   } catch (err) {
     res.send(err);
   }
