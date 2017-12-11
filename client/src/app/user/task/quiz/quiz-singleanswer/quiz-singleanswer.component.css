@@ -16,6 +16,13 @@ mat-toolbar{
   color: white;
 }
 
+.centered {
+  width: 50%;
+  height: 50%;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
 
 .spacer {
   flex: 1 1 auto;

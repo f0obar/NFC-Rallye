@@ -39,7 +39,7 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
   }
 
 
-  imageAvailable(): boolean {
+  imageAvailable(): boolean  {
     return !isNullOrUndefined(this.question.getImage());
   }
 

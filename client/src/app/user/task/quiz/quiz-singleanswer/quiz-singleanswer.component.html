@@ -9,9 +9,8 @@
 
       <br>
       <ng-container *ngIf="imageAvailable() == true">
-        <img class="img-responsive center-block"
-             src="data:{{question.getImage().filetype}};base64,{{question.getImage().base64}}">
-        <br>
+        <img mat-card-image class="img-responsive centered"
+             src="data:{{question.getImage()?.filetype}};base64,{{question.getImage()?.base64}}">
       </ng-container>
 
 

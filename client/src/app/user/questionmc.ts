@@ -27,6 +27,6 @@ export class QuestionMultiplechoice {
   }
 
   public getImage(): any {
-
+    return this.image;
   }
 }
