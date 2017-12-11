@@ -6,8 +6,10 @@ const SolvedRiddle = require('../models/solvedRiddle');
 const PlaySession = require('../models/playSession');
 
 const ResponseHandler = require('../util/responsehandler');
+const UserException = require('../exceptions/userexception');
 
 const gameService = require('../services/gameService');
+const scoreBoardService = require('../services/scoreboardService');
 
 router.post('/sessions', startPlaySession);
 router.delete('/sessions/:token', deletePlaySession);
@@ -22,28 +24,23 @@ const MULTI_ANSWER_POINTS = 20;
 async function startPlaySession(req, res, next) {
   try {
     const session = await gameService.createSession(req.body.groupName, req.body.password);
+    await scoreBoardService.pushScoreboard();
     res.send({token: session.token})
   } catch (err) {
-    res.status(400);
-    res.send({"error": err.message});
+    if (err instanceof UserException) {
+      res.status(400);
+      res.send({"error": err.message});
+    } else {
+      console.error(err);
+      res.status(500);
+    }
   }
-}
-
-function _saveSolvedRiddles(solvedRiles, res, callback) {
-  solvedRiles.save(function (err, savedSolvedRiles) {
-    if (err) {
-      res.send(err);
-      return;
-    }
-    if (callback) {
-      callback(savedSolvedRiles);
-    }
-  });
 }
 
 async function deletePlaySession(req, res, next) {
   try {
     await gameService.destroySession(req.params.token);
+    await scoreBoardService.pushScoreboard();
     res.send({deleted: true});
   } catch (err) {
     res.send(err);
@@ -52,7 +49,6 @@ async function deletePlaySession(req, res, next) {
 
 async function getState(req, res, next) {
   const handler = ResponseHandler(res);
-
   try {
     const result = await gameService.getGameState(req.params.token);
     handler.success(result);
@@ -92,7 +88,7 @@ async function solveRiddle(req, res, next) {
     solvedRiddle.points = 0;
     solvedRiddle.endDate = new Date();
     await gameService.advanceState(session);
-    await _saveSolvedRiddles(solvedRiddle);
+    await _finishSolveRiddle();
     res.send({correctAnswer: true, points: solvedRiddle.points});
   } else {
     solvedRiddle.skipped = false;
@@ -103,13 +99,18 @@ async function solveRiddle(req, res, next) {
       solvedRiddle.endDate = new Date();
       session.points += solvedRiddle.points;
       await gameService.advanceState(session);
-      await _saveSolvedRiddles(solvedRiddle);
+      await _finishSolveRiddle();
       res.send({correctAnswer: true, points: session.points});
     } else {
-      await _saveSolvedRiddles(solvedRiddle);
+      await _finishSolveRiddle();
       res.send({correctAnswer: false, points: session.points});
     }
   }
+}
+
+async function _finishSolveRiddle(solvedRiddle) {
+  await solvedRiddle.save();
+  await scoreBoardService.pushScoreboard();
 }
 
 function _getPoints(riddle, solvedRiddle) {

@@ -5,6 +5,8 @@ const Riddle = require('../models/riddle');
 const Location = require('../models/location');
 const SolvedRiddle = require('../models/solvedRiddle');
 
+const UserException = require('../exceptions/userexception');
+
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
@@ -36,7 +38,7 @@ async function getGameState(token) {
     .exec();
 
   if (session === null) {
-    throw new Error('Session doesn\'t exist');
+    throw new UserException('Session doesn\'t exist');
   }
 
   const result = {
@@ -58,7 +60,7 @@ async function getGameState(token) {
     return result;
   } else {
     if (!session.location) {
-      throw new Error("location not found, session is invalid");
+      throw new UserException("location not found, session is invalid");
     }
     result.location = filterObject(session.location, ['name', 'image']);
     result.riddle = filterObject(session.riddle, ['name', 'choices', 'description', 'hint', 'image']);
@@ -69,18 +71,18 @@ async function getGameState(token) {
 async function checkLocation(token, tagID, skip) {
   const session = await PlaySession.findOne({"token": token});
   if (!session) {
-    throw new Error('Invalid session');
+    throw new UserException('Invalid session');
   }
   session.lastUpdated = new Date();
 
   if (session.task !== 'findLocation') {
-    throw new Error('Not the time to solve riddles.');
+    throw new UserException('Not the time to solve riddles.');
   }
 
   if (!skip) {
     const tag = await Tag.findOne({'tagID': tagID});
     if (!tag) {
-      throw new Error('Invalid tag');
+      throw new UserException('Invalid tag');
     }
     if (session.location.equals(tag.location)) {
       // Correct location, lets update the session then
@@ -101,7 +103,7 @@ async function checkLocation(token, tagID, skip) {
 
 async function createSession(groupName, password) {
   if (!groupName || !password) {
-    throw new Error('No group name or password provided');
+    throw new UserException('No group name or password provided');
   }
 
   const tags = await Tag.find().populate('location').exec();
@@ -149,10 +151,10 @@ async function createSession(groupName, password) {
           oldSession.save();
           return oldSession;
         } else {
-          throw new Error("Wrong password");
+          throw new UserException("Wrong password");
         }
       } else {
-        throw new Error("Group name already exists");
+        throw new UserException("Group name already exists");
       }
     }
     const playSession = new PlaySession();
@@ -164,7 +166,7 @@ async function createSession(groupName, password) {
     await advanceState(playSession);
     return playSession;
   } else {
-    throw new Error('Not enough riddles in the database');
+    throw new UserException('Not enough riddles in the database');
   }
 }
 
@@ -231,7 +233,7 @@ async function _finishAdvanceState(playSession) {
   if (playSession.task !== 'won') {
     const riddles = await Riddle.find().exec();
     if (!riddles || riddles.length === 0) {
-      throw new Error('no Riddles in database');
+      throw new UserException('no Riddles in database');
     }
     playSession.riddle = _getRiddleID(playSession, riddles);
     const solvedRiddle = new SolvedRiddle();
