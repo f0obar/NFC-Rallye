@@ -35,7 +35,7 @@
         <button mat-mini-fab color="warn" (click)="removeChoice(entry)">-</button>
       </div>
       <div>
-      <button mat-mini-fab color="primary" class="add-button" (click)="addChoice()">+</button>
+        <button mat-mini-fab color="primary" class="add-button" (click)="addChoice()">+</button>
       </div>
     </div>
   </ng-container>
@@ -43,7 +43,8 @@
 
   <div class="form-group">
     <mat-form-field>
-      <input matInput class="hint" placeholder="Hinweis" [(ngModel)]="data.currentQuiz.hint" name="hint" class="form-control">
+      <textarea matInput class="hint" placeholder="Hinweis" [(ngModel)]="data.currentQuiz.hint" name="hint" class="form-control" required matTextareaAutosize matAutosizeMinRows="2"
+                matAutosizeMaxRows="5"></textarea>
     </mat-form-field>
   </div>
 
@@ -61,7 +62,7 @@
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label">Bild auswählen</label>
+    <h1 class="mat-body">Bild auswählen</h1>
     <input class="form-control" accept="image/*" type="file" (change)="handleFileSelect($event)">
     <br/>
     <img *ngIf="isImageAvailable()" class="img-responsive center-block" src="data:{{data.currentQuiz.image.filetype}};base64,{{data.currentQuiz.image.base64}}">
