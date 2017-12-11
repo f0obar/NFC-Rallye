@@ -2,6 +2,7 @@ const Config = require('../models/config');
 const PlaySession = require('../models/playSession');
 const Tag = require('../models/tag');
 const Riddle = require('../models/riddle');
+const Location = require('../models/location');
 const SolvedRiddle = require('../models/solvedRiddle');
 
 const bcrypt = require('bcryptjs');
