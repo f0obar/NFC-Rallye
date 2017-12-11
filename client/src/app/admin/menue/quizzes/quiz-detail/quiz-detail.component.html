@@ -2,14 +2,14 @@
 <div mat-dialog-content>
   <mat-slide-toggle #slider (change)="changeType(slider.checked)">Multiple Choice</mat-slide-toggle>
   <div class="form-group">
-    <mat-form-field>
+    <mat-form-field class="width">
       <input matInput placeholder="Rätselname" [(ngModel)]="data.currentQuiz.name" name="name" class="form-control"
              required autofocus>
     </mat-form-field>
   </div>
 
   <div class="form-group">
-    <mat-form-field>
+    <mat-form-field class="width">
     <textarea matInput placeholder="Beschreibung" [(ngModel)]="data.currentQuiz.description" name="description"
               class="form-control"
               required matTextareaAutosize matAutosizeMinRows="2"
@@ -19,7 +19,7 @@
 
 
   <div class="form-group">
-    <mat-form-field>
+    <mat-form-field class="width">
       <input matInput placeholder="Antwort" [(ngModel)]="data.currentQuiz.answer" name="answer" class="form-control"
              required>
     </mat-form-field>
@@ -28,7 +28,7 @@
   <ng-container *ngIf="type=='multipleChoice'">
     <div class="form-group">
       <div *ngFor="let entry of data.currentQuiz.choices; let i=index">
-        <mat-form-field>
+        <mat-form-field class="answer">
           <input matInput placeholder="Antwortmöglichkeiten" [(ngModel)]="data.currentQuiz.choices[i]"
                  class="form-control">
         </mat-form-field>
@@ -42,14 +42,14 @@
 
 
   <div class="form-group">
-    <mat-form-field>
+    <mat-form-field class="width">
       <textarea matInput class="hint" placeholder="Hinweis" [(ngModel)]="data.currentQuiz.hint" name="hint" class="form-control" required matTextareaAutosize matAutosizeMinRows="2"
                 matAutosizeMaxRows="5"></textarea>
     </mat-form-field>
   </div>
 
   <div>
-    <mat-form-field>
+    <mat-form-field class="width">
       <mat-select class="form-control" placeholder="Rätsel an Ort binden" [(ngModel)]="data.currentQuiz.location"
                   name="locationSelect">
         <mat-option *ngFor="let entry of locations" [value]="entry._id">{{entry._id}}</mat-option>

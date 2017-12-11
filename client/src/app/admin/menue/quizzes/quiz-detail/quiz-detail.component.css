@@ -2,10 +2,14 @@
   margin-bottom: 20px;
 }
 
-mat-form-field{
+.width{
   width: 100%;
 }
 
 img{
   max-width: 250px;
+}
+
+.answer{
+  width: 75%;
 }
