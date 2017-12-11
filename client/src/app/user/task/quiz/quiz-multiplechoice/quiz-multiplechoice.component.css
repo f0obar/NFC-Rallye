@@ -51,6 +51,11 @@ color:#fff;
   text-align: center;
 }
 
+.mat-raised-button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media only screen and (min-width: 768px) {
   /* For tablets: */
   mat-card {
