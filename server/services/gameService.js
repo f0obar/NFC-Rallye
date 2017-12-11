@@ -53,6 +53,7 @@ async function getGameState(token) {
   };
 
   if (session.task === 'won') {
+    result.groupName = session.groupName;
     result.winText = await Config.get('winText');
     return result;
   } else {
