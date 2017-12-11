@@ -29,7 +29,7 @@ async function startPlaySession(req, res, next) {
   } catch (err) {
     if (err instanceof UserException) {
       res.status(400);
-      res.send({"error": err.message});
+      res.send({"error": err});
     } else {
       console.error(err);
       res.status(500);

@@ -9,6 +9,10 @@ const UserException = require('../exceptions/userexception');
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const Filter = require('bad-words');
+
+const filter = new Filter();
+const pokemon = JSON.parse("[{\"name\":\"Bisasam\"},{\"name\":\"Bisaknosp\"},{\"name\":\"Bisaflor\"},{\"name\":\"Glumanda\"},{\"name\":\"Glutexo\"},{\"name\":\"Glurak\"},{\"name\":\"Schiggy\"},{\"name\":\"Schillok\"},{\"name\":\"Turtok\"},{\"name\":\"Raupy\"},{\"name\":\"Safcon\"},{\"name\":\"Smettbo\"},{\"name\":\"Hornliu\"},{\"name\":\"Kokuna\"},{\"name\":\"Bibor\"},{\"name\":\"Taubsi\"},{\"name\":\"Tauboga\"},{\"name\":\"Tauboss\"},{\"name\":\"Rattfratz\"},{\"name\":\"Rattikarl\"},{\"name\":\"Habitak\"},{\"name\":\"Ibitak\"},{\"name\":\"Rettan\"},{\"name\":\"Arbok\"},{\"name\":\"Pikachu\"},{\"name\":\"Raichu\"},{\"name\":\"Sandan\"},{\"name\":\"Sandamer\"},{\"name\":\"Nidoran♀\"},{\"name\":\"Nidorina\"},{\"name\":\"Nidoqueen\"},{\"name\":\"Nidoran♂\"},{\"name\":\"Nidorino\"},{\"name\":\"Nidoking\"},{\"name\":\"Piepi\"},{\"name\":\"Pixi\"},{\"name\":\"Vulpix\"},{\"name\":\"Vulnona\"},{\"name\":\"Pummeluff\"},{\"name\":\"Knuddeluff\"},{\"name\":\"Zubat\"},{\"name\":\"Golbat\"},{\"name\":\"Myrapla\"},{\"name\":\"Duflor\"},{\"name\":\"Giflor\"},{\"name\":\"Paras\"},{\"name\":\"Parasek\"},{\"name\":\"Bluzuk\"},{\"name\":\"Omot\"},{\"name\":\"Digda\"},{\"name\":\"Digdri\"},{\"name\":\"Mauzi\"},{\"name\":\"Snobilikat\"},{\"name\":\"Enton\"},{\"name\":\"Entoron\"},{\"name\":\"Menki\"},{\"name\":\"Rasaff\"},{\"name\":\"Fukano\"},{\"name\":\"Arkani\"},{\"name\":\"Quapsel\"},{\"name\":\"Quaputzi\"},{\"name\":\"Quappo\"},{\"name\":\"Abra\"},{\"name\":\"Kadabra\"},{\"name\":\"Simsala\"},{\"name\":\"Machollo\"},{\"name\":\"Maschock\"},{\"name\":\"Machomei\"},{\"name\":\"Knofensa\"},{\"name\":\"Ultrigaria\"},{\"name\":\"Sarzenia\"},{\"name\":\"Tentacha\"},{\"name\":\"Tentoxa\"},{\"name\":\"Kleinstein\"},{\"name\":\"Georok\"},{\"name\":\"Geowaz\"},{\"name\":\"Ponita\"},{\"name\":\"Gallopa\"},{\"name\":\"Flegmon\"},{\"name\":\"Lahmus\"},{\"name\":\"Magnetilo\"},{\"name\":\"Magneton\"},{\"name\":\"Porenta\"},{\"name\":\"Dodu\"},{\"name\":\"Dodri\"},{\"name\":\"Jurob\"},{\"name\":\"Jugong\"},{\"name\":\"Sleima\"},{\"name\":\"Sleimok\"},{\"name\":\"Muschas\"},{\"name\":\"Austos\"},{\"name\":\"Nebulak\"},{\"name\":\"Alpollo\"},{\"name\":\"Gengar\"},{\"name\":\"Onix\"},{\"name\":\"Traumato\"},{\"name\":\"Hypno\"},{\"name\":\"Krabby\"},{\"name\":\"Kingler\"},{\"name\":\"Voltobal\"},{\"name\":\"Lektrobal\"},{\"name\":\"Owei\"},{\"name\":\"Kokowei\"},{\"name\":\"Tragosso\"},{\"name\":\"Knogga\"},{\"name\":\"Kicklee\"},{\"name\":\"Nockchan\"},{\"name\":\"Schlurp\"},{\"name\":\"Smogon\"},{\"name\":\"Smogmog\"},{\"name\":\"Rihorn\"},{\"name\":\"Rizeros\"},{\"name\":\"Chaneira\"},{\"name\":\"Tangela\"},{\"name\":\"Kangama\"},{\"name\":\"Seeper\"},{\"name\":\"Seemon\"},{\"name\":\"Goldini\"},{\"name\":\"Golking\"},{\"name\":\"Sterndu\"},{\"name\":\"Starmie\"},{\"name\":\"Pantimos\"},{\"name\":\"Sichlor\"},{\"name\":\"Rossana\"},{\"name\":\"Elektek\"},{\"name\":\"Magmar\"},{\"name\":\"Pinsir\"},{\"name\":\"Tauros\"},{\"name\":\"Karpador\"},{\"name\":\"Garados\"},{\"name\":\"Lapras\"},{\"name\":\"Ditto\"},{\"name\":\"Evoli\"},{\"name\":\"Aquana\"},{\"name\":\"Blitza\"},{\"name\":\"Flamara\"},{\"name\":\"Porygon\"},{\"name\":\"Amonitas\"},{\"name\":\"Amoroso\"},{\"name\":\"Kabuto\"},{\"name\":\"Kabutops\"},{\"name\":\"Aerodactyl\"},{\"name\":\"Relaxo\"},{\"name\":\"Arktos\"},{\"name\":\"Zapdos\"},{\"name\":\"Lavados\"},{\"name\":\"Dratini\"},{\"name\":\"Dragonir\"},{\"name\":\"Dragoran\"},{\"name\":\"Mewtu\"},{\"name\":\"Mew\"}]");
 
 const LOCATION_VISIT_POINTS = 20;
 
@@ -158,15 +162,34 @@ async function createSession(groupName, password) {
       }
     }
     const playSession = new PlaySession();
-    playSession.groupName = groupName;
+    playSession.groupName = await badWordFilter(groupName);
     playSession.password = bcrypt.hashSync(password, 10);
     playSession.token = await generateToken();
     playSession.startDate = new Date();
-    console.log("Generate new PlaySession: " + playSession._id);
+    console.log("Generate new PlaySession: " + playSession._id + " with name: " + playSession.groupName);
     await advanceState(playSession);
     return playSession;
   } else {
     throw new UserException('Not enough riddles in the database');
+  }
+}
+
+async function badWordFilter(name) {
+  const cleanName = filter.clean(name);
+  if (name !== cleanName) {
+    let tries = 0;
+    let randomPokemon = pokemon[Math.random() * pokemon.length | 0];
+    while (await PlaySession.findOne({"groupName": randomPokemon.name})) {
+      if (tries === 10) {
+        // If we really cannot find a free Pokemon Name
+        throw new UserException("Search for a new name");
+      }
+      randomPokemon = pokemon[Math.random() * pokemon.length | 0];
+      tries++;
+    }
+    throw new UserException("Search for a new name", randomPokemon.name);
+  } else {
+    return name;
   }
 }
 

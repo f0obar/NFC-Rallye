@@ -1,6 +1,6 @@
-function UserException(message) {
+function UserException(message, suggestion) {
   this.message = message;
-  this.name = 'UserException';
+  this.suggestion = suggestion;
 }
 
 module.exports = UserException;
