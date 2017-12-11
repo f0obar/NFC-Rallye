@@ -18,6 +18,8 @@ export class UserComponent implements OnInit{
   points = 0;
   gameRunning: boolean;
   sessionID: string;
+  groupName: string;
+  winText: string;
   progressCount: number;
   progressDone: number;
   currentLocation: Location;
@@ -165,6 +167,9 @@ export class UserComponent implements OnInit{
             this.currentQuestion = new QuestionMultiplechoice(dataQuestion['description'],dataQuestion['question'] ,dataQuestion['choices'],dataQuestion['hint'], dataQuestion['image']);
           }
           console.log('the new question/location', this.currentQuestion, this.currentLocation);
+        } else {
+          this.groupName = data['groupName'];
+          this.winText = data['winText'];
         }
       },
       (err: HttpErrorResponse) => {

@@ -1,3 +1,23 @@
-<p class="scoreboard">
-  scoreboard works!
-</p>
+<h1 class="mat-display-1">{{winText}}</h1>
+
+<ng-container>
+  <div class="table-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Gruppenname</mat-header-cell>
+        <mat-cell *matCellDef="let element" [style.background-color]="isMyGroup(element.name) ? 'orange' : 'white'"> {{element.name}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="points">
+        <mat-header-cell *matHeaderCellDef> Punkte</mat-header-cell>
+        <mat-cell *matCellDef="let element" [style.background-color]="isMyGroup(element.name) ? 'orange' : 'white'"> {{element.points}}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+</ng-container>
+
+<i class="material-icons" (click)="abbrechen()">exit_to_app</i>
+

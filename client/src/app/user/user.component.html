@@ -4,7 +4,7 @@
     <app-user-task *ngIf="(currentQuestion!= undefined) && (currentLocation != undefined)"[question]="currentQuestion" [location]="currentLocation" [sessionID]="sessionID" [currentTask]="currentTask" (taskOutput)="getStateFromServer()" (taskLogout)="clearLocalSession()" (taskPointEmitter)="setPoints($event)">Quiz Loading..</app-user-task>
   </div>
   <div *ngIf="currentTask == 'won'">
-    <app-user-scoreboard>Scoreboard Loading..</app-user-scoreboard>
+    <app-user-scoreboard [winText]="winText" [groupName]="groupName" (scoreboardOutput)="clearLocalSession()">Scoreboard Loading..</app-user-scoreboard>
   </div>
 </div>
 <div *ngIf="gameRunning == false">
