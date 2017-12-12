@@ -88,7 +88,7 @@ async function solveRiddle(req, res, next) {
     solvedRiddle.points = 0;
     solvedRiddle.endDate = new Date();
     await gameService.advanceState(session);
-    await _finishSolveRiddle();
+    await _finishSolveRiddle(solvedRiddle);
     res.send({correctAnswer: true, points: solvedRiddle.points});
   } else {
     solvedRiddle.skipped = false;
@@ -99,10 +99,10 @@ async function solveRiddle(req, res, next) {
       solvedRiddle.endDate = new Date();
       session.points += solvedRiddle.points;
       await gameService.advanceState(session);
-      await _finishSolveRiddle();
+      await _finishSolveRiddle(solvedRiddle);
       res.send({correctAnswer: true, points: session.points});
     } else {
-      await _finishSolveRiddle();
+      await _finishSolveRiddle(solvedRiddle);
       res.send({correctAnswer: false, points: session.points});
     }
   }
