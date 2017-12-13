@@ -14,8 +14,13 @@
 
 mat-toolbar{
   background-color: #3f51b5;
+  text-align: right;
 }
 
 .material-icons{
   color: white;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }
