@@ -7,6 +7,7 @@ import {isNullOrUndefined} from 'util';
 import {UserQuizHintPopupComponent} from '../quiz-hint-popup/quiz-hint-popup.component';
 import {UserLocationMapPopupComponent} from '../../location/location-map-popup/location-map-popup.component';
 import {SharedSimpleDialogComponent} from '../../../../shared/simple-dialog/simple-dialog.component';
+import {UserQuizHelpPopupComponent} from "../quiz-help-popup/quiz-help-popup.component";
 
 @Component({
   selector: 'app-user-quiz-multiplechoice',
@@ -158,4 +159,11 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
       }
     });
   }
+
+  help() {
+    const d = this.dialog.open(UserQuizHelpPopupComponent, {
+
+    });
+  }
+
 }
