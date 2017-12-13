@@ -11,6 +11,7 @@
 button{
   width: 90%;
   margin: 10px;
+  text-overflow: ellipsis;
 }
 
 mat-card{
