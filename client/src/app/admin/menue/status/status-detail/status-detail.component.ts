@@ -1,7 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {PlaySession} from '../status.component';
-import {SharedSimpleDialogComponent} from '../../../../shared/simple-dialog/simple-dialog.component';
-import {MatDialog} from '@angular/material';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Component({
   selector: 'app-admin-status-detail',
@@ -9,38 +8,52 @@ import {MatDialog} from '@angular/material';
   styleUrls: ['./status-detail.component.css']
 })
 export class AdminStatusDetailComponent implements OnInit {
-
-  maximized = false;
-
-  @Input() session: PlaySession;
-
-  @Output()
-  detailDelete: EventEmitter<string> = new EventEmitter();
-  @Output()
-  detailMinimize: EventEmitter<string> = new EventEmitter();
-
-  constructor(public dialog: MatDialog) {
-    this.maximized = false;
-  }
+  constructor(public dialogRef: MatDialogRef<AdminStatusDetailComponent>,@Inject(MAT_DIALOG_DATA,) public data: any, private http: HttpClient) { }
 
   ngOnInit() {
+
   }
 
-  deleteSession() {
-    const d = this.dialog.open(SharedSimpleDialogComponent, {data: {
-      title: 'Session löschen',
-      message: 'Möchtest du wirklich die Session ' + this.session.sessionGroupName  +' löschen?',
-      button1: 'Löschen',
-      button2: 'Abbrechen'
-    }});
-    d.afterClosed().subscribe(result => {
-      if(result === 'b1') {
-        console.log('deleting the detailed session');
-        this.detailDelete.emit(this.session.session_id);
-      }
-    });
+  /**
+   * closes dialog
+   */
+  cancel() {
+    this.dialogRef.close('cancel');
   }
-  minimize(){
-    this.detailMinimize.emit();
+
+  deleteGroup() {
+    this.dialogRef.close('delete');
+  }
+
+  /**
+   * submits new / edited quiz to the server using rest api
+   */
+  submit(password: string) {
+    if(password.length > 0){
+      console.log('need to hash new pw');
+      this.http.put('/api/admin/playsessions/' + this.data.playSession.session_id, {
+        groupName: this.data.playSession.sessionGroupName,
+      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+        (data) => {
+          this.dialogRef.close();
+        },
+        (err) => {
+          console.log('error editing location', err);
+        }
+      );
+    } else {
+      console.log('dont need to hash new pw');
+      this.http.put('/api/admin/playsessions/' + this.data.playSession.session_id, {
+        password: password,
+        groupName: this.data.playSession.sessionGroupName,
+      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+        (data) => {
+          this.dialogRef.close();
+        },
+        (err) => {
+          console.log('error editing location', err);
+        }
+      );
+    }
   }
 }

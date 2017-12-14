@@ -14,32 +14,32 @@
     <mat-table #table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef> Gruppenname</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.sessionGroupName}}</mat-cell>
+        <mat-cell *matCellDef="let element" (click)="openDetail(element)"> {{element.sessionGroupName}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="location">
         <mat-header-cell *matHeaderCellDef> Ort</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.sessionLocation}}</mat-cell>
+        <mat-cell *matCellDef="let element" (click)="openDetail(element)"> {{element.sessionLocation}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="time">
         <mat-header-cell *matHeaderCellDef> Spielzeit</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{parseTimeSession(element)}}</mat-cell>
+        <mat-cell *matCellDef="let element" (click)="openDetail(element)"> {{parseTimeSession(element)}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="lastActive">
         <mat-header-cell *matHeaderCellDef> Zuletzt aktiv vor</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{parseTimeLast(element)}}</mat-cell>
+        <mat-cell *matCellDef="let element" (click)="openDetail(element)"> {{parseTimeLast(element)}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="points">
         <mat-header-cell *matHeaderCellDef> Punkte</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.points}}</mat-cell>
+        <mat-cell *matCellDef="let element" (click)="openDetail(element)"> {{element.points}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="progress">
         <mat-header-cell *matHeaderCellDef> Fortschritt</mat-header-cell>
-        <mat-cell *matCellDef="let element">
+        <mat-cell *matCellDef="let element" (click)="openDetail(element)">
           <mat-progress-bar
             [value]="((convertInt(element.sessionLocationCount) - element.sessionLocationsToVisit.length) / convertInt(element.sessionLocationCount))*100"></mat-progress-bar>
         </mat-cell>

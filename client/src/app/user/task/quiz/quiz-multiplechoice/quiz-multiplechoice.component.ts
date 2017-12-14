@@ -77,11 +77,11 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
               horizontalPosition: 'center'
             });
             this.solution = answer;
+            if (!isNullOrUndefined(data['points'])) {
+              this.quizPointEmitter.emit(data['points']);
+            }
 
             setTimeout(()=>{
-              if (!isNullOrUndefined(data['points'])) {
-                this.quizPointEmitter.emit(data['points']);
-              }
               this.quizOutput.emit();
             }, 2000);
           } else {

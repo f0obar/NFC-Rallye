@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {isNullOrUndefined} from 'util';
+import {AdminStatusDetailComponent} from "./status-detail/status-detail.component";
 
 
 @Component({
@@ -215,6 +216,21 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
         console.log('current play sessions error', err);
       }
     );
+  }
+
+  openDetail(playSession: PlaySession) {
+    const d = this.dialog.open(AdminStatusDetailComponent, {
+      data: {
+        playSession: playSession,
+        adminToken: this.adminToken
+      }
+    });
+    d.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+       console.log('deleting playsession');
+       this.deleteSession(playSession.session_id);
+      }
+    });
   }
 
   convertInt(s: string): number {

@@ -12,6 +12,11 @@ h1{
   overflow: auto;
 }
 
+.mat-row:hover {
+  background-color: #eeeeee;
+  cursor: pointer;
+}
+
 .filter {
   min-height: 64px;
   padding: 8px 24px 0;

@@ -198,7 +198,8 @@ const routes: Routes = [
     UserLocationMapPopupComponent,
     UserLocationCameraPopupComponent,
     UserQuizHintPopupComponent,
-    UserQuizHelpPopupComponent
+    UserQuizHelpPopupComponent,
+    AdminStatusDetailComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

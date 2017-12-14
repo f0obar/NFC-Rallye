@@ -1,7 +1,25 @@
-<div *ngFor="let entry of session.sessionLocationsToVisit">
-  <p>{{entry}}</p>
+<h1 mat-dialog-title>Gruppe Editieren</h1>
+<div mat-dialog-content>
+
+  <div class="form-group">
+    <mat-form-field class="width">
+      <input matInput placeholder="Gruppenname" [(ngModel)]="data.playSession.sessionGroupName" name="name" class="form-control"
+             required autofocus>
+    </mat-form-field>
+  </div>
+
+  <div class="form-group">
+    <mat-form-field class="width">
+      <input #password matInput placeholder="Passwort" name="password" class="form-control"
+             required autofocus>
+    </mat-form-field>
+  </div>
+
 </div>
-<button type="button" (click)="minimize()">X</button>
-<button type="button" (click)="deleteSession()">DELETE</button>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" tabindex="2" (click)="submit(password.value)">Speichern</button>
+  <button mat-raised-button color="warn" tabindex="-1" (click)="deleteGroup()">Löschen</button>
+  <button mat-raised-button tabindex="-2" (click)="cancel()">Abbrechen</button>
+</div>
 
 
