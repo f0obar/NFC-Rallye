@@ -15,7 +15,7 @@
       </ng-container>
 
       <div class="form-group" *ngFor="let entry of question.choices">
-        <button [disabled]="isAnswerUsed(entry)" mat-raised-button color="secondary" (click)="solveQuestion(entry)">
+        <button [disabled]="isAnswerUsed(entry)" [class.solved]="isAnswerCorrect(entry)" mat-raised-button color="secondary" (click)="solveQuestion(entry)">
           {{entry}}
         </button>
       </div>

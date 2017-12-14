@@ -30,6 +30,7 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
   quizPointEmitter: EventEmitter<any> = new EventEmitter();
 
   usedAnswers = [];
+  solution = '';
 
 
   constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog) {
@@ -75,10 +76,14 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
               duration: 2000,
               horizontalPosition: 'center'
             });
-            if (!isNullOrUndefined(data['points'])) {
-              this.quizPointEmitter.emit(data['points']);
-            }
-            this.quizOutput.emit();
+            this.solution = answer;
+
+            setTimeout(()=>{
+              if (!isNullOrUndefined(data['points'])) {
+                this.quizPointEmitter.emit(data['points']);
+              }
+              this.quizOutput.emit();
+            }, 2000);
           } else {
             console.log('wrong answer');
             this.snackBar.open('Falsche Antwort', null, {
@@ -97,6 +102,10 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
 
   isAnswerUsed(answer: string): boolean {
     return this.usedAnswers.indexOf(answer) > -1;
+  }
+
+  isAnswerCorrect(answer: string): boolean {
+    return answer === this.solution;
   }
 
 

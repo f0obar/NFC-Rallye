@@ -87,6 +87,14 @@ color:#fff;
   }
 }
 
+.mat-raised-button[disabled] {
+  background-color: #FF6B6B;
+}
+
+.mat-raised-button.solved {
+  background-color: #C7F464;
+}
+
 @media only screen and (min-width: 1200px) {
   /* For desktop: */
   mat-card {
