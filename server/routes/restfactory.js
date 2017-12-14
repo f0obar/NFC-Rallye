@@ -2,6 +2,7 @@
 
 const express = require('express');
 const authenticator = require('./authMiddleware');
+const SolvedRiddle = require('../models/solvedRiddle');
 
 function getEntries(Model){
     return function(req, res, next){
@@ -73,8 +74,15 @@ function updateEntry(Model) {
 }
 
 function deleteEntry(Model) {
-    return function (req, res, next) {
+    return async function (req, res, next) {
         const id = req.params.id;
+        if (Model.modelName === 'PlaySession') {
+            const session = await Model.findOne({_id: id}).exec();
+            session.solvedRiddles.forEach(async function(solvedRiddle) {
+                console.log('Delete Solved Riddle:', solvedRiddle);
+                await SolvedRiddle.remove({_id: solvedRiddle});
+            });
+        }
         Model.remove({
             _id: id
         }, function (err, entry) {

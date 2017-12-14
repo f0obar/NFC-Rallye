@@ -223,8 +223,14 @@ async function generateToken() {
   return token;
 }
 
-async function destroySession(token) {
-  await PlaySession.remove({ token: token });
+async function deleteSession(token) {
+  const session = await PlaySession.find({token: token}).exec();
+  if (session) {
+    session.solvedRiddles.forEach(async function(solvedRiddle) {
+      await SolvedRiddle.remove({_id: solvedRiddle});
+    });
+    await PlaySession.remove({ token: token });
+  }
 }
 
 async function advanceState(playSession) {
@@ -352,6 +358,6 @@ module.exports = {
   getGameState,
   checkLocation,
   createSession,
-  destroySession,
+  deleteSession,
   advanceState
 };

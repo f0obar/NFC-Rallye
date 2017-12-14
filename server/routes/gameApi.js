@@ -141,13 +141,9 @@ function sessionDeleter() {
       return;
     }
     const currentTime = Date.now();
-    sessions.forEach(function (session) {
+    sessions.forEach(async function (session) {
       if (currentTime > session.lastUpdated.getTime() + sessionToDeleteTime) {
-        session.remove(function (err) {
-          if (err) {
-            console.log(err);
-          }
-        });
+        await gameService.deleteSession(session.token);
       }
     });
   });
