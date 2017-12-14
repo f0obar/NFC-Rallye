@@ -4,6 +4,8 @@ const express = require('express');
 const authenticator = require('./authMiddleware');
 const SolvedRiddle = require('../models/solvedRiddle');
 
+const bcrypt = require("bcryptjs");
+
 function getEntries(Model){
     return function(req, res, next){
         Model.find(function(err, entries){
@@ -49,9 +51,10 @@ function createEntry(Model) {
 }
 
 function updateEntry(Model) {
-    return function (req, res, next) {
+    return async function (req, res, next) {
         console.log("req",req.body);
         const id = req.params.id;
+
         Model.findById(id, function (err, entry) {
             if (err) {
                 res.send(err);
@@ -59,7 +62,11 @@ function updateEntry(Model) {
             }
             Model.schema.eachPath(function(path) {
                 if(req.body.hasOwnProperty(path)){
-                    entry[path] = req.body[path];
+                    if (path === 'password') {
+                        entry['password'] = bcrypt.hashSync(req.body['password'], 10);
+                    } else {
+                        entry[path] = req.body[path];
+                    }
                 }
             });
             entry.save(function (err) {

@@ -32,6 +32,7 @@ export class AdminStatusDetailComponent implements OnInit {
     if(password.length > 0){
       console.log('need to hash new pw');
       this.http.put('/api/admin/playsessions/' + this.data.playSession.session_id, {
+        password: password,
         groupName: this.data.playSession.sessionGroupName,
       }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
         (data) => {
@@ -44,7 +45,6 @@ export class AdminStatusDetailComponent implements OnInit {
     } else {
       console.log('dont need to hash new pw');
       this.http.put('/api/admin/playsessions/' + this.data.playSession.session_id, {
-        password: password,
         groupName: this.data.playSession.sessionGroupName,
       }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
         (data) => {
