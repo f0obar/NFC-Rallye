@@ -27,6 +27,6 @@ export class QuestionSingleanswer {
   }
 
   public getImage(): any {
-
+    return this.image;
   }
 }

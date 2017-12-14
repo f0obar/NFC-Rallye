@@ -45,6 +45,7 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges {
     return !isNullOrUndefined(this.question.getImage());
   }
 
+
   /**
    * opens popup dialog for the hint
    */
