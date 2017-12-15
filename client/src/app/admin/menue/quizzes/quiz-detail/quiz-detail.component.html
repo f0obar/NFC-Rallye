@@ -27,7 +27,7 @@
 
   <ng-container *ngIf="type=='multipleChoice'">
     <div class="form-group">
-      <div *ngFor="let entry of data.currentQuiz.choices; let i=index">
+      <div *ngFor="let entry of data.currentQuiz.choices;trackBy:trackByFn;let i=index;">
         <mat-form-field class="answer">
           <input matInput placeholder="Antwortmöglichkeiten" [(ngModel)]="data.currentQuiz.choices[i]"
                  class="form-control">

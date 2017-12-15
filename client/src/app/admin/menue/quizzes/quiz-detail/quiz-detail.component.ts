@@ -68,6 +68,10 @@ export class AdminQuizDetailComponent implements OnInit {
     }
   }
 
+  trackByFn(index, item) {
+    return index;
+  }
+
   /**
    * adds a choice to the array
    */
