@@ -1,16 +1,8 @@
-const WebSocket = require('ws');
-const PlaySession = require('../models/playSession');
-
-const wss = new WebSocket.Server({ port: 44527 });
-let ws = null;
-
-wss.on('connection', function(_ws) {
-  console.log("Connected to WebSocket");
-  ws = _ws;
-});
+const PlaySession = require("../models/playSession");
+const WebSocketService = require("./webSocketService");
 
 async function getScoreboard() {
-  const result = {sessions: []};
+  const result = { sessions: [] };
   const playSessions = await PlaySession.find().exec();
   playSessions.forEach(function(playSession) {
     const session = {};
@@ -22,12 +14,11 @@ async function getScoreboard() {
 }
 
 async function pushScoreboard() {
-  if (ws !== null) {
+  try {
     const scoreboard = await getScoreboard();
-    ws.send(JSON.stringify(scoreboard.sessions));
-    console.log("Pushed Scoreboard through WebSocket")
-  } else {
-    console.log("No WebSocket connected")
+    WebSocketService.push(scoreboard.sessions);
+  } catch (err) {
+    console.error(err);
   }
 }
 
