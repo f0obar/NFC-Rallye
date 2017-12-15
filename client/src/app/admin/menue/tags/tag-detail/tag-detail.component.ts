@@ -38,6 +38,7 @@ export class AdminTagDetailComponent implements OnInit {
       null,
       'sample ID',
       'sample name');
+    this.generateID();
   }
 
   loadLocations() {
@@ -119,6 +120,14 @@ export class AdminTagDetailComponent implements OnInit {
         );
       }
       console.log('saving quiz detail', this.data.currentTag);
+    }
+  }
+
+  generateID() {
+    this.data.currentTag.tagID = this.data.currentTag.alias + '-';
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for (var i = 0; i < 10; i++) {
+      this.data.currentTag.tagID += possible.charAt(Math.floor(Math.random() * possible.length));
     }
   }
 
