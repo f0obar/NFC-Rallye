@@ -191,7 +191,7 @@ const routes: Routes = [
     UserQuizHelpPopupComponent,
     AdminStatusDetailComponent
   ],
-  providers: [WebSocketService],
+  providers: [WebSocketService, {provide: Window, useValue: window}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
