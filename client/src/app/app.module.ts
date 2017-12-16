@@ -3,20 +3,9 @@ import {NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // Material
 import {
-  MatButtonModule,
-  MatSortModule,
-  MatCheckboxModule,
-  MatDialogModule,
-  MatInputModule,
-  MatListModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatTableModule,
-  MatToolbarModule
+  MatButtonModule, MatCheckboxModule, MatDialogModule, MatInputModule, MatListModule, MatPaginatorModule,
+  MatProgressBarModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule,
+  MatTableModule, MatToolbarModule
 } from '@angular/material';
 
 import {AppComponent} from './app.component';
@@ -51,8 +40,9 @@ import {UserQuizHintPopupComponent} from './user/task/quiz/quiz-hint-popup/quiz-
 import {MatCardModule} from '@angular/material/card';
 import {HttpModule} from '@angular/http';
 import {MatIconModule} from '@angular/material/icon';
-import { ScoreboardComponent } from './scoreboard/scoreboard.component';
+import {ScoreboardComponent} from './scoreboard/scoreboard.component';
 import {UserQuizHelpPopupComponent} from './user/task/quiz/quiz-help-popup/quiz-help-popup.component';
+import {WebSocketService} from './scoreboard/services/websocket.service';
 
 
 const routes: Routes = [
@@ -201,7 +191,7 @@ const routes: Routes = [
     UserQuizHelpPopupComponent,
     AdminStatusDetailComponent
   ],
-  providers: [],
+  providers: [WebSocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

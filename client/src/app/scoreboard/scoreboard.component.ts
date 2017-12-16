@@ -1,7 +1,12 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
-import {MatPaginator, MatSort, MatSortHeader, MatTableDataSource} from '@angular/material';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {MatPaginator, MatTableDataSource} from '@angular/material';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {WebSocketService} from './services/websocket.service';
+import {Subject} from 'rxjs/Subject';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+
+const WS_URL = 'ws://localhost:44527';
 
 @Component({
   selector: 'app-scoreboard',
@@ -10,19 +15,29 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 })
 export class ScoreboardComponent implements OnInit, AfterViewInit {
 
-  constructor(private http: HttpClient) { }
-
+  public messages: Subject<String> = new Subject<String>();
   displayedColumns = ['name', 'points'];
 
-  public groups: Array<Group>;
+  public groups: Array<Group> = [];
 
   dataSource = new MatTableDataSource();
+
+  constructor(private http: HttpClient, private wsService: WebSocketService) {
+    this.messages = <Subject<String>>this.wsService
+      .connect(WS_URL)
+      .map((response: MessageEvent): String => {
+        return JSON.parse(response.data);
+      });
+
+    this.messages.subscribe(data => {
+      this.updateScoreboard(data);
+    });
+  }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.getDataFromServer();
-    IntervalObservable.create(5000).subscribe(n => this.getDataFromServer());
   }
 
   /**
@@ -34,21 +49,24 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * gets all current playsessions from the server and puts them into the table
+   * gets all current playSessions from the server and puts them into the table
    */
-  getDataFromServer() {
+  updateScoreboard(data) {
     this.groups = [];
+    for (const entry of data['sessions']) {
+      this.groups.push(new Group(entry['name'], entry['points']));
+    }
+    this.groups.sort((n1, n2) => n2.points - n1.points);
+    this.dataSource.data = this.groups;
+  }
 
+  getDataFromServer() {
     this.http.get('/api/scoreboard').subscribe(
       data => {
-        for(let entry of data['sessions']){
-          this.groups.push(new Group(entry['name'],entry['points']));
-        }
-        this.groups.sort((n1,n2) => n2.points - n1.points);
-        this.dataSource.data = this.groups;
+        this.updateScoreboard(data);
       },
       (err: HttpErrorResponse) => {
-        console.log('session expired',err);
+        console.log('session expired', err);
       }
     );
   }

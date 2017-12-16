@@ -16,7 +16,7 @@ async function getScoreboard() {
 async function pushScoreboard() {
   try {
     const scoreboard = await getScoreboard();
-    WebSocketService.push(scoreboard.sessions);
+    WebSocketService.push(scoreboard);
   } catch (err) {
     console.error(err);
   }
