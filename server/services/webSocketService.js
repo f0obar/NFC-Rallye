@@ -1,6 +1,8 @@
 const WebSocket = require("ws");
 
-const wss = new WebSocket.Server({ port: 44527 });
+const _port = global.ws_port || 44527;
+
+const wss = new WebSocket.Server({ port: _port });
 
 wss.on("connection", function(ws) {
   console.log("Connected to WebSocket Client");
