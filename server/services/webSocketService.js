@@ -1,8 +1,19 @@
 const WebSocket = require("ws");
 
-const _port = global.ws_port || 44527;
+let prod = process.env.PROD;
 
-const wss = new WebSocket.Server({ port: _port });
+let ws_port = 0;
+
+if (prod === 'true') {
+  // Proxy WebSocket through Nginx for SSL Support
+  ws_port = 44526
+} else {
+  ws_port = 44527
+}
+
+console.log('WebSocket Port:', ws_port);
+
+const wss = new WebSocket.Server({ port: ws_port });
 
 wss.on("connection", function(ws) {
   console.log("Connected to WebSocket Client");

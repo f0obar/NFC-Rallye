@@ -12,35 +12,18 @@ const mongoose = require('mongoose');
 const debug = require('debug')('node:server');
 const http = require('http');
 
+const api = require('./routes/api');
+
 const app = express();
 
 /**
  * Get port from environment and store in Express.
  */
+
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 let prod = process.env.PROD;
-if (!prod === true) {
-  prod = false;
-}
-
-global.ws_port = null;
-if (prod) {
-  app.use(express.static(path.join(__dirname, '../client/dist')));
-
-  // Proxy WebSocket through Nginx for SSL Support
-  global.ws_port = 44526
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-  });
-}
-
-/**
- * Now load the api
- */
-const api = require('./routes/api');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,6 +34,14 @@ app.use(bodyParser.json({limit: '2mb'}));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use('/api', api);
+
+if (prod === 'true') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
+}
 
 // connect to db
 mongoose.Promise = Promise;
