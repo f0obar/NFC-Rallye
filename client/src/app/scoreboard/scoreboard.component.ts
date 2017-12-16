@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 
 const WS_PREFIX = 'ws://';
-const WS_PORT = ':44527'
+const WS_PORT = ':44527';
 
 @Component({
   selector: 'app-scoreboard',
@@ -23,8 +23,8 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource();
 
-  constructor(private http: HttpClient, private wsService: WebSocketService, private window: Window) {
-    const hostname = this.window.location.hostname;
+  constructor(private http: HttpClient, private wsService: WebSocketService) {
+    const hostname = window.location.hostname;
     this.messages = <Subject<String>>this.wsService
       .connect(WS_PREFIX + hostname + WS_PORT)
       .map((response: MessageEvent): String => {
