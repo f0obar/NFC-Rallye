@@ -3,6 +3,7 @@
 const express = require('express');
 const authenticator = require('./authMiddleware');
 const SolvedRiddle = require('../models/solvedRiddle');
+const scoreBoardService = require('../services/scoreboardService');
 
 const bcrypt = require("bcryptjs");
 
@@ -86,19 +87,17 @@ function deleteEntry(Model) {
         if (Model.modelName === 'PlaySession') {
             const session = await Model.findOne({_id: id}).exec();
             session.solvedRiddles.forEach(async function(solvedRiddle) {
-                console.log('Delete Solved Riddle:', solvedRiddle);
                 await SolvedRiddle.remove({_id: solvedRiddle});
             });
         }
-        Model.remove({
-            _id: id
-        }, function (err, entry) {
-            if (err) {
-                res.send(err);
-                return;
-            }
+        try {
+            await Model.remove({_id: id}).exec();
+            await scoreBoardService.pushScoreboard();
             res.send({message: Model.modelName + ' deleted'});
-        });
+        } catch (err) {
+            res.send(err);
+            return;
+        }
     }
 }
 
