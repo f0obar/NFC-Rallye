@@ -10,8 +10,12 @@ mat-toolbar{
   background-color: #3f51b5;
 }
 
-.material-icons{
+.material-icons {
   color: white;
+}
+
+.material-icons:hover {
+  cursor: pointer;
 }
 
 #map {

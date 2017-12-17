@@ -10,6 +10,11 @@
   width: 200px;
 }
 
+.mat-list-item:hover {
+  background-color: #eeeeee;
+  cursor: pointer;
+}
+
 .sidenav-button {
   margin-top: 8px;
   margin-left: 8px;
