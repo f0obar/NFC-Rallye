@@ -197,8 +197,6 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
             if(!isNullOrUndefined(data[d]['lastUpdated'])){
               playSession.sessionlastUpdated = new Date(data[d]['lastUpdated']);
             }
-
-            this.resolveAlias(playSession);
             this.activePlaySessions.push(playSession);
           }
         }
@@ -210,6 +208,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
             playSession.sessionLocationsToVisit.push(playSession.sessionLocation);
           }
         }
+        this.resolveAlias(this.activePlaySessions);
         this.dataSource.data = this.activePlaySessions;
         console.log('current play sessions', this.activePlaySessions);
       },
@@ -238,8 +237,20 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
     return parseInt(s, 10);
   }
 
-  resolveAlias(playSession: PlaySession){
-    playSession.setLocationAlias('abcde');
+  resolveAlias(playSessions: PlaySession[]){
+    let locationNames;
+
+    this.http.get('/api/admin/locationnames', {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
+      (data) => {
+        locationNames = data['locations'];
+        for (const playSession of playSessions){
+          playSession.setLocationAlias(locationNames[playSession.sessionLocation]);
+        }
+      },
+      (err) => {
+        console.log('current play sessions error', err);
+      }
+    );
   }
 }
 
