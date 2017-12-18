@@ -10,10 +10,7 @@ router.get('/', async function(req, res, next) {
   try {
     const locations = await Location.find().exec();
     locations.forEach(function (location) {
-      const loc = {};
-      loc.id = location._id;
-      loc.name = location.name;
-      result.locations.push(loc);
+      result.locations.push({[location._id]: location.name});
     });
     res.send(result);
   } catch(err) {
