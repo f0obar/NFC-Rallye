@@ -3,12 +3,12 @@
     <mat-table #table [dataSource]="dataSource">
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef> Gruppenname</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.name}}</mat-cell>
+        <mat-cell *matCellDef="let element" [class.highlighted]="highlightGroup(element)"> {{element.name}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="points">
         <mat-header-cell *matHeaderCellDef> Punkte</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.points}}</mat-cell>
+        <mat-cell *matCellDef="let element" [class.highlighted]="highlightGroup(element)"> {{element.points}}</mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

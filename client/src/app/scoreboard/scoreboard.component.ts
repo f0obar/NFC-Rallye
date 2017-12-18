@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {WebSocketService} from './services/websocket.service';
@@ -15,6 +15,8 @@ const WS_PORT = ':44527';
   styleUrls: ['./scoreboard.component.css']
 })
 export class ScoreboardComponent implements OnInit, AfterViewInit {
+
+  @Input() groupName: string;
 
   public messages: Subject<String> = new Subject<String>();
   displayedColumns = ['name', 'points'];
@@ -71,6 +73,10 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
         console.log('session expired', err);
       }
     );
+  }
+
+  highlightGroup(group: Group): boolean{
+    return this.groupName == group.name;
   }
 }
 
