@@ -6,11 +6,11 @@ const router = express.Router();
 router.use(authenticator);
 
 router.get('/', async function(req, res, next) {
-  const result = {locations: []};
+  const result = {locations: {}};
   try {
     const locations = await Location.find().exec();
     locations.forEach(function (location) {
-      result.locations.push({[location._id]: location.name});
+      result.locations[location._id] = location.name;
     });
     res.send(result);
   } catch(err) {
