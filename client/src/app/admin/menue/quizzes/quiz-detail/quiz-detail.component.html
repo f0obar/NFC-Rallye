@@ -52,7 +52,7 @@
     <mat-form-field class="width">
       <mat-select class="form-control" placeholder="Rätsel an Ort binden" [(ngModel)]="data.currentQuiz.location"
                   name="locationSelect">
-        <mat-option *ngFor="let entry of locations" [value]="entry._id">{{entry._id}}</mat-option>
+        <mat-option *ngFor="let entry of locations" [value]="entry._id">{{entry.name}}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>

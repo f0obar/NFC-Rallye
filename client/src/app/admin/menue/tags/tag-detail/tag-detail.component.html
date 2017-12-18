@@ -13,7 +13,7 @@
   <div class="form-group">
     <mat-form-field>
     <mat-select placeholder="Verknüpfter Ort" class="form-control" [(ngModel)]="data.currentTag.location" name="locationSelect">
-      <mat-option *ngFor="let entry of locations" [value]="entry._id">{{entry._id}}</mat-option>
+      <mat-option *ngFor="let entry of locations" [value]="entry._id">{{entry.name}}</mat-option>
     </mat-select>
     </mat-form-field>
   </div>

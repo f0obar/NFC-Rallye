@@ -198,6 +198,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
               playSession.sessionlastUpdated = new Date(data[d]['lastUpdated']);
             }
 
+            this.resolveAlias(playSession);
             this.activePlaySessions.push(playSession);
           }
         }
@@ -236,9 +237,14 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
   convertInt(s: string): number {
     return parseInt(s, 10);
   }
+
+  resolveAlias(playSession: PlaySession){
+    playSession.setLocationAlias('abcde');
+  }
 }
 
 export class PlaySession {
+  public locationAlias: string;
   constructor(public sessionGroupName: string,
               public sessionlastUpdated: Date,
               public sessionLocation: string,
@@ -250,6 +256,8 @@ export class PlaySession {
               public startDate: Date,
               public endDate: Date,
               public points: number) {
-
+  }
+  public setLocationAlias(s: string){
+    this.locationAlias = s;
   }
 }

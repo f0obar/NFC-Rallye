@@ -19,7 +19,7 @@
 
       <ng-container matColumnDef="location">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Ort</mat-header-cell>
-        <mat-cell *matCellDef="let element" (click)="openDetail(element)"> {{element.sessionLocation}}</mat-cell>
+        <mat-cell *matCellDef="let element" (click)="openDetail(element)"> {{element.locationAlias}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="time">
