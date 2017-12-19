@@ -7,10 +7,7 @@
     {
       "root": "src",
       "outDir": "dist",
-      "assets": [
-        "assets",
-        "favicon.ico"
-      ],
+      "assets": ["assets", "favicon.ico"],
       "index": "index.html",
       "main": "main.ts",
       "polyfills": "polyfills.ts",
@@ -18,16 +15,14 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
-      "styles": [
-        "styles.css"
-      ],
+      "styles": ["../node_modules/leaflet/dist/leaflet.css", "styles.css"],
       "scripts": [
+        "../node_modules/leaflet/dist/leaflet.js",
         "assets/js/countup/countUp.js",
         "assets/js/qrcode/grid.js",
         "assets/js/qrcode/version.js",
         "assets/js/qrcode/detector.js",
         "assets/js/qrcode/formatinf.js",
-        "assets/js/qrcode/errorlevel.js",
         "assets/js/qrcode/bitmat.js",
         "assets/js/qrcode/datablock.js",
         "assets/js/qrcode/bmparser.js",

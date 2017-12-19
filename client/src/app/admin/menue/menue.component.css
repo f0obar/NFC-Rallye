@@ -1,4 +1,4 @@
-.sidenav-container {
+mat-sidenav-container {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -6,7 +6,7 @@
   right: 0;
 }
 
-.sidenav-side {
+mat-sidenav {
   width: 200px;
 }
 

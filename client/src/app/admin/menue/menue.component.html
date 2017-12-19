@@ -1,7 +1,9 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" opened="true">
-    <mat-list class="sidenav-side">
-      <mat-list-item><h2 class="mat-h2"> Menu </h2></mat-list-item>
+    <mat-list>
+      <mat-list-item>
+        <h2 class="mat-h2"> Menu </h2>
+      </mat-list-item>
       <mat-divider></mat-divider>
       <ng-container *ngFor="let entry of menueItems">
         <mat-list-item (click)="sidenav.close(); currentSelection=entry;"> {{entry}} </mat-list-item>
@@ -15,11 +17,9 @@
   </button>
   <div class="sidenav-content" (click)="sidenav.close()">
     <app-admin-status *ngIf="currentSelection=='Status'" [adminToken]="adminToken"></app-admin-status>
-    <app-admin-configuration *ngIf="currentSelection=='Konfiguration'"
-                             [adminToken]="adminToken"></app-admin-configuration>
+    <app-admin-configuration *ngIf="currentSelection=='Konfiguration'" [adminToken]="adminToken"></app-admin-configuration>
     <app-admin-locations *ngIf="currentSelection=='Orte'" [adminToken]="adminToken"></app-admin-locations>
     <app-admin-quizzes *ngIf="currentSelection=='Rätsel'" [adminToken]="adminToken"></app-admin-quizzes>
     <app-admin-tags *ngIf="currentSelection=='Tags'" [adminToken]="adminToken"></app-admin-tags>
   </div>
 </mat-sidenav-container>
-
