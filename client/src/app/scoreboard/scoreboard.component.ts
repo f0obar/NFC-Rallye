@@ -23,6 +23,7 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
 
   public groups: Array<Group> = [];
 
+  //data source for the table
   dataSource = new MatTableDataSource();
 
   constructor(private http: HttpClient, private wsService: WebSocketService) {
@@ -53,7 +54,7 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * gets all current playSessions from the server and puts them into the table
+   * parses new scoreboard data
    */
   updateScoreboard(data) {
     this.groups = [];
@@ -64,6 +65,9 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
     this.dataSource.data = this.groups;
   }
 
+  /**
+   * gets current scoreboard entries from the server
+   */
   getDataFromServer() {
     this.http.get('/api/scoreboard').subscribe(
       data => {
@@ -75,6 +79,11 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
     );
   }
 
+  /**
+   * checks if selected group is the highlighted group
+   * @param {Group} group
+   * @returns {boolean}
+   */
   highlightGroup(group: Group): boolean{
     return this.groupName == group.name;
   }
