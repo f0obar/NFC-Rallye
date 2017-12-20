@@ -21,6 +21,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
   displayedColumns = ['tagID','alias', 'location','url', 'edit'];
 
   dataSource = new MatTableDataSource();
+  hostname = window.location.hostname;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

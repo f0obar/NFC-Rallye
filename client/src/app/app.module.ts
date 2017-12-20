@@ -50,76 +50,30 @@ const routes: Routes = [
     path: 'admin', component: AdminComponent,
     children: [
       {
-        path: 'listriddles',
-        component: AdminComponent
-      },
-      {
-        path: 'addriddle',
-        component: AdminComponent
-      },
-      {
-        path: 'edittiddle:id',
-        component: AdminComponent
-      },
-      {
-        path: 'listlocations',
-        component: AdminComponent
-      },
-      {
-        path: 'addlocation',
-        component: AdminComponent
-      },
-      {
-        path: 'editlocation:id',
-        component: AdminComponent
-      },
-      {
-        path: 'listtags',
-        component: AdminComponent
-      },
-      {
-        path: 'addtag',
-        component: AdminComponent
-      },
-      {
-        path: 'edittag:id',
-        component: AdminComponent
-      },
-      {
-        path: 'login',
-        component: AdminComponent
-      },
-      {
-        path: 'liststatuss',
-        component: AdminComponent
-      },
-      {
         path: '**',
-        redirectTo: '/admin/login'
-      }
-    ]
-  },
-  {
-    path: 'user', component: UserComponent, children: [
-      {
-        path: '',
-        component: UserComponent
-      },
-      {
-        path: '**',
-        redirectTo: '/user'
+        redirectTo: '/admin'
       }
     ]
   },
   {
     path: 'scoreboard',
-    component: ScoreboardComponent
+    component: ScoreboardComponent,
+    children: [
+      {
+        path: '**',
+        redirectTo: '/scoreboard'
+      }
+    ]
   },
   {
     path: 'tag',
     component: UserComponent
   },
-  {path: '**', redirectTo: 'user'}
+  {
+    path: '',
+    component: UserComponent
+  },
+  {path: '**', redirectTo: ''}
 ];
 
 @NgModule({
