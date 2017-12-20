@@ -309,6 +309,7 @@ async function _finishAdvanceState(playSession) {
       throw new UserException("no Riddles in database");
     }
     playSession.riddle = _getRiddleID(playSession, riddles);
+    playSession.usedRiddles.push(playSession.riddle);
     const solvedRiddle = new SolvedRiddle();
     solvedRiddle.riddle = playSession.riddle;
     solvedRiddle.tries = 0;
@@ -322,7 +323,7 @@ async function _finishAdvanceState(playSession) {
 
 function _getRiddleID(session, riddles) {
   const unusedRiddles = riddles.filter(function(riddle) {
-    return session.solvedRiddles.indexOf(riddle._id) === -1;
+    return session.usedRiddles.indexOf(riddle._id) === -1;
   });
 
   const nonLocationRiddles = unusedRiddles.filter(function(riddle) {
