@@ -223,13 +223,27 @@ async function generateToken() {
   return token;
 }
 
-async function deleteSession(token) {
-  const session = await PlaySession.find({token: token}).exec();
+async function deleteSession(_token, findById) {
+  let session = null;
+  if (findById) {
+    session = await PlaySession.findOne({ _id: _token }).exec();
+  } else {
+    session = await PlaySession.findOne({ token: _token }).exec();
+  }
   if (session) {
-    session.solvedRiddles.forEach(async function(solvedRiddle) {
-      await SolvedRiddle.remove({_id: solvedRiddle});
-    });
-    await PlaySession.remove({ token: token });
+    console.log("Deleting Session:", session._id);
+    if (session.solvedRiddles) {
+      session.solvedRiddles.forEach(async function(solvedRiddleId) {
+        console.log(
+          "Deleting Solved Riddle:",
+          solvedRiddleId,
+          "of Session:",
+          session._id
+        );
+        await SolvedRiddle.remove({ _id: solvedRiddleId });
+      });
+    }
+    await session.remove();
   }
 }
 
