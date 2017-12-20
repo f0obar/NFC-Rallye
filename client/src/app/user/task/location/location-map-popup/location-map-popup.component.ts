@@ -1,7 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, HostListener } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-declare const L; 
+declare const L;
+
+const mapMaxWidth = 800;
+const mapMobileWidth = 450;
 
 @Component({
   selector: 'app-user-location-map-popup',
@@ -10,14 +13,47 @@ declare const L;
 })
 export class UserLocationMapPopupComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<UserLocationMapPopupComponent>,@Inject(MAT_DIALOG_DATA) public data: any) { }
+  mapStyles = {
+    'width': '400px',
+    'height' : '300px'
+  }
+  
+  rendered = false;
+
+  constructor(public dialogRef: MatDialogRef<UserLocationMapPopupComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.resizeMap();
+    this.rendered = true;
+  }
+
+  @HostListener('window:resize') onResize() {
+    if(this.rendered) {
+      this.resizeMap();
+    }
+  }
+
+  resizeMap(): void {
+    let width = window.screen.width;
+    const height = window.screen.height;
+    if (width > mapMaxWidth) {
+      width = mapMaxWidth;
+    }
+    this.mapStyles.width = String(width) + "px";
+    if (width > mapMobileWidth) {
+      this.mapStyles.height = String(width * 0.75) + "px";
+    } else {
+      this.mapStyles.height = String(height * 0.75) + "px";
+    }
+  }
 
   ngOnInit() {
-    console.log("L:", L);
-    const map = L.map('map', { scrollWheelZoom: false}).setView([49.1226, 9.211], 18);
+    
+  }
+
+  ngAfterViewInit() {
+    const map = L.map('map').setView([49.1226, 9.211], 17);
 
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+    }).addTo(map);
   }
 }
