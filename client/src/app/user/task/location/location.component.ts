@@ -30,6 +30,9 @@ export class UserLocationComponent implements OnInit {
   @Output()
   locationSkip: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  locationFound: EventEmitter<any> = new EventEmitter();
+
   constructor(private http: HttpClient,public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
   }
 
@@ -44,9 +47,7 @@ export class UserLocationComponent implements OnInit {
    * @param {string} tag
    */
   scannedTag(tag: string): void {
-    const suffix = tag.slice(tag.indexOf('/tag/'), tag.length);
-    console.log('suffix=', suffix);
-    window.open(location.origin + suffix, '_self');
+    this.locationFound.emit(tag);
   }
 
   openCamera() {

@@ -25,7 +25,7 @@
 
       <ng-container matColumnDef="url">
         <mat-header-cell *matHeaderCellDef> URL</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{hostname}}/tag/#/{{element.tagID}}</mat-cell>
+        <mat-cell *matCellDef="let element">{{hostname}}/tag/{{element.tagID}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="edit">

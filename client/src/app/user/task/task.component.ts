@@ -24,6 +24,9 @@ export class UserTaskComponent implements OnInit {
   @Output()
   taskPointEmitter: EventEmitter<number> = new EventEmitter();
 
+  @Output()
+  locationFound: EventEmitter<any> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit() {

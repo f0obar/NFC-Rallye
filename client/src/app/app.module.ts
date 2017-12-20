@@ -67,7 +67,13 @@ const routes: Routes = [
   },
   {
     path: 'tag',
-    component: UserComponent
+    component: UserComponent,
+    children: [
+      {
+        path: '**',
+        component: UserComponent
+      }
+    ]
   },
   {
     path: '',

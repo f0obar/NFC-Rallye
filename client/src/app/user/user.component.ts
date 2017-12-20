@@ -51,10 +51,9 @@ export class UserComponent implements OnInit{
     }
 
     if(this.gameRunning === true){
+      this.getStateFromServer();
       if(this.urlContainsTag()){
-        this.handleScannedTag();
-      } else {
-        this.getStateFromServer();
+        this.foundLocation(this.router.url);
       }
     }
   }
@@ -65,47 +64,11 @@ export class UserComponent implements OnInit{
    */
   urlContainsTag():boolean {
     const url = this.router.url;
-    if(url.startsWith('/tag#/')) {
+    if(url.startsWith('/tag/')) {
       return true;
     } else {
       return false;
     }
-  }
-
-  /**
-   * informs the server about the newly scanned tag in order to advance game state
-   */
-  handleScannedTag() {
-    let url = this.router.url;
-    url = url.slice(6);
-    console.log('url', url);
-
-    this.http.post('/api/game/sessions/' + this.sessionID + '/location', {tagID: url}).subscribe(
-      (data) => {
-        if (data['correctLocation'] === true){
-          this.snackBar.open('Du hast einen Ort gefunden!',null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-        } else {
-          this.snackBar.open('Das ist der falsche Ort!',null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-        }
-        console.log('scanned tag', data);
-        this.getStateFromServer();
-
-      },
-      (err) => {
-        this.snackBar.open('Es ist ein Fehler Aufgetreten',null, {
-          duration: 2000,
-          horizontalPosition: 'center'
-        });
-        console.log('scanned tag error', err);
-        this.getStateFromServer();
-      }
-    );
   }
 
   loggedIn(id: string) {
@@ -208,7 +171,6 @@ export class UserComponent implements OnInit{
       }
       console.log('SETTING', amount);
       localStorage.setItem('points', '' + amount);
-      console.log('123')
   }
 
   /**
@@ -228,5 +190,40 @@ export class UserComponent implements OnInit{
   clearLocalSession(): void {
     localStorage.clear();
     this.gameRunning = false;
+  }
+
+  foundLocation(url: string){
+    // extract location id:
+    const suffix = url.slice(url.indexOf('/tag/') + 5, url.length);
+    console.log('SUFFIX',suffix);
+
+
+    this.http.post('/api/game/sessions/' + this.sessionID + '/location', {tagID: suffix}).subscribe(
+      (data) => {
+        if (data['correctLocation'] === true){
+          this.snackBar.open('Du hast einen Ort gefunden!',null, {
+            duration: 2000,
+            horizontalPosition: 'center'
+          });
+          this.router.navigate(['root']);
+          this.getStateFromServer();
+        } else {
+          this.snackBar.open('Das ist der falsche Ort!',null, {
+            duration: 2000,
+            horizontalPosition: 'center'
+          });
+          this.router.navigate(['root']);
+          this.getStateFromServer();
+        }
+      },
+      (err) => {
+        this.snackBar.open('Es ist ein Fehler Aufgetreten',null, {
+          duration: 2000,
+          horizontalPosition: 'center'
+        });
+        this.router.navigateByUrl('/tag/' + suffix);
+        console.log('scanned tag error', err);
+      }
+    );
   }
 }
