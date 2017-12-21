@@ -69,7 +69,7 @@ async function getGameState(token) {
     if (!session.location) {
       throw new UserException("location not found, session is invalid");
     }
-    result.location = filterObject(session.location, ["name", "image"]);
+    result.location = filterObject(session.location, ["name", "image", "lat", "lng"]);
     result.riddle = filterObject(session.riddle, [
       "name",
       "choices",
