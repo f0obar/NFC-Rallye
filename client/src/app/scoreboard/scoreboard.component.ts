@@ -2,12 +2,15 @@ import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core'
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {WebSocketService} from './services/websocket.service';
+import { environment } from '../../environments/environment';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 
-const WS_PREFIX = 'ws://';
+const WS_PREFIX = environment.wsPrefix;
 const WS_PORT = ':44527';
+
+console.log(WS_PREFIX);
 
 @Component({
   selector: 'app-scoreboard',
