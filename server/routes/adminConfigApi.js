@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const bcrypt = require('bcryptjs');
+
 const authenticator = require('./authMiddleware');
+
 const Config = require('../models/config');
 
 const allowedKeys = {
