@@ -97,7 +97,8 @@ export class AdminQuizDetailComponent implements OnInit {
                 data[d]['name'],
                 data[d]['_id'],
                 data[d]['lat'],
-                data[d]['lng']));
+                data[d]['lng'],
+                data[d]['lvl']+''));
           }
         }
         console.log('initialized array', this.locations);

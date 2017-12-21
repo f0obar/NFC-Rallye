@@ -68,7 +68,8 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
                 data[d]['name'],
                 data[d]['_id'],
                 data[d]['lat'],
-                data[d]['lng']));
+                data[d]['lng'],
+                data[d]['lvl']+''));
           }
         }
         this.dataSource.data = this.locations;

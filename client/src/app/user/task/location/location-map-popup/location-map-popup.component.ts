@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, Inject, OnInit, HostListener } from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, HostListener, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
-import {isNullOrUndefined} from "util";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {isNullOrUndefined} from 'util';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 declare const L;
 
@@ -13,7 +13,7 @@ const mapMobileWidth = 450;
   templateUrl: './location-map-popup.component.html',
   styleUrls: ['./location-map-popup.component.css']
 })
-export class UserLocationMapPopupComponent implements OnInit {
+export class UserLocationMapPopupComponent implements AfterViewInit {
 
   customIcon = L.icon({
     iconUrl: '../../../../assets/images/location_pin.svg',
@@ -31,7 +31,8 @@ export class UserLocationMapPopupComponent implements OnInit {
 
   rendered = false;
 
-  constructor(public dialogRef: MatDialogRef<UserLocationMapPopupComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar,private http: HttpClient) {
+  constructor(public dialogRef: MatDialogRef<UserLocationMapPopupComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar,private http: HttpClient) {
     this.resizeMap();
     this.rendered = true;
   }
@@ -49,16 +50,12 @@ export class UserLocationMapPopupComponent implements OnInit {
     if (width > mapMaxWidth) {
       width = mapMaxWidth;
     }
-    this.mapStyles.width = String(width) + "px";
+    this.mapStyles.width = String(width) + 'px';
     if (width > mapMobileWidth) {
-      this.mapStyles.height = String(width * 0.75) + "px";
+      this.mapStyles.height = String(width * 0.75) + 'px';
     } else {
-      this.mapStyles.height = String(height * 0.75) + "px";
+      this.mapStyles.height = String(height * 0.75) + 'px';
     }
-  }
-
-  ngOnInit() {
-
   }
 
   ngAfterViewInit() {
@@ -74,26 +71,28 @@ export class UserLocationMapPopupComponent implements OnInit {
       }
     } else {
       if(!isNullOrUndefined(this.data.location.longitude)) {
-        let myMarker = L.marker([this.data.location.latitude, this.data.location.longitude], {title: "Ort", alt: "Position", draggable: true, icon: this.customIcon})
+        const myMarker = L.marker([this.data.location.latitude,
+          this.data.location.longitude],
+          {title: 'Ort', alt: 'Position', draggable: true, icon: this.customIcon})
           .addTo(map)
           .on('dragend', () => {
-            let coord = String(myMarker.getLatLng()).split(',');
-            let lat = coord[0].split('(')[1];
+            const coord = String(myMarker.getLatLng()).split(',');
+            const lat = coord[0].split('(')[1];
             console.log('LAT',lat);
-            let lng = coord[1].split(')')[0];
+            const lng = coord[1].split(')')[0];
             console.log('LNG',lng);
 
             this.data.location.latitude = lat;
             this.data.location.longitude = lng;
           });
       } else {
-        let myMarker = L.marker([49.1226, 9.211], {title: "Ort", alt: "Position", draggable: true, icon: this.customIcon})
+        const myMarker = L.marker([49.1226, 9.211], {title: 'Ort', alt: 'Position', draggable: true, icon: this.customIcon})
           .addTo(map)
           .on('dragend', () => {
-            let coord = String(myMarker.getLatLng()).split(',');
-            let lat = (coord[0].split('('))[1];
+            const coord = String(myMarker.getLatLng()).split(',');
+            const lat = (coord[0].split('('))[1];
             console.log('LAT',lat);
-            let lng = (coord[1].split(')'))[0];
+            const lng = (coord[1].split(')'))[0];
             console.log('LNG',lng);
 
             this.data.location.latitude = lat;
@@ -110,7 +109,8 @@ export class UserLocationMapPopupComponent implements OnInit {
     console.log('location',this.data.location);
     this.http.put('/api/admin/locations/' + this.data.location._id, {
       lat: this.data.location.latitude,
-      lng: this.data.location.longitude
+      lng: this.data.location.longitude,
+      lvl: this.data.location.level
     }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
       () => {
         console.log('successfully edited quiz');

@@ -5,7 +5,8 @@ export class AdminLocation {
               public name: string,
               public _id: string,
               public latitude: any,
-              public longitude: any) {
+              public longitude: any,
+              public level: string) {
 
   }
 }

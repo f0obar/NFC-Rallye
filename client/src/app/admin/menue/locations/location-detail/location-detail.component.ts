@@ -37,7 +37,7 @@ export class AdminLocationDetailComponent implements OnInit {
       filesize: '',
       filetype: '',
       base64: '',
-    }, true, 'sample name', '12345','49.1226','9.211');
+    }, true, 'sample name', '12345','49.1226','9.211',"0");
   }
 
   submit() {
