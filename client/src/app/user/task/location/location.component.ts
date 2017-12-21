@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Location} from '../../location';
 import {UserLocationCameraPopupComponent} from './location-camera-popup/location-camera-popup.component';
-import {UserLocationMapPopupComponent} from './location-map-popup/location-map-popup.component';
+import {UserLocationMapPopupComponent} from '../../../shared/map/location-map-popup.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
@@ -94,6 +94,7 @@ export class UserLocationComponent implements OnInit {
 
   openMap() {
     const d = this.dialog.open(UserLocationMapPopupComponent, {
+      panelClass: 'app-full-bleed-dialog',
       data: {
         location: this.location,
         admin: false

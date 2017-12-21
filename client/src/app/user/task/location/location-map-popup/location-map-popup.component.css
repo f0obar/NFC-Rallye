@@ -1,7 +1,0 @@
-::ng-deep .cdk-overlay-pane {
-  max-width: 98vw !important;
-}
-
-::ng-deep .mat-dialog-container {
-  padding: 0;
-}

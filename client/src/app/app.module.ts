@@ -34,7 +34,7 @@ import {UserQuizSingleanswerComponent} from './user/task/quiz/quiz-singleanswer/
 import {UserQuizMultiplechoiceComponent} from './user/task/quiz/quiz-multiplechoice/quiz-multiplechoice.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {SharedSimpleDialogComponent} from './shared/simple-dialog/simple-dialog.component';
-import {UserLocationMapPopupComponent} from './user/task/location/location-map-popup/location-map-popup.component';
+import {UserLocationMapPopupComponent} from './shared/map/location-map-popup.component';
 import {UserLocationCameraPopupComponent} from './user/task/location/location-camera-popup/location-camera-popup.component';
 import {UserQuizHintPopupComponent} from './user/task/quiz/quiz-hint-popup/quiz-hint-popup.component';
 import {MatCardModule} from '@angular/material/card';

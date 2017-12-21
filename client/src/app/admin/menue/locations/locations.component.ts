@@ -4,7 +4,7 @@ import {AdminLocationDetailComponent} from './location-detail/location-detail.co
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {AdminLocation} from './admin-location';
 import {SharedSimpleDialogComponent} from "../../../shared/simple-dialog/simple-dialog.component";
-import {UserLocationMapPopupComponent} from "../../../user/task/location/location-map-popup/location-map-popup.component";
+import {UserLocationMapPopupComponent} from "../../../shared/map/location-map-popup.component";
 
 @Component({
   selector: 'app-admin-locations',
@@ -99,6 +99,7 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
 
   openMap(location: AdminLocation) {
     const d = this.dialog.open(UserLocationMapPopupComponent, {
+      panelClass: 'app-full-bleed-dialog',
       data: {
         location: location,
         admin: true,

@@ -3,7 +3,7 @@ import {QuestionSingleanswer} from '../../../questionsingleanswer';
 import {HttpClient} from '@angular/common/http';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
-import {UserLocationMapPopupComponent} from '../../location/location-map-popup/location-map-popup.component';
+import {UserLocationMapPopupComponent} from '../../../../shared/map/location-map-popup.component';
 import {Location} from '../../../location';
 import {UserQuizHintPopupComponent} from '../quiz-hint-popup/quiz-hint-popup.component';
 import {SharedSimpleDialogComponent} from '../../../../shared/simple-dialog/simple-dialog.component';

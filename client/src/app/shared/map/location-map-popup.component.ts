@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Inject, OnInit, HostListener, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, HostListener} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
