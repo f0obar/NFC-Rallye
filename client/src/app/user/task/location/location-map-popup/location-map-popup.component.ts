@@ -16,12 +16,11 @@ const mapMobileWidth = 450;
 export class UserLocationMapPopupComponent implements OnInit {
 
   customIcon = L.icon({
-    iconUrl: 'https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-location-128.png',
+    iconUrl: '../../../../assets/images/location_pin.svg',
 
-    iconSize:     [38, 60], // size of the icon
-    shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-    shadowAnchor: [4, 62],  // the same for the shadow
+
+    iconSize:     [48, 48], // size of the icon
+    iconAnchor:   [24, 48], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
   });
 
