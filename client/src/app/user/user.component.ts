@@ -117,7 +117,7 @@ export class UserComponent implements OnInit{
          * when the session is not finished the current location and question get parsed.
          */
         if(this.currentTask !== 'won') {
-          this.currentLocation = new Location(dataLocation['name'], 0, 0, 0, dataLocation['image']);
+          this.currentLocation = new Location(dataLocation['name'], 0, dataLocation['image'], dataLocation['lat'],dataLocation['lng']);
 
           /**
            * check if Riddle is Singleanswer or Multiple Choice

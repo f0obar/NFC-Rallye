@@ -1,1 +1,7 @@
 <div id="map" [ngStyle]="mapStyles"></div>
+<ng-container *ngIf="data.admin == true">
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary" tabindex="2" (click)="submit()">Speichern</button>
+    <button mat-raised-button tabindex="-1" (click)="cancel()">Abbrechen</button>
+  </div>
+</ng-container>

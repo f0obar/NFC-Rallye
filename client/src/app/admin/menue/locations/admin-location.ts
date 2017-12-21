@@ -3,7 +3,9 @@ export class AdminLocation {
               public image: any,
               public isActive: boolean,
               public name: string,
-              public _id: string) {
+              public _id: string,
+              public latitude: any,
+              public longitude: any) {
 
   }
 }

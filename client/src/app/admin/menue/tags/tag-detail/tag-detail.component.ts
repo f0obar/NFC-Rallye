@@ -54,7 +54,9 @@ export class AdminTagDetailComponent implements OnInit {
                 data[d]['image'],
                 data[d]['isActive'],
                 data[d]['name'],
-                data[d]['_id']));
+                data[d]['_id'],
+                data[d]['lat'],
+                data[d]['lng']));
           }
         }
         console.log('initialized array', this.locations);

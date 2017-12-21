@@ -4,6 +4,7 @@ import {AdminLocationDetailComponent} from './location-detail/location-detail.co
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {AdminLocation} from './admin-location';
 import {SharedSimpleDialogComponent} from "../../../shared/simple-dialog/simple-dialog.component";
+import {UserLocationMapPopupComponent} from "../../../user/task/location/location-map-popup/location-map-popup.component";
 
 @Component({
   selector: 'app-admin-locations',
@@ -65,7 +66,9 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
                 data[d]['image'],
                 data[d]['isActive'],
                 data[d]['name'],
-                data[d]['_id']));
+                data[d]['_id'],
+                data[d]['lat'],
+                data[d]['lng']));
           }
         }
         this.dataSource.data = this.locations;
@@ -90,6 +93,16 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
     });
     edit.afterClosed().subscribe(() => {
       this.loadLocationsFromServer();
+    });
+  }
+
+  openMap(location: AdminLocation) {
+    const d = this.dialog.open(UserLocationMapPopupComponent, {
+      data: {
+        location: location,
+        admin: true,
+        adminToken: this.adminToken
+      }
     });
   }
 

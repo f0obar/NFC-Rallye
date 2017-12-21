@@ -95,7 +95,8 @@ export class UserLocationComponent implements OnInit {
   openMap() {
     const d = this.dialog.open(UserLocationMapPopupComponent, {
       data: {
-        location: this.location
+        location: this.location,
+        admin: false
       }
     });
   }

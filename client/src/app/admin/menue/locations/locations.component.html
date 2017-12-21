@@ -35,6 +35,7 @@
         <mat-cell *matCellDef="let element">
           <div class="btn-group" role="group">
             <button mat-raised-button color="primary" (click)="editLocation(element)">editieren</button>
+            <button mat-raised-button color="secondary" (click)="openMap(element)">Karte</button>
             <button mat-raised-button color="warn" (click)="deleteLocation(element)">entfernen</button>
           </div>
         </mat-cell>

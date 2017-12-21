@@ -36,8 +36,8 @@ export class AdminLocationDetailComponent implements OnInit {
       filename: '',
       filesize: '',
       filetype: '',
-      base64: ''
-    }, true, 'sample name', '12345');
+      base64: '',
+    }, true, 'sample name', '12345','49.1226','9.211');
   }
 
   submit() {
@@ -47,7 +47,7 @@ export class AdminLocationDetailComponent implements OnInit {
         image: this.data.currentLocation.image,
         isActive: this.data.currentLocation.isActive,
         name: this.data.currentLocation.name,
-        _id: this.data.currentLocation._id,
+        _id: this.data.currentLocation._id
       }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
         (data) => {
           console.log('successfully edited location');
