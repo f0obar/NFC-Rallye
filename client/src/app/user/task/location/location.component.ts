@@ -94,6 +94,7 @@ export class UserLocationComponent implements OnInit {
 
   openMap() {
     const d = this.dialog.open(UserLocationMapPopupComponent, {
+      maxWidth: '98vw',
       panelClass: 'app-full-bleed-dialog',
       data: {
         location: this.location,

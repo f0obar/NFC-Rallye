@@ -100,6 +100,7 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
   openMap(location: AdminLocation) {
     const d = this.dialog.open(UserLocationMapPopupComponent, {
       panelClass: 'app-full-bleed-dialog',
+      maxWidth: '98vw',
       data: {
         location: location,
         admin: true,

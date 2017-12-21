@@ -115,5 +115,4 @@ mat dialog with bleed
  */
 .app-full-bleed-dialog .mat-dialog-container {
   padding: 0;
-  max-width: 98vw;
 }
