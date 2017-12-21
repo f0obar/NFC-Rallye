@@ -10,8 +10,6 @@ import 'rxjs/add/operator/filter';
 const WS_PREFIX = environment.wsPrefix;
 const WS_PORT = ':44527';
 
-console.log(WS_PREFIX);
-
 @Component({
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',
