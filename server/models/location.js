@@ -7,6 +7,7 @@ const LocationSchema = new mongoose.Schema({
   image: Object,
   lat: Number,
   lng: Number,
+  lvl: Number,
   heat: {type: Number, default: 0}
 });
 
