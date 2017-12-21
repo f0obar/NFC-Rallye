@@ -54,10 +54,12 @@ function createEntry(Model) {
 
 function updateEntry(Model) {
   return async function(req, res, next) {
+    console.log("id", req.params);
     console.log("req", req.body);
     const id = req.params.id;
 
     Model.findById(id, function(err, entry) {
+      console.log("entry", entry);
       if (err) {
         res.send(err);
         return;

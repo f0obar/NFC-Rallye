@@ -104,6 +104,9 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
         adminToken: this.adminToken
       }
     });
+    d.afterClosed().subscribe(() => {
+      this.loadLocationsFromServer();
+    });
   }
 
   /**

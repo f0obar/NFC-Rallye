@@ -15,12 +15,21 @@ const mapMobileWidth = 450;
 })
 export class UserLocationMapPopupComponent implements OnInit {
 
+  customIcon = L.icon({
+    iconUrl: 'https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-location-128.png',
+
+    iconSize:     [38, 60], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+  });
+
   mapStyles = {
     'width': '400px',
     'height' : '300px'
   }
 
-  // marker;
   rendered = false;
 
   constructor(public dialogRef: MatDialogRef<UserLocationMapPopupComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar,private http: HttpClient) {
@@ -62,31 +71,31 @@ export class UserLocationMapPopupComponent implements OnInit {
 
     if(this.data.admin === false) {
       if (!isNullOrUndefined(this.data.location.getLatitude())) {
-        L.marker({'lat': this.data.location.getLatitude(), 'lng': this.data.location.getLongitude()}).addTo(map);
+        L.marker([this.data.location.getLatitude(),this.data.location.getLongitude()], {icon: this.customIcon}).addTo(map);
       }
     } else {
       if(!isNullOrUndefined(this.data.location.longitude)) {
-        let myMarker = L.marker([this.data.location.latitude, this.data.location.longitude], {title: "Ort", alt: "Position", draggable: true})
+        let myMarker = L.marker([this.data.location.latitude, this.data.location.longitude], {title: "Ort", alt: "Position", draggable: true, icon: this.customIcon})
           .addTo(map)
-          .on('dragend', function () {
+          .on('dragend', () => {
             let coord = String(myMarker.getLatLng()).split(',');
-            let lat = coord[0].split('(');
-            console.log(lat);
-            let lng = coord[1].split(')');
-            console.log(lng);
+            let lat = coord[0].split('(')[1];
+            console.log('LAT',lat);
+            let lng = coord[1].split(')')[0];
+            console.log('LNG',lng);
 
             this.data.location.latitude = lat;
             this.data.location.longitude = lng;
           });
       } else {
-        let myMarker = L.marker([49.1226, 9.211], {title: "Ort", alt: "Position", draggable: true})
+        let myMarker = L.marker([49.1226, 9.211], {title: "Ort", alt: "Position", draggable: true, icon: this.customIcon})
           .addTo(map)
-          .on('dragend', function () {
+          .on('dragend', () => {
             let coord = String(myMarker.getLatLng()).split(',');
-            let lat = coord[0].split('(');
-            console.log(lat);
-            let lng = coord[1].split(')');
-            console.log(lng);
+            let lat = (coord[0].split('('))[1];
+            console.log('LAT',lat);
+            let lng = (coord[1].split(')'))[0];
+            console.log('LNG',lng);
 
             this.data.location.latitude = lat;
             this.data.location.longitude = lng;
@@ -99,7 +108,8 @@ export class UserLocationMapPopupComponent implements OnInit {
    * submits new / edited quiz to the server using rest api
    */
   submit() {
-    this.http.put('/api/admin/riddles/' + this.data.location._id, {
+    console.log('location',this.data.location);
+    this.http.put('/api/admin/locations/' + this.data.location._id, {
       lat: this.data.location.latitude,
       lng: this.data.location.longitude
     }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
