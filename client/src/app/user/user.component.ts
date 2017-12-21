@@ -64,7 +64,7 @@ export class UserComponent implements OnInit{
    */
   urlContainsTag():boolean {
     const url = this.router.url;
-    if(url.startsWith('/tag/')) {
+    if(url.startsWith('/tag')) {
       return true;
     } else {
       return false;
@@ -194,7 +194,7 @@ export class UserComponent implements OnInit{
 
   foundLocation(url: string){
     // extract location id:
-    const suffix = url.slice(url.indexOf('/tag/') + 5, url.length);
+    const suffix = url.split('/')[url.split('/').length - 1];
     console.log('SUFFIX',suffix);
 
 
@@ -206,15 +206,14 @@ export class UserComponent implements OnInit{
             horizontalPosition: 'center'
           });
           this.router.navigate(['root']);
-          this.getStateFromServer();
-        } else {
+        } else if (data['correctLocation'] === false) {
           this.snackBar.open('Das ist der falsche Ort!',null, {
             duration: 2000,
             horizontalPosition: 'center'
           });
           this.router.navigate(['root']);
-          this.getStateFromServer();
         }
+        this.getStateFromServer();
       },
       (err) => {
         this.snackBar.open('Es ist ein Fehler Aufgetreten',null, {
