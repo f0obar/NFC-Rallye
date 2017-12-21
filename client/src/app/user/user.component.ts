@@ -216,7 +216,7 @@ export class UserComponent implements OnInit{
         this.getStateFromServer();
       },
       (err) => {
-        this.snackBar.open('Es ist ein Fehler Aufgetreten',null, {
+        this.snackBar.open('Netzwerkfehler, überprüfe deine Verbindung',null, {
           duration: 2000,
           horizontalPosition: 'center'
         });
