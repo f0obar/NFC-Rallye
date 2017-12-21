@@ -23,6 +23,7 @@
         "assets/js/qrcode/version.js",
         "assets/js/qrcode/detector.js",
         "assets/js/qrcode/formatinf.js",
+        "assets/js/qrcode/errorlevel.js",
         "assets/js/qrcode/bitmat.js",
         "assets/js/qrcode/datablock.js",
         "assets/js/qrcode/bmparser.js",

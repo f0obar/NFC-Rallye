@@ -16,15 +16,7 @@ export class UserLocationCameraPopupComponent implements OnInit, AfterContentIni
     this.cameraConfig = data;
   }
 
-  cameraIcon: string;
-
-  frontIcon = '<i class="material-icons">camera_front</i>';
-
-  backIcon = '<i class="material-icons">camera_rear</i>';
-
   cameraConfig: CameraConfig;
-
-  backActive = true;
 
   width = 0;
   height = 0;
@@ -61,18 +53,7 @@ export class UserLocationCameraPopupComponent implements OnInit, AfterContentIni
       this.streaming = true;
     });
 
-    // We have two Cameras
-    if (this.cameraConfig.back === true && this.cameraConfig.front === true) {
-      this.setCamera();
-    } else {
-      // Prefer back Camera
-      if (this.cameraConfig.back === true) {
-        this.startStream(CameraConfig.backConstraints);
-        this.backActive = true;
-      } else if (this.cameraConfig.front === true) {
-        this.startStream(CameraConfig.frontConstraints);
-      }
-    }
+    this.startStream(CameraConfig.backConstraints);
   }
 
   openVideo(): void {
@@ -137,21 +118,6 @@ export class UserLocationCameraPopupComponent implements OnInit, AfterContentIni
       });
       this.video.srcObject = null;
       this.streaming = false;
-    }
-  }
-
-  switchCamera(): void {
-    this.backActive = !this.backActive;
-    this.setCamera();
-  }
-  setCamera(): void {
-    this.stopStream();
-    if (this.backActive) {
-      this.startStream(CameraConfig.backConstraints);
-      this.cameraIcon = this.backIcon;
-    } else {
-      this.startStream(CameraConfig.frontConstraints);
-      this.cameraIcon = this.frontIcon;
     }
   }
 }
