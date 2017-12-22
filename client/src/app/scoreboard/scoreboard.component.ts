@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {WebSocketService} from './services/websocket.service';
@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
+import {isNullOrUndefined} from 'util';
 
 const WS_PREFIX = environment.wsPrefix;
 const WS_PORT = ':44527';
@@ -15,6 +16,7 @@ const WS_PORT = ':44527';
   templateUrl: './scoreboard.component.html',
   styleUrls: ['./scoreboard.component.css']
 })
+
 export class ScoreboardComponent implements OnInit, AfterViewInit {
 
   @Input() groupName: string;
@@ -24,10 +26,10 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
 
   public groups: Array<Group> = [];
 
-  //data source for the table
+  // data source for the table
   dataSource = new MatTableDataSource();
 
-  constructor(private http: HttpClient, private wsService: WebSocketService) {
+  constructor(private http: HttpClient, private wsService: WebSocketService,private el: ElementRef) {
     const hostname = window.location.hostname;
     this.messages = <Subject<String>>this.wsService
       .connect(WS_PREFIX + hostname + WS_PORT)
@@ -50,8 +52,21 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
    * Set the sort after the view init since this component will
    * be able to query its view for the initialized sort.
    */
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    if (!isNullOrUndefined(this.groupName)) {
+      await this.loadScript('../../assets/js/confetti/jquery.min.js');
+      await this.loadScript('../../assets/js/confetti/confetti.js');
+    }
+  }
+
+  private loadScript(scriptUrl: string) {
+    return new Promise((resolve, reject) => {
+      const scriptElement = document.createElement('script');
+      scriptElement.src = scriptUrl;
+      scriptElement.onload = resolve;
+      document.body.appendChild(scriptElement);
+    });
   }
 
   /**
