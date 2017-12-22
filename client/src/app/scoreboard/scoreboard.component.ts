@@ -85,8 +85,8 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
    * @param {Group} group
    * @returns {boolean}
    */
-  highlightGroup(group: Group): boolean{
-    return this.groupName == group.name;
+  highlightRow(group: Group): boolean{
+   return this.groupName === group.name;
   }
 }
 
