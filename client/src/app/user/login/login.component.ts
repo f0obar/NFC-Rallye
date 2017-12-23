@@ -24,7 +24,7 @@ export class UserLoginComponent implements OnInit {
    */
   submitLogin(teamname: string, password: string ) {
     console.log('clicked login button',teamname);
-    if (teamname.length > 3) {
+    if (teamname.length > 3 && password.length > 0) {
       this.http.post('/api/game/sessions', {groupName: teamname, password: password}).subscribe(
         (data) => {
           console.log('loginPost data', data['token']);
@@ -38,8 +38,13 @@ export class UserLoginComponent implements OnInit {
           console.log('loginPost error', err);
         }
       );
+    } else if (teamname.length <= 3) {
+      this.snackBar.open('Gruppenname muss aus mindestens 4 Zeichen bestehen!',null, {
+        duration: 2000,
+        horizontalPosition: 'center'
+      });
     } else {
-     this.snackBar.open('Gruppenname muss aus mindestens 4 Zeichen bestehen',null, {
+      this.snackBar.open('Bitte ein Passwort eingeben!',null, {
         duration: 2000,
         horizontalPosition: 'center'
       });
