@@ -127,7 +127,7 @@ export class UserComponent implements OnInit{
           if (dataQuestion['choices'].length === 0){
             this.currentQuestion = new QuestionSingleanswer(dataQuestion['description'],dataQuestion['question'],dataQuestion['hint'], dataQuestion['image']);
           } else {
-            this.currentQuestion = new QuestionMultiplechoice(dataQuestion['description'],dataQuestion['question'] ,dataQuestion['choices'],dataQuestion['hint'], dataQuestion['image']);
+            this.currentQuestion = new QuestionMultiplechoice(dataQuestion['description'],dataQuestion['question'] ,dataQuestion['choices'], dataQuestion['image']);
           }
           console.log('the new question/location', this.currentQuestion, this.currentLocation);
         } else {

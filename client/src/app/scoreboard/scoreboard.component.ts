@@ -7,6 +7,7 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import {isNullOrUndefined} from 'util';
+import {Router} from '@angular/router';
 
 const WS_PREFIX = environment.wsPrefix;
 const WS_PORT = ':44527';
@@ -29,7 +30,7 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
   // data source for the table
   dataSource = new MatTableDataSource();
 
-  constructor(private http: HttpClient, private wsService: WebSocketService,private el: ElementRef) {
+  constructor(private http: HttpClient, private wsService: WebSocketService,private el: ElementRef, public router: Router) {
     const hostname = window.location.hostname;
     this.messages = <Subject<String>>this.wsService
       .connect(WS_PREFIX + hostname + WS_PORT)
@@ -58,6 +59,10 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
       await this.loadScript('../../assets/js/confetti/jquery.min.js');
       await this.loadScript('../../assets/js/confetti/confetti.js');
     }
+    history.pushState(null,null,this.router.url);
+    window.addEventListener('popstate', (event) => {
+      history.pushState(null,null,this.router.url);
+    });
   }
 
   private loadScript(scriptUrl: string) {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Location} from '../../location';
 import {UserLocationCameraPopupComponent} from './location-camera-popup/location-camera-popup.component';
 import {UserLocationMapPopupComponent} from '../../../shared/map/location-map-popup.component';
@@ -13,7 +13,7 @@ import {UserQuizHelpPopupComponent} from '../quiz/quiz-help-popup/quiz-help-popu
   templateUrl: './location.component.html',
   styleUrls: ['./location.component.css']
 })
-export class UserLocationComponent implements OnInit {
+export class UserLocationComponent implements AfterViewInit {
   @Input() location: Location;
   @Input() sessionID: string;
 
@@ -29,7 +29,11 @@ export class UserLocationComponent implements OnInit {
   constructor(private http: HttpClient,public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
+    history.pushState(null,null,this.router.url);
+    window.addEventListener('popstate', (event) => {
+      history.pushState(null,null,this.router.url);
+    });
   }
 
   /**

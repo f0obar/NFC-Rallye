@@ -1,21 +1,29 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class UserLoginComponent implements OnInit {
+export class UserLoginComponent implements OnInit,AfterViewInit {
   @Output()
   loginOutput: EventEmitter<string> = new EventEmitter();
 
   imageLogo = '/assets/images/schnitzel_logo.png';
 
-  constructor(private http: HttpClient, public snackBar: MatSnackBar) { }
+  constructor(private http: HttpClient, public snackBar: MatSnackBar, public router: Router) { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    history.pushState(null,null,this.router.url);
+    window.addEventListener('popstate', (event) => {
+      history.pushState(null,null,this.router.url);
+    });
   }
 
   /**

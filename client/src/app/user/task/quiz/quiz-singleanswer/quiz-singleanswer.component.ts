@@ -1,13 +1,13 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {QuestionSingleanswer} from '../../../questionsingleanswer';
 import {HttpClient} from '@angular/common/http';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
-import {UserLocationMapPopupComponent} from '../../../../shared/map/location-map-popup.component';
 import {Location} from '../../../location';
 import {UserQuizHintPopupComponent} from '../quiz-hint-popup/quiz-hint-popup.component';
 import {SharedSimpleDialogComponent} from '../../../../shared/simple-dialog/simple-dialog.component';
 import {UserQuizHelpPopupComponent} from '../quiz-help-popup/quiz-help-popup.component';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -15,7 +15,7 @@ import {UserQuizHelpPopupComponent} from '../quiz-help-popup/quiz-help-popup.com
   templateUrl: './quiz-singleanswer.component.html',
   styleUrls: ['./quiz-singleanswer.component.css']
 })
-export class UserQuizSingleanswerComponent implements OnInit, OnChanges {
+export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() question: QuestionSingleanswer;
   @Input() sessionID: string;
   @Input() location: Location;
@@ -30,7 +30,14 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges {
   @Output()
   quizPointEmitter: EventEmitter<any> = new EventEmitter();
 
-  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog) {
+  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog,private router: Router) {
+  }
+
+  ngAfterViewInit() {
+    history.pushState(null,null,this.router.url);
+    window.addEventListener('popstate', (event) => {
+      history.pushState(null,null,this.router.url);
+    });
   }
 
   ngOnInit() {
@@ -123,17 +130,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges {
             console.log('skip error', err);
           }
         );
-      }
-    });
-  }
-
-  /**
-   * opens popup for the map
-   */
-  openMap(): void {
-    const d = this.dialog.open(UserLocationMapPopupComponent, {
-      data: {
-        location: this.location
       }
     });
   }

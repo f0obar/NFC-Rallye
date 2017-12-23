@@ -1,20 +1,18 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {QuestionSingleanswer} from '../../../questionsingleanswer';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {QuestionMultiplechoice} from '../../../questionmc';
 import {HttpClient} from '@angular/common/http';
-import {MatButtonBase, MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
-import {UserQuizHintPopupComponent} from '../quiz-hint-popup/quiz-hint-popup.component';
-import {UserLocationMapPopupComponent} from '../../../../shared/map/location-map-popup.component';
 import {SharedSimpleDialogComponent} from '../../../../shared/simple-dialog/simple-dialog.component';
-import {UserQuizHelpPopupComponent} from "../quiz-help-popup/quiz-help-popup.component";
+import {UserQuizHelpPopupComponent} from '../quiz-help-popup/quiz-help-popup.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-quiz-multiplechoice',
   templateUrl: './quiz-multiplechoice.component.html',
   styleUrls: ['./quiz-multiplechoice.component.css']
 })
-export class UserQuizMultiplechoiceComponent implements OnInit {
+export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
   @Input() question: QuestionMultiplechoice;
   @Input() sessionID: string;
   @Input() location: Location;
@@ -33,27 +31,22 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
   solution = '';
 
 
-  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog) {
+  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog,private router: Router) {
   }
 
   ngOnInit() {
     console.log('QuizComponent got initialized with', this.question);
   }
 
+  ngAfterViewInit() {
+    history.pushState(null,null,this.router.url);
+    window.addEventListener('popstate', (event) => {
+      history.pushState(null,null,this.router.url);
+    });
+  }
 
   imageAvailable(): boolean  {
     return !isNullOrUndefined(this.question.getImage());
-  }
-
-  /**
-   * opens popup dialog for the hint
-   */
-  toggleHint() {
-    const d = this.dialog.open(UserQuizHintPopupComponent, {
-      data: {
-        hint: this.question.getHint()
-      }
-    });
   }
 
   /**
@@ -136,17 +129,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit {
             console.log('skip error', err);
           }
         );
-      }
-    });
-  }
-
-  /**
-   * opens popup for the map
-   */
-  openMap(): void {
-    const d = this.dialog.open(UserLocationMapPopupComponent, {
-      data: {
-        location: this.location
       }
     });
   }

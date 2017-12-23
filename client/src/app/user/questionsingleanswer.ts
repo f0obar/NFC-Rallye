@@ -15,13 +15,6 @@ export class QuestionSingleanswer {
     }
   }
 
-  public isHintAvailable(): boolean {//
-    if(this.hint !== null && !isUndefined(this.hint)){
-      return true;
-    }
-    return false;
-  }
-
   public getName(): string {
     return this.name;
   }

@@ -2,7 +2,7 @@
   <div>
     <mat-card>
       <div class="question-center">
-        <h4 class="mat-h4">{{question.getName()}} <i class="material-icons" id="hint" (click)="toggleHint()">info</i></h4>
+        <h4 class="mat-h4">{{question.getName()}}</h4>
       </div>
       <div class="question" >{{question.getQuestion()}} </div>
 
@@ -28,8 +28,6 @@
     <i class="material-icons" (click)="abbrechen()">exit_to_app</i>
     <span class="spacer"></span>
     <i class="material-icons" (click)="help()">help_outline</i>
-    <span class="spacer"></span>
-    <i class="material-icons" (click)="openMap()">location_on</i>
     <span class="spacer"></span>
     <i class="material-icons" (click)="skipQuestion()">skip_next</i>
   </mat-toolbar>
