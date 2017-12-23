@@ -16,7 +16,7 @@
 
       <div class="form-group">
         <mat-form-field>
-          <input matInput placeholder="Antwort" type="text" #answer ng-model="riddle.answer">
+          <input matInput placeholder="Antwort" type="text" #answer ng-model="riddle.answer" (keydown.enter)="solveQuestion(answer.value)">
         </mat-form-field>
         <i class="material-icons" id="hint" style="color: #333333" (click)="toggleHint()">info</i>
       </div>
