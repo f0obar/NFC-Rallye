@@ -242,6 +242,6 @@ export class AdminQuizDetailComponent implements OnInit {
    * checks if there is a valid image
    */
   isImageAvailable():boolean {
-    return !isNullOrUndefined(this.data.currentQuiz.image) && !isNullOrUndefined(this.data.currentQuiz.image.filetype);
+    return !isNullOrUndefined(this.data.currentQuiz.image) && !isNullOrUndefined(this.data.currentQuiz.image.filetype) && this.data.currentQuiz.image.filetype != "";
   }
 }

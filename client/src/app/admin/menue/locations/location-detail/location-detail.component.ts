@@ -124,6 +124,6 @@ export class AdminLocationDetailComponent implements OnInit {
    * checks if there is a valid image
    */
   isImageAvailable():boolean {
-    return  !isNullOrUndefined(this.data.currentLocation.image) &&!isNullOrUndefined(this.data.currentLocation.image.filetype);
+    return  !isNullOrUndefined(this.data.currentLocation.image) &&!isNullOrUndefined(this.data.currentLocation.image.filetype) && this.data.currentLocation.image.filetype != "";
   }
 }

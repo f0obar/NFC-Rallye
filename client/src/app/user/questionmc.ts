@@ -7,7 +7,7 @@ export class QuestionMultiplechoice {
     return this.question;
   }
   public imageAvailable(): boolean {
-    return !isNullOrUndefined(this.image) && !isNullOrUndefined(this.image.filetype);
+    return !isNullOrUndefined(this.image) && !isNullOrUndefined(this.image.filetype) && this.image.filetype != "";
   }
 
   public getName(): string {
