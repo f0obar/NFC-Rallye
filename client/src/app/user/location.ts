@@ -17,7 +17,7 @@ export class Location {
     return this.image;
   }
   public imageAvailable(): boolean {
-    return !isNullOrUndefined(this.image) && !isNullOrUndefined(this.image.filetype && this.image.filetype != "");
+    return !isNullOrUndefined(this.image) && !isNullOrUndefined(this.image.filetype) && this.image.filetype != "";
   }
   public getLongitude(): any {
     return this.longitude;
