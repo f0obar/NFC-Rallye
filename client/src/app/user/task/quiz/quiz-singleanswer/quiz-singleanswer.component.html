@@ -8,10 +8,8 @@
 
 
       <br>
-      <ng-container *ngIf="imageAvailable() == true">
-        <img mat-card-image class="img-responsive centered"
+        <img *ngIf="question?.imageAvailable()" mat-card-image class="img-responsive centered"
              src="data:{{question.getImage()?.filetype}};base64,{{question.getImage()?.base64}}">
-      </ng-container>
 
 
       <div class="form-group">

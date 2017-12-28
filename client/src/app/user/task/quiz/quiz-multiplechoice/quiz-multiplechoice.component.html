@@ -9,10 +9,8 @@
 
 
       <br>
-      <ng-container *ngIf="imageAvailable() == true">
-        <img mat-card-image class="img-responsive centered"
+        <img *ngIf="question?.imageAvailable()" mat-card-image class="img-responsive centered"
              src="data:{{question.getImage()?.filetype}};base64,{{question.getImage()?.base64}}">
-      </ng-container>
 
       <div class="form-group" *ngFor="let entry of question.choices">
         <button [disabled]="isAnswerUsed(entry)" [class.solved]="isAnswerCorrect(entry)" mat-raised-button color="secondary" (click)="solveQuestion(entry)">

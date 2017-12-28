@@ -1,4 +1,4 @@
-import {isUndefined} from 'util';
+import {isNullOrUndefined, isUndefined} from 'util';
 
 export class QuestionSingleanswer {
   constructor(private name: string,private question: string,private hint?: string, private image?: any) {}
@@ -15,6 +15,9 @@ export class QuestionSingleanswer {
     }
   }
 
+  public imageAvailable(): boolean {
+    return !isNullOrUndefined(this.image) && !isNullOrUndefined(this.image.filetype);
+  }
   public getName(): string {
     return this.name;
   }

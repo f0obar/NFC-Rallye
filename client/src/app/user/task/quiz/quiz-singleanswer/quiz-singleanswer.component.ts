@@ -48,11 +48,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
 
   }
 
-  imageAvailable(): boolean {
-    return !isNullOrUndefined(this.question.getImage());
-  }
-
-
   /**
    * opens popup dialog for the hint
    */

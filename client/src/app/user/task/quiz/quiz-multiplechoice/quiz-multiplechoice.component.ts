@@ -44,11 +44,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
       history.pushState(null,null,this.router.url);
     });
   }
-
-  imageAvailable(): boolean  {
-    return !isNullOrUndefined(this.question.getImage());
-  }
-
   /**
    * sends answer to the server and checks if its correct
    * @param {string} answer
