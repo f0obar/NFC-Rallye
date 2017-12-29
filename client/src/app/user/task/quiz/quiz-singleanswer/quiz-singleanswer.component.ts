@@ -134,10 +134,11 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
    */
   abbrechen() {
     const deleteSession = this.dialog.open(SharedSimpleDialogComponent, {data: {
-      title: 'Schnitzeljagd beenden',
-      message: 'Möchtest du die Schnitzeljagd wirklich beenden?',
-      button1: 'JA BEENDEN',
-      button2: 'Abbrechen'
+        title: 'Schnitzeljagd verlassen',
+        message: 'Möchtest du die Session wirklich verlassen? Die Session kann fortgesetzt werden,' +
+        ' indem du dich mit deinem Gruppennamen und Passwort erneut anmeldest.',
+        button1: 'JA verlassen',
+        button2: 'Abbrechen'
     }});
     deleteSession.afterClosed().subscribe(result => {
       if(result === 'b1') {
