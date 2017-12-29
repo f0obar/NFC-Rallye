@@ -1,7 +1,8 @@
-import {AfterViewInit, Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-user-login',
@@ -11,6 +12,8 @@ import {Router} from '@angular/router';
 export class UserLoginComponent implements OnInit,AfterViewInit {
   @Output()
   loginOutput: EventEmitter<string> = new EventEmitter();
+
+  @ViewChild('teamname') teamname: ElementRef;
 
   imageLogo = '/assets/images/schnitzel_logo.png';
 
@@ -25,6 +28,8 @@ export class UserLoginComponent implements OnInit,AfterViewInit {
       history.pushState(null,null,this.router.url);
     });
   }
+
+
 
   /**
    * sends the teamname to the server and closes the login screen if the registration was successful.
@@ -43,6 +48,14 @@ export class UserLoginComponent implements OnInit,AfterViewInit {
           this.loginOutput.emit('' + data['token']);
         },
         (err) => {
+          // bad word filter handling
+          if (!isNullOrUndefined(err['error']['error']['suggestion'])){
+            this.teamname.nativeElement.value = err['error']['error']['suggestion'];
+          }
+          this.snackBar.open(err['error']['error']['message'],null, {
+            duration: 2000,
+            horizontalPosition: 'center'
+          });
           console.log('loginPost error', err);
         }
       );
