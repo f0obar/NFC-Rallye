@@ -3,6 +3,7 @@
     <img src="{{imageLogo}}">
     <h1 class="mat-display-2">Schnitzeljagd</h1>
     <form role="form" (ngSubmit)="submitLogin(teamname.value, password.value)">
+      <h1 class="mat-body-2">Neu registrieren/mit vorhandenen Nutzerdaten anmelden: </h1>
       <div class="form-group">
         <mat-form-field>
           <input #teamname matInput placeholder="Gruppenname" (keydown.enter)="password.focus();$event.preventDefault()">
