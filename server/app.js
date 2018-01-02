@@ -49,6 +49,11 @@ mongoose.connect('mongodb://127.0.0.1/schnitzel', {
   useMongoClient: true,
 });
 
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error: ' + err);
+  process.exit(1);
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = new Error('Not Found');
