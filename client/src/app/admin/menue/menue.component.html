@@ -1,8 +1,8 @@
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="over" opened="true">
+  <mat-sidenav #sidenav mode="over">
     <mat-list>
       <ng-container *ngFor="let entry of menueItems">
-        <mat-list-item (click)="sidenav.close(); currentSelection=entry;"> {{entry}} </mat-list-item>
+        <mat-list-item (click)="sidenav.close(); selectEntry(entry)"> {{entry}} </mat-list-item>
       </ng-container>
       <mat-list-item (click)="logout()"> Logout </mat-list-item>
     </mat-list>
