@@ -101,17 +101,20 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
    * Opens a new Popup dialog for editing a quiz.
    * @param {AdminQuiz} quiz to edit.
    */
-  editQuiz(quiz: AdminQuiz) {
+  editQuiz(quiz: AdminQuiz,event: any) {
     console.log('edit quiz', quiz._id);
-    const edit = this.dialog.open(AdminQuizDetailComponent, {
-      data: {
-        currentQuiz: quiz,
-        adminToken: this.adminToken
-      }
-    });
-    edit.afterClosed().subscribe(() => {
-      this.loadQuizzesFromServer();
-    });
+    // catch icon click
+    if (((event['path'])[0])['className'] !== 'material-icons') {
+      const edit = this.dialog.open(AdminQuizDetailComponent, {
+        data: {
+          currentQuiz: quiz,
+          adminToken: this.adminToken
+        }
+      });
+      edit.afterClosed().subscribe(() => {
+        this.loadQuizzesFromServer();
+      });
+    }
   }
 
   /**

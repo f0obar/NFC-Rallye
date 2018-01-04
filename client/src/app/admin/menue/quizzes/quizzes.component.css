@@ -7,3 +7,33 @@
 h1{
   padding-top: 20px;
 }
+
+.material-icons {
+  color: #282c87;
+}
+
+.material-icons:hover {
+  color: #383dbb;
+  cursor: pointer;
+}
+
+.mat-row:hover {
+  background-color: #eeeeee;
+  cursor: pointer;
+}
+
+.mat-column-isActive {
+  flex: 0 0 60px;
+}
+
+.mat-column-name {
+  flex: 0 0 200px;
+}
+
+.mat-column-id {
+  flex: 0 0 200px;
+}
+
+.mat-column-edit {
+  flex: 0 0 60px;
+}

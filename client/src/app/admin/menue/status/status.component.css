@@ -12,6 +12,19 @@ h1{
   overflow: auto;
 }
 
+.material-icons {
+  color: #282c87;
+}
+
+.material-icons:hover {
+  color: #383dbb;
+  cursor: pointer;
+}
+
+.mat-column-edit {
+  flex: 0 0 60px;
+}
+
 .mat-row:hover {
   background-color: #eeeeee;
   cursor: pointer;

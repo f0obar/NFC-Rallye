@@ -1,9 +1,9 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {isNullOrUndefined} from 'util';
-import {AdminStatusDetailComponent} from "./status-detail/status-detail.component";
+import {AdminStatusDetailComponent} from './status-detail/status-detail.component';
 
 
 @Component({
@@ -16,14 +16,13 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
   @Input() adminToken: string;
 
   public activePlaySessions: Array<PlaySession>;
-  public currentMaximized = '';
 
-  displayedColumns = ['name', 'location','time','lastActive','points', 'progress'];
+  displayedColumns = ['name', 'location','time','lastActive','points', 'progress','edit'];
 
   dataSource = new MatTableDataSource();
 
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {
+  constructor(private http: HttpClient, public dialog: MatDialog, private cdRef : ChangeDetectorRef) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -55,27 +54,19 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
       if (result === 'b1') {
         console.log('deleting all active sessions');
         for (let i = 0; i < this.activePlaySessions.length; i++) {
-          this.deleteSession(this.activePlaySessions[i].session_id);
+          this.deleteSession(this.activePlaySessions[i]);
         }
       }
     });
   }
 
-  detailMinimize() {
-    this.currentMaximized = '';
-  }
-
-  maximize(sessionID: string) {
-    this.currentMaximized = sessionID;
-  }
-
-  deleteSession(sessionID: string) {
-    console.log('deleting session', sessionID);
-    this.http.delete('/api/admin/playsessions/' + sessionID, {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
+  deleteSession(playSession: PlaySession) {
+    console.log('deleting session', playSession.session_id);
+    this.http.delete('/api/admin/playsessions/' + playSession.session_id, {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
       (data) => {
         console.log('delete session successfull', data);
         for (let index = 0; index < this.activePlaySessions.length; index++) {
-          if (this.activePlaySessions[index].session_id === sessionID) {
+          if (this.activePlaySessions[index].session_id === playSession.session_id) {
             this.activePlaySessions.splice(index, 1);
           }
         }
@@ -85,6 +76,22 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
         console.log('delete session error', err);
       }
     );
+  }
+
+  deleteSessionWithDialog(playSession: PlaySession) {
+    const d = this.dialog.open(SharedSimpleDialogComponent, {
+      data: {
+        title: 'Session Löschen',
+        message: 'Möchtest du wirklich diese Session löschen?',
+        button1: 'Löschen',
+        button2: 'Abbrechen'
+      }
+    });
+    d.afterClosed().subscribe(result => {
+      if (result === 'b1') {
+        this.deleteSession(playSession);
+      }
+    });
   }
 
   /**
@@ -114,6 +121,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
       currentTime = new Date(currentTime.getTime() + (currentTime.getTimezoneOffset() * 60 * 1000));
       return this.parseTimeToString(currentTime);
     }
+    this.cdRef.detectChanges();
     return '';
   }
 
@@ -126,6 +134,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
       currentTime = new Date(currentTime.getTime() + (currentTime.getTimezoneOffset() * 60 * 1000));
       return this.parseTimeToString(currentTime);
     }
+    this.cdRef.detectChanges();
     return '';
   }
 
@@ -218,19 +227,15 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
     );
   }
 
-  openDetail(playSession: PlaySession) {
-    const d = this.dialog.open(AdminStatusDetailComponent, {
-      data: {
-        playSession: playSession,
-        adminToken: this.adminToken
-      }
-    });
-    d.afterClosed().subscribe(result => {
-      if (result === 'delete') {
-       console.log('deleting playsession');
-       this.deleteSession(playSession.session_id);
-      }
-    });
+  openDetail(playSession: PlaySession,event: any) {
+    if (((event['path'])[0])['className'] !== 'material-icons') {
+      const d = this.dialog.open(AdminStatusDetailComponent, {
+        data: {
+          playSession: playSession,
+          adminToken: this.adminToken
+        }
+      });
+    }
   }
 
   convertInt(s: string): number {
