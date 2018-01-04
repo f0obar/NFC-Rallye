@@ -15,11 +15,16 @@ mat-sidenav {
   cursor: pointer;
 }
 
-.sidenav-button {
-  margin-top: 8px;
-  margin-left: 8px;
+.toolbar {
+  position: fixed;
+  z-index: 2;
 }
 
 .sidenav-content {
+  margin-top: 70px;
   padding: 8px;
+}
+
+h1.mat-display-2 {
+  margin-left: 8px;
 }
