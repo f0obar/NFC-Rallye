@@ -21,10 +21,6 @@ export class AdminStatusDetailComponent implements OnInit {
     this.dialogRef.close('cancel');
   }
 
-  deleteGroup() {
-    this.dialogRef.close('delete');
-  }
-
   /**
    * submits new / edited quiz to the server using rest api
    */

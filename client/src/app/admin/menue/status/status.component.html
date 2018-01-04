@@ -43,11 +43,17 @@
           <mat-progress-bar
             [value]="((convertInt(element.sessionLocationCount) - element.sessionLocationsToVisit.length) / convertInt(element.sessionLocationCount))*100"></mat-progress-bar>
         </mat-cell>
+      </ng-container>
 
+      <ng-container matColumnDef="edit">
+        <mat-header-cell *matHeaderCellDef> edit</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <i class="material-icons" (click)="deleteSessionWithDialog(element)">delete</i>
+        </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetail(row)"></mat-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetail(row,$event)"></mat-row>
     </mat-table>
 
     <mat-paginator #paginator
