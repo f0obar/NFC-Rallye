@@ -1,9 +1,9 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {isNullOrUndefined} from 'util';
-import {AdminStatusDetailComponent} from "./status-detail/status-detail.component";
+import {AdminStatusDetailComponent} from './status-detail/status-detail.component';
 
 
 @Component({
@@ -16,14 +16,13 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
   @Input() adminToken: string;
 
   public activePlaySessions: Array<PlaySession>;
-  public currentMaximized = '';
 
   displayedColumns = ['name', 'location','time','lastActive','points', 'progress'];
 
   dataSource = new MatTableDataSource();
 
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {
+  constructor(private http: HttpClient, public dialog: MatDialog, private cdRef : ChangeDetectorRef) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -59,14 +58,6 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
         }
       }
     });
-  }
-
-  detailMinimize() {
-    this.currentMaximized = '';
-  }
-
-  maximize(sessionID: string) {
-    this.currentMaximized = sessionID;
   }
 
   deleteSession(sessionID: string) {
@@ -114,6 +105,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
       currentTime = new Date(currentTime.getTime() + (currentTime.getTimezoneOffset() * 60 * 1000));
       return this.parseTimeToString(currentTime);
     }
+    this.cdRef.detectChanges();
     return '';
   }
 
@@ -126,6 +118,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
       currentTime = new Date(currentTime.getTime() + (currentTime.getTimezoneOffset() * 60 * 1000));
       return this.parseTimeToString(currentTime);
     }
+    this.cdRef.detectChanges();
     return '';
   }
 
