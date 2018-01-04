@@ -116,17 +116,20 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
    * opens a new popup dialog with an existing location
    * @param {AdminLocation} location
    */
-  editLocation(location: AdminLocation) {
-    console.log('edit location', location._id);
-    const edit = this.dialog.open(AdminLocationDetailComponent, {
-      data: {
-        currentLocation: location,
-        adminToken: this.adminToken
-      }
-    });
-    edit.afterClosed().subscribe(() => {
-      this.loadLocationsFromServer();
-    });
+  editLocation(location: AdminLocation,event: any) {
+    console.log('edit location', location._id,event);
+    // catch icon click
+    if (((event['path'])[0])['className'] !== 'material-icons') {
+      const edit = this.dialog.open(AdminLocationDetailComponent, {
+        data: {
+          currentLocation: location,
+          adminToken: this.adminToken
+        }
+      });
+      edit.afterClosed().subscribe(() => {
+        this.loadLocationsFromServer();
+      });
+    }
   }
 
   /**

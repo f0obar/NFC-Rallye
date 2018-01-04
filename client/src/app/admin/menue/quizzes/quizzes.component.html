@@ -2,7 +2,7 @@
   <h1 class="mat-display-2">Rätsel</h1>
 
   <div class="container">
-  <button mat-raised-button color="primary" (click)="addQuiz()">Rätsel hinzufügen</button>
+    <button mat-raised-button color="primary" (click)="addQuiz()">Rätsel hinzufügen</button>
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
     </mat-form-field>
@@ -38,17 +38,13 @@
       <ng-container matColumnDef="edit">
         <mat-header-cell *matHeaderCellDef> edit</mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <div class="btn-group" role="group">
-            <button mat-raised-button color="primary" (click)="editQuiz(element)">editieren</button>
-            <button mat-raised-button color="warn" (click)="deleteQuiz(element)">entfernen</button>
-          </div>
+          <i class="material-icons" (click)="deleteQuiz(element)">delete</i>
         </mat-cell>
       </ng-container>
 
 
-
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editQuiz(row,$event)"></mat-row>
     </mat-table>
 
     <mat-paginator #paginator
