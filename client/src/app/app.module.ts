@@ -50,8 +50,28 @@ const routes: Routes = [
     path: 'admin', component: AdminComponent,
     children: [
       {
+        path: 'status',
+        component: AdminComponent
+      },
+      {
+        path: 'configuration',
+        component: AdminComponent
+      },
+      {
+        path: 'locations',
+        component: AdminComponent
+      },
+      {
+        path: 'riddles',
+        component: AdminComponent
+      },
+      {
+        path: 'tags',
+        component: AdminComponent
+      },
+      {
         path: '**',
-        redirectTo: '/admin'
+        redirectTo: '/admin/status'
       }
     ]
   },
