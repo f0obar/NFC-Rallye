@@ -61,8 +61,8 @@ export class UserLocationMapPopupComponent implements AfterViewInit {
   ngAfterViewInit() {
     const map = L.map('map').setView([49.1226, 9.211], 17);
 
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
     if(this.data.admin === false) {
