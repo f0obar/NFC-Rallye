@@ -1,10 +1,6 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="over" opened="true">
     <mat-list>
-      <mat-list-item>
-        <h2 class="mat-h2"> Menu </h2>
-      </mat-list-item>
-      <mat-divider></mat-divider>
       <ng-container *ngFor="let entry of menueItems">
         <mat-list-item (click)="sidenav.close(); currentSelection=entry;"> {{entry}} </mat-list-item>
       </ng-container>
@@ -12,9 +8,10 @@
     </mat-list>
 
   </mat-sidenav>
-  <button class="sidenav-button" mat-mini-fab color="primary" (click)="sidenav.toggle()">
-    <i class="material-icons">menu</i>
-  </button>
+  <mat-toolbar color="primary" class="toolbar">
+    <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+    <h1 class="mat-display-2">{{currentSelection}}</h1>
+  </mat-toolbar>
   <div class="sidenav-content" (click)="sidenav.close()">
     <app-admin-status *ngIf="currentSelection=='Status'" [adminToken]="adminToken"></app-admin-status>
     <app-admin-configuration *ngIf="currentSelection=='Konfiguration'" [adminToken]="adminToken"></app-admin-configuration>
