@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-admin',
@@ -11,7 +12,7 @@ export class AdminComponent implements OnInit {
   authenticated: boolean;
   adminToken: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,public snackBar: MatSnackBar) {
     this.authenticated = false;
     this.adminToken = '';
   }
@@ -21,9 +22,29 @@ export class AdminComponent implements OnInit {
    */
   ngOnInit() {
     if(localStorage.getItem('admintoken') !== null){
-      this.adminToken = localStorage.getItem('admintoken');
-      this.authenticated = true;
+      this.checkAdminTokenValid(localStorage.getItem('admintoken'));
     }
+  }
+
+  /**
+   * checks if old admin token is still valid
+   */
+  checkAdminTokenValid(adminToken: string){
+    this.http.get('/api/admin/playsessions', {headers: new HttpHeaders().set('X-Auth-Token', adminToken)}).subscribe(
+      (data) => {
+        this.adminToken = adminToken;
+        this.authenticated = true;
+      },
+      (err) => {
+        if(err['status']=== 401){
+          localStorage.removeItem('admintoken');
+          this.snackBar.open('Session ist abgelaufen',null, {
+            duration: 2000,
+            horizontalPosition: 'center'
+          });
+        }
+      }
+    );
   }
 
   /**
