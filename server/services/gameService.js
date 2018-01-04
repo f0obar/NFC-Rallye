@@ -203,12 +203,12 @@ async function badWordFilter(name) {
     while (await PlaySession.findOne({ groupName: randomPokemon })) {
       if (tries === 10) {
         // If we really cannot find a free Pokemon Name
-        throw new UserException("Search for a new name");
+        throw new UserException("Select another name please");
       }
       randomPokemon = pokemon[(Math.random() * pokemon.length) | 0];
       tries++;
     }
-    throw new UserException("Search for a new name", randomPokemon);
+    throw new UserException("How about this instead?", randomPokemon);
   } else {
     return name;
   }
