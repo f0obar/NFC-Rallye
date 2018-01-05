@@ -1,28 +1,20 @@
 <div class="card">
   <mat-card>
-    <mat-card-title class="centered">
-      <h2 class="mat-h2">Finde folgenden Ort:</h2>
-    </mat-card-title>
-    <div id="image">
-      <img *ngIf="location?.imageAvailable()" mat-card-image class="img-responsive" src="data:{{location?.getImage().filetype}};base64,{{location?.getImage().base64}}">
+    <img *ngIf="location?.imageAvailable()" class="img-responsive" src="data:{{location?.getImage().filetype}};base64,{{location?.getImage().base64}}">
+    <div class="location-text">
+      <h1 class="mat-h1">Ort: {{location?.getName()}}</h1>
     </div>
-    <mat-card-content class="centered">
-      <h1 class="mat-h1">{{location?.getName()}}</h1>
-    </mat-card-content>
   </mat-card>
-
-
-  <div id="bottom">
-    <mat-toolbar class="container_bottom">
-      <i class="material-icons" (click)="abbrechen()">exit_to_app</i>
-      <span class="spacer"></span>
-      <i class="material-icons" (click)="help()">help_outline</i>
-      <span class="spacer"></span>
-      <i class="material-icons" (click)="openMap()">location_on</i>
-      <span class="spacer"></span>
-      <i class="material-icons" (click)="skip()">skip_next</i>
-      <span class="spacer"></span>
-      <i class="material-icons" (click)="openCamera()">photo_camera</i>
-    </mat-toolbar>
-  </div>
 </div>
+
+<mat-toolbar class="footer">
+  <i class="material-icons" (click)="abbrechen()">exit_to_app</i>
+  <span class="spacer"></span>
+  <i class="material-icons" (click)="help()">help_outline</i>
+  <span class="spacer"></span>
+  <i class="material-icons" (click)="openMap()">location_on</i>
+  <span class="spacer"></span>
+  <i class="material-icons" (click)="skip()">skip_next</i>
+  <span class="spacer"></span>
+  <i class="material-icons" (click)="openCamera()">photo_camera</i>
+</mat-toolbar>

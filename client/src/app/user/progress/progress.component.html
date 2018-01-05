@@ -1,17 +1,19 @@
-<div id="header">
-  <mat-toolbar>
-    <form id="progress">
-      <div class="container">
-        <div class="item home"><i class="material-icons">home</i>{{progressDone}}/{{progressCount}}</div>
-        <div>
-          <div class="item star" id="child_1"><i class="material-icons" >star</i><ng-container id="points">{{points}}</ng-container></div>
-          <div id="child_2" [@popOverState]="stateName">+{{pointIncrease}}</div>
+<mat-toolbar class="header mat-elevation-z2">
+  <form id="progress">
+    <div class="container">
+      <div class="item home">
+        <i class="material-icons">home</i>{{progressDone}}/{{progressCount}}</div>
+      <div>
+        <div class="item star" id="child_1">
+          <i class="material-icons">star</i>
+          <ng-container id="points">{{points}}</ng-container>
         </div>
-        <div class="item time"><i class="material-icons">access_time</i>{{parsedTime}}</div>
+        <div id="child_2" [@popOverState]="stateName">+{{pointIncrease}}</div>
       </div>
-      <mat-progress-bar id="bar" [value]="(progressDone / progressCount)*100"></mat-progress-bar>
-    </form>
-  </mat-toolbar>
-</div>
-
-
+      <div class="item time">
+        <i class="material-icons">access_time</i>{{parsedTime}}</div>
+    </div>
+    <mat-progress-bar color="accent" id="bar" [value]="(progressDone / progressCount)*100"></mat-progress-bar>
+  </form>
+</mat-toolbar>
+<div class="header-spacer"></div>

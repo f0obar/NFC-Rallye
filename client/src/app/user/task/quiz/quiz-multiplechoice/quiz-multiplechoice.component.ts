@@ -17,7 +17,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
   @Input() sessionID: string;
   @Input() location: Location;
 
-
   @Output()
   quizOutput: EventEmitter<any> = new EventEmitter();
 
@@ -29,7 +28,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
 
   usedAnswers = [];
   solution = '';
-
 
   constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog,private router: Router) {
   }

@@ -4,14 +4,9 @@
       <div class="question-center">
         <h4 class="mat-h4">{{question.getName()}}</h4>
       </div>
-      <div class="question" >{{question.getQuestion()}} </div>
-
-
-
+      <div class="question">{{question.getQuestion()}} </div>
       <br>
-        <img *ngIf="question?.imageAvailable()" mat-card-image class="img-responsive centered"
-             src="data:{{question.getImage()?.filetype}};base64,{{question.getImage()?.base64}}">
-
+      <img *ngIf="question?.imageAvailable()" mat-card-image class="img-responsive centered" src="data:{{question.getImage()?.filetype}};base64,{{question.getImage()?.base64}}">
       <div class="form-group" *ngFor="let entry of question.choices">
         <button [disabled]="isAnswerUsed(entry)" [class.solved]="isAnswerCorrect(entry)" mat-raised-button color="secondary" (click)="solveQuestion(entry)">
           {{entry}}

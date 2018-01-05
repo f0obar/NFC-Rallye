@@ -1,10 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
-/*
- * Base structure
- */
-
 /* Move down content because we have a fixed navbar that is 50px tall */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 body {
   padding-top: 0px;
 }

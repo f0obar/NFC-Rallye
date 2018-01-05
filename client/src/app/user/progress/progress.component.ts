@@ -42,8 +42,6 @@ export class UserProgressComponent implements OnInit {
   showPointAnimation = false;
   pointIncrease: number;
 
-
-
   constructor() {
     this.points = 0;
   }
