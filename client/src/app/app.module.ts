@@ -4,7 +4,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // Material
 import {
   MatButtonModule, MatCheckboxModule, MatDialogModule, MatInputModule, MatListModule, MatPaginatorModule,
-  MatProgressBarModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule,
+  MatProgressBarModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule,
+  MatSortModule,
   MatTableModule, MatToolbarModule
 } from '@angular/material';
 
@@ -43,7 +44,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {ScoreboardComponent} from './scoreboard/scoreboard.component';
 import {UserQuizHelpPopupComponent} from './user/task/quiz/quiz-help-popup/quiz-help-popup.component';
 import {WebSocketService} from './scoreboard/services/websocket.service';
-
 
 const routes: Routes = [
   {
@@ -158,7 +158,8 @@ const routes: Routes = [
     MatSelectModule,
     MatListModule,
     MatIconModule,
-    MatSortModule
+    MatSortModule,
+    MatRadioModule
   ],
   entryComponents: [
     SharedSimpleDialogComponent,

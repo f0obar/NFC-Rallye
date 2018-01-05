@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../../locations/admin-location';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatSlideToggleModule, MatSlideToggle} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatSlideToggle} from '@angular/material';
 import {AdminQuiz} from '../admin-quiz';
-import {isNullOrUndefined} from "util";
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-admin-quiz-detail',
@@ -15,6 +15,7 @@ export class AdminQuizDetailComponent implements OnInit {
   pageHeader: string;
   createNewEntry: boolean;
   locations: Array<AdminLocation>;
+  selectedAnswerIndex: number;
 
   @ViewChild('slider')
   slider:MatSlideToggle;
@@ -38,6 +39,14 @@ export class AdminQuizDetailComponent implements OnInit {
     if(this.data.currentQuiz.choices.length !== 0){
       this.type = 'multipleChoice';
       this.slider.toggle();
+
+      if (!isNullOrUndefined(this.data.currentQuiz.answer) && this.data.currentQuiz.answer !==  '') {
+        // for upgrading old quizzes that might have an answer but the answer isn't in the available choices
+        if (this.data.currentQuiz.choices.indexOf(this.data.currentQuiz.answer, 0) < 0) {
+          this.data.currentQuiz.choices.push(this.data.currentQuiz.answer);
+        }
+        this.selectedAnswerIndex = this.data.currentQuiz.choices.indexOf(this.data.currentQuiz.answer, 0);
+      }
     } else {
       this.type = 'singleAnswer';
     }
@@ -63,6 +72,9 @@ export class AdminQuizDetailComponent implements OnInit {
    */
   removeChoice(choice: string){
     const index = this.data.currentQuiz.choices.indexOf(choice, 0);
+    if(this.selectedAnswerIndex === index){
+      this.selectedAnswerIndex = null;
+    }
     if (index > -1) {
       this.data.currentQuiz.choices.splice(index, 1);
     }
@@ -113,6 +125,17 @@ export class AdminQuizDetailComponent implements OnInit {
    * submits new / edited quiz to the server using rest api
    */
   submit() {
+    if (this.type === 'multipleChoice'){
+      if (!isNullOrUndefined(this.selectedAnswerIndex) && this.selectedAnswerIndex > -1 && this.selectedAnswerIndex < this.data.currentQuiz.choices.length){
+        this.data.currentQuiz.answer = this.data.currentQuiz.choices[this.selectedAnswerIndex];
+      } else {
+        this.snackBar.open('Keine Antwort eingegeben!', null, {
+          duration: 2000,
+          horizontalPosition: 'center'
+        });
+        return;
+      }
+    }
     if (this.createNewEntry === false) {
       this.http.put('/api/admin/riddles/' + this.data.currentQuiz._id, {
         answer: this.data.currentQuiz.answer,
@@ -215,6 +238,7 @@ export class AdminQuizDetailComponent implements OnInit {
     this.data.currentQuiz.choices = [];
     this.data.currentQuiz.choices.push(this.data.currentQuiz.answer);
     this.type = 'multipleChoice';
+    this.selectedAnswerIndex = 0;
   }
 
   /**

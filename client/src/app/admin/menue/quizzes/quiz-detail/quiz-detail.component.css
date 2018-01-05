@@ -13,3 +13,12 @@ img{
 .answer{
   width: 75%;
 }
+
+.material-icons {
+  color: #282c87;
+}
+
+.material-icons:hover {
+  color: #383dbb;
+  cursor: pointer;
+}
