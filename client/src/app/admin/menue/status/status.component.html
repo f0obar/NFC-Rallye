@@ -38,7 +38,7 @@
       <ng-container matColumnDef="progress">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Fortschritt</mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <mat-progress-bar
+          <mat-progress-bar class="progress"
             [value]="((convertInt(element.sessionLocationCount) - element.sessionLocationsToVisit.length) / convertInt(element.sessionLocationCount))*100"></mat-progress-bar>
         </mat-cell>
       </ng-container>

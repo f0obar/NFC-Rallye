@@ -17,8 +17,13 @@
   cursor: pointer;
 }
 
+.progress {
+  height: 6px;
+  width: 90%;
+}
+
 .mat-column-edit {
-  flex: 0 0 60px;
+  flex: 0 0 40px;
 }
 
 .mat-row:hover {
@@ -31,8 +36,7 @@
   padding: 8px 24px 0;
 }
 
-
-.container{
+.container {
   display: flex;
   align-items: center;
   justify-content: space-between;
