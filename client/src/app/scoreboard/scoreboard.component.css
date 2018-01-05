@@ -1,14 +1,21 @@
+.mat-header-cell {
+  font-size: 18px;
+}
+
 .mat-row.highlighted {
-  background-color: #C7F464;
+  background-color: #2d8728;
+}
+
+.mat-row.highlighted .mat-cell {
+  color: white;
 }
 
 .confetti {
-  z-index:-1;
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  overflow:hidden;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
 }
-
