@@ -20,6 +20,10 @@ mat-sidenav {
   z-index: 2;
 }
 
+#logout {
+  color: #87282d;
+}
+
 .sidenav-content {
   margin-top: 70px;
   padding: 8px;
