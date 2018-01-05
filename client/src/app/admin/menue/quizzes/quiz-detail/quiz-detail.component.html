@@ -1,77 +1,69 @@
 <h1 mat-dialog-title>{{pageHeader}}</h1>
-<div mat-dialog-content>
-  <mat-slide-toggle #slider (change)="changeType(slider.checked)">Multiple Choice</mat-slide-toggle>
-  <div class="form-group">
-    <mat-form-field class="width">
+<mat-dialog-content>
+  <div class="dialog-element">
+    <mat-checkbox [(ngModel)]="data.currentQuiz.isActive">Rätsel aktiv?</mat-checkbox>
+  </div>
+  <div class="dialog-element">
+    <mat-slide-toggle #slider (change)="changeType(slider.checked)">Multiple Choice</mat-slide-toggle>
+  </div>
+  <div class="dialog-element">
+    <mat-form-field>
       <input matInput placeholder="Rätselname" [(ngModel)]="data.currentQuiz.name" name="name" class="form-control"
              required autofocus>
     </mat-form-field>
   </div>
-
-  <div class="form-group">
-    <mat-form-field class="width">
+  <div class="dialog-element">
+    <mat-form-field>
     <textarea matInput placeholder="Beschreibung" [(ngModel)]="data.currentQuiz.description" name="description"
-              class="form-control"
-              required matTextareaAutosize matAutosizeMinRows="2"
-              matAutosizeMaxRows="5"></textarea>
+              required matTextareaAutosize matAutosizeMinRows="1"
+              matAutosizeMaxRows="5">
+    </textarea>
     </mat-form-field>
   </div>
-
-
-  <div class="form-group" *ngIf="type!=='multipleChoice'">
-    <mat-form-field class="width">
-      <input matInput placeholder="Antwort" [(ngModel)]="data.currentQuiz.answer" name="answer" class="form-control"
-             required>
-    </mat-form-field>
+  <div class="dialog-element" *ngIf="type!=='multipleChoice'">
+  <mat-form-field>
+    <input matInput placeholder="Antwort" [(ngModel)]="data.currentQuiz.answer" name="answer" class="form-control"
+           required>
+  </mat-form-field>
   </div>
-
   <ng-container *ngIf="type=='multipleChoice'">
-    <div class="form-group">
-      <mat-radio-group class="example-radio-group" [(ngModel)]="selectedAnswerIndex">
-        <div *ngFor="let entry of data.currentQuiz.choices;trackBy:trackByFn;let i=index;">
-          <mat-radio-button class="example-radio-button" [value]="i"></mat-radio-button>
-          <mat-form-field class="answer">
-            <input matInput placeholder="Antwortmöglichkeiten" [(ngModel)]="data.currentQuiz.choices[i]"
-                   class="form-control">
-          </mat-form-field>
-          <i class="material-icons" (click)="removeChoice(entry)">delete</i>
-        </div>
-      </mat-radio-group>
-      <div>
-        <i class="material-icons" (click)="addChoice()">add_circle</i>
+    <mat-radio-group class="example-radio-group" [(ngModel)]="selectedAnswerIndex">
+      <div *ngFor="let entry of data.currentQuiz.choices;trackBy:trackByFn;let i=index;">
+        <mat-radio-button class="example-radio-button" [value]="i"></mat-radio-button>
+        <mat-form-field class="answer">
+          <input matInput placeholder="Antwortmöglichkeit" [(ngModel)]="data.currentQuiz.choices[i]"
+                 class="form-control">
+        </mat-form-field>
+        <i class="material-icons" (click)="removeChoice(entry)">delete</i>
       </div>
+    </mat-radio-group>
+    <div class="dialog-element">
+      <i class="material-icons" (click)="addChoice()">add_circle</i>
     </div>
   </ng-container>
-
-
-  <div class="form-group">
-    <mat-form-field class="width">
-      <textarea matInput class="hint" placeholder="Hinweis" [(ngModel)]="data.currentQuiz.hint" name="hint" class="form-control" required matTextareaAutosize matAutosizeMinRows="2"
-                matAutosizeMaxRows="5"></textarea>
-    </mat-form-field>
+  <div class="dialog-element">
+  <mat-form-field>
+    <textarea matInput class="hint" placeholder="Hinweis" [(ngModel)]="data.currentQuiz.hint" name="hint"
+              class="form-control" required matTextareaAutosize matAutosizeMinRows="1"
+              matAutosizeMaxRows="5"></textarea>
+  </mat-form-field>
   </div>
-
-  <div>
-    <mat-form-field class="width">
-      <mat-select class="form-control" placeholder="Rätsel an Ort binden" [(ngModel)]="data.currentQuiz.location"
-                  name="locationSelect">
-        <mat-option *ngFor="let entry of locations" [value]="entry._id">{{entry.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="dialog-element">
+  <mat-form-field>
+    <mat-select class="form-control" placeholder="Rätsel an Ort binden" [(ngModel)]="data.currentQuiz.location"
+                name="locationSelect">
+      <mat-option *ngFor="let entry of locations" [value]="entry._id">{{entry.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
   </div>
-  <div class="form-group">
-    <div>
-      <mat-checkbox [(ngModel)]="data.currentQuiz.isActive">Rätsel aktiv?</mat-checkbox>
-    </div>
+  <div class="dialog-element">
+    <input [hidden]=true id="input-file-id" accept="image/*" type="file" (change)="handleFileSelect($event)"/>
+    <label class="mat-raised-button mat-primary mat-fabmat-mini-fab.mat" for="input-file-id">Bild auswählen</label>
   </div>
-  <div class="form-group">
-    <h1 class="mat-body">Bild auswählen</h1>
-    <input class="form-control" accept="image/*" type="file" (change)="handleFileSelect($event)">
-    <br/>
-    <img *ngIf="isImageAvailable()" class="img-responsive center-block" src="data:{{data.currentQuiz.image.filetype}};base64,{{data.currentQuiz.image.base64}}">
-  </div>
-</div>
-<div mat-dialog-actions>
+  <img *ngIf="isImageAvailable()" class="img-responsive center-block"
+       src="data:{{data.currentQuiz.image.filetype}};base64,{{data.currentQuiz.image.base64}}">
+</mat-dialog-content>
+<mat-dialog-actions>
   <button mat-raised-button color="primary" tabindex="2" (click)="submit()">Speichern</button>
   <button mat-raised-button tabindex="-1" (click)="cancel()">Abbrechen</button>
-</div>
+</mat-dialog-actions>

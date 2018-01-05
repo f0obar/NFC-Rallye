@@ -1,17 +1,25 @@
-.add-button{
+.add-button {
   margin-bottom: 20px;
 }
 
-.width{
+.width {
   width: 100%;
 }
 
-img{
+img {
   max-width: 250px;
 }
 
-.answer{
-  width: 75%;
+textarea {
+  resize: none;
+}
+
+.dialog-element {
+  margin-bottom: 8px;
+}
+
+mat-form-field {
+  margin-bottom: 8px;
 }
 
 .material-icons {
