@@ -1,27 +1,31 @@
 <h1 mat-dialog-title>{{pageHeader}}</h1>
-<div mat-dialog-content>
-  <div class="form-group">
-    <label class="control-label">Raumname</label>
-    <input type="text" class="form-control" name="roomname" [(ngModel)]="data.currentLocation.name" required autofocus>
+<mat-dialog-content>
+  <div class="dialog-element">
+    <mat-checkbox [(ngModel)]="data.currentLocation.isActive">Aktiv?</mat-checkbox>
   </div>
-  <div class="form-group">
-    <label class="control-label">Beschreibung</label>
-    <textarea class="form-control" rows="5" name="description" [(ngModel)]="data.currentLocation.description"></textarea>
+  <div class="dialog-element">
+    <mat-form-field>
+      <input matInput placeholder="Raumname" [(ngModel)]="data.currentLocation.name" required autofocus>
+    </mat-form-field>
   </div>
-  <div class="form-group">
-    <div>
-      <!--<input type="checkbox" name="includelocation" [(ngModel)]="data.currentLocation.isActive">-->
-      <mat-checkbox [(ngModel)]="data.currentLocation.isActive">Aktiv?</mat-checkbox>
-    </div>
+  <div class="dialog-element">
+    <mat-form-field>
+      <textarea matInput placeholder="Beschreibung" [(ngModel)]="data.currentLocation.description" name="description"
+                required matTextareaAutosize matAutosizeMinRows="1"
+                matAutosizeMaxRows="5">
+      </textarea>
+    </mat-form-field>
   </div>
-  <div class="form-group">
-    <label class="control-label">Bild auswählen</label>
-    <input class="form-control" accept="image/*" type="file" (change)="handleFileSelect($event)">
-    <br/>
-      <img *ngIf="isImageAvailable()" class="img-responsive center-block" src="data:{{data.currentLocation.image.filetype}};base64,{{data.currentLocation.image.base64}}">
-    </div>
-</div>
-<div mat-dialog-actions>
+  <div class="dialog-element">
+    <img *ngIf="isImageAvailable()" class="img-responsive center-block"
+         src="data:{{data.currentLocation.image.filetype}};base64,{{data.currentLocation.image.base64}}">
+  </div>
+  <div class="dialog-element">
+    <input [hidden]=true id="input-file-id" accept="image/*" type="file" (change)="handleFileSelect($event)"/>
+    <label class="mat-raised-button mat-primary mat-fabmat-mini-fab.mat" for="input-file-id">Bild auswählen</label>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
   <button mat-raised-button color="primary" tabindex="2" (click)="submit()">Speichern</button>
   <button mat-raised-button tabindex="-1" (click)="cancel()">Abbrechen</button>
-</div>
+</mat-dialog-actions>

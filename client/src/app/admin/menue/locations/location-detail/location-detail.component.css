@@ -1,0 +1,15 @@
+.dialog-element {
+  margin-bottom: 8px;
+}
+
+textarea {
+  resize: none;
+}
+
+img {
+  max-height: 300px;
+}
+
+mat-form-field {
+  width: 80%;
+}

@@ -7,11 +7,29 @@
 }
 
 img {
-  max-width: 250px;
+  max-width: 600px;
 }
 
 textarea {
   resize: none;
+}
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-left {
+  width: 400px;
+}
+
+.flex-right {
+  justify-content: center;
 }
 
 .dialog-element {
@@ -19,7 +37,7 @@ textarea {
 }
 
 mat-form-field {
-  margin-bottom: 8px;
+  width: 80%;
 }
 
 .material-icons {
