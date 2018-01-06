@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const RiddleSchema = new mongoose.Schema({
   name: String,
   image: Object,
+  code: String,
   description: String,
   answer: String,
   choices: [String],

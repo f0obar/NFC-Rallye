@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, NgModule, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../../locations/admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatSlideToggle} from '@angular/material';
@@ -18,7 +18,7 @@ export class AdminQuizDetailComponent implements OnInit {
   selectedAnswerIndex: number;
 
   @ViewChild('slider')
-  slider:MatSlideToggle;
+  slider: MatSlideToggle;
 
   constructor(public dialogRef: MatDialogRef<AdminQuizDetailComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient, public snackBar: MatSnackBar) {
@@ -36,11 +36,11 @@ export class AdminQuizDetailComponent implements OnInit {
       this.createNewEntry = true;
     }
     this.loadLocations();
-    if(this.data.currentQuiz.choices.length !== 0){
+    if (this.data.currentQuiz.choices.length !== 0) {
       this.type = 'multipleChoice';
       this.slider.toggle();
 
-      if (!isNullOrUndefined(this.data.currentQuiz.answer) && this.data.currentQuiz.answer !==  '') {
+      if (!isNullOrUndefined(this.data.currentQuiz.answer) && this.data.currentQuiz.answer !== '') {
         // for upgrading old quizzes that might have an answer but the answer isn't in the available choices
         if (this.data.currentQuiz.choices.indexOf(this.data.currentQuiz.answer, 0) < 0) {
           this.data.currentQuiz.choices.push(this.data.currentQuiz.answer);
@@ -70,9 +70,9 @@ export class AdminQuizDetailComponent implements OnInit {
   /**
    * removes specified choice from the array
    */
-  removeChoice(choice: string){
+  removeChoice(choice: string) {
     const index = this.data.currentQuiz.choices.indexOf(choice, 0);
-    if(this.selectedAnswerIndex === index){
+    if (this.selectedAnswerIndex === index) {
       this.selectedAnswerIndex = null;
     }
     if (index > -1) {
@@ -87,7 +87,7 @@ export class AdminQuizDetailComponent implements OnInit {
   /**
    * adds a choice to the array
    */
-  addChoice(){
+  addChoice() {
     this.data.currentQuiz.choices.push('');
   }
 
@@ -110,7 +110,7 @@ export class AdminQuizDetailComponent implements OnInit {
                 data[d]['_id'],
                 data[d]['lat'],
                 data[d]['lng'],
-                data[d]['lvl']+''));
+                data[d]['lvl'] + ''));
           }
         }
         console.log('initialized array', this.locations);
@@ -125,8 +125,9 @@ export class AdminQuizDetailComponent implements OnInit {
    * submits new / edited quiz to the server using rest api
    */
   submit() {
-    if (this.type === 'multipleChoice'){
-      if (!isNullOrUndefined(this.selectedAnswerIndex) && this.selectedAnswerIndex > -1 && this.selectedAnswerIndex < this.data.currentQuiz.choices.length){
+    if (this.type === 'multipleChoice') {
+      if (!isNullOrUndefined(this.selectedAnswerIndex) &&
+        this.selectedAnswerIndex > -1 && this.selectedAnswerIndex < this.data.currentQuiz.choices.length) {
         this.data.currentQuiz.answer = this.data.currentQuiz.choices[this.selectedAnswerIndex];
       } else {
         this.snackBar.open('Keine Antwort eingegeben!', null, {
@@ -234,7 +235,7 @@ export class AdminQuizDetailComponent implements OnInit {
   /**
    * converts singleanswer quiz to multiplechoice
    */
-  convertToMultipleChoice(){
+  convertToMultipleChoice() {
     this.data.currentQuiz.choices = [];
     this.data.currentQuiz.choices.push(this.data.currentQuiz.answer);
     this.type = 'multipleChoice';
@@ -244,7 +245,7 @@ export class AdminQuizDetailComponent implements OnInit {
   /**
    * converts multiplechoice quiz to singleanswer
    */
-  convertToSingleAnswer(){
+  convertToSingleAnswer() {
     this.data.currentQuiz.choices = [];
     this.type = 'singleAnswer';
   }
@@ -254,18 +255,19 @@ export class AdminQuizDetailComponent implements OnInit {
    * @param {boolean} mc
    */
   changeType(mc: boolean) {
-   if(mc && this.type !== 'multipleChoice') {
-     this.convertToMultipleChoice();
-   }
-   if(!mc && this.type !== 'singleAnswer') {
+    if (mc && this.type !== 'multipleChoice') {
+      this.convertToMultipleChoice();
+    }
+    if (!mc && this.type !== 'singleAnswer') {
       this.convertToSingleAnswer();
-   }
+    }
   }
 
   /**
    * checks if there is a valid image
    */
-  isImageAvailable():boolean {
-    return !isNullOrUndefined(this.data.currentQuiz.image) && !isNullOrUndefined(this.data.currentQuiz.image.filetype) && this.data.currentQuiz.image.filetype != "";
+  isImageAvailable(): boolean {
+    return !isNullOrUndefined(this.data.currentQuiz.image) &&
+      !isNullOrUndefined(this.data.currentQuiz.image.filetype) && this.data.currentQuiz.image.filetype !== '';
   }
 }

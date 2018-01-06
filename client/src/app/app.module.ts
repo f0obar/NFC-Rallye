@@ -43,7 +43,9 @@ import {HttpModule} from '@angular/http';
 import {MatIconModule} from '@angular/material/icon';
 import {ScoreboardComponent} from './scoreboard/scoreboard.component';
 import {UserQuizHelpPopupComponent} from './user/task/quiz/quiz-help-popup/quiz-help-popup.component';
+
 import {WebSocketService} from './scoreboard/services/websocket.service';
+import {HighlightModule} from 'ngx-highlightjs';
 
 const routes: Routes = [
   {
@@ -159,7 +161,11 @@ const routes: Routes = [
     MatListModule,
     MatIconModule,
     MatSortModule,
-    MatRadioModule
+    MatRadioModule,
+    HighlightModule.forRoot({
+      theme: 'github-gist',
+      path: 'assets/js/highlightjs'
+    })
   ],
   entryComponents: [
     SharedSimpleDialogComponent,

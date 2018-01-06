@@ -75,6 +75,7 @@ async function getGameState(token) {
       "choices",
       "description",
       "hint",
+      "code",
       "image"
     ]);
     return result;

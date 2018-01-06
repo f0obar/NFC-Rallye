@@ -24,6 +24,10 @@ mat-toolbar {
   background-color: #282c87;
 }
 
+code {
+  text-align: left;
+}
+
 .material-icons:hover {
   cursor: pointer;
 }
@@ -71,6 +75,11 @@ mat-toolbar {
   mat-card {
     margin: 0 auto;
     max-width: 75%;
+  }
+
+  code {
+    margin: 0 auto;
+    width: 80%;
   }
 
   .img-responsive {

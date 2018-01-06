@@ -17,6 +17,26 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
   @Input() sessionID: string;
   @Input() location: Location;
 
+  code = `public class Program
+{
+  public static void main(String[] args)
+  {
+    int x = 4;
+    int y = 9;
+    int min;
+    
+    if (x < y) {
+      min = x;
+      if (y < x) {
+        min = y;
+      }
+    } else {
+      min = y;
+    }
+    System.out.println("Das Minimum lautet: " +  min);
+  }
+}`;
+
   @Output()
   quizOutput: EventEmitter<any> = new EventEmitter();
 
