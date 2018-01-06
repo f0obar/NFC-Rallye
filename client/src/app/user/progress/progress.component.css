@@ -42,10 +42,11 @@ mat-toolbar {
   top: 16px;
 }
 
-#child_3 {
+#child_2 {
   position: relative;
   z-index: 2;
   top: 16px;
+  color: white;
 }
 
 .container {
