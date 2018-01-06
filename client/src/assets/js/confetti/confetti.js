@@ -55,15 +55,17 @@ $(function () {
   }
 
   $(document).ready(function () {
-    SetGlobals();
-    InitializeConfetti();
+    try {
+      SetGlobals();
+      InitializeConfetti();
 
-    $(window).resize(function () {
-      W = window.innerWidth;
-      H = window.innerHeight;
-      canvas.width = W;
-      canvas.height = H;
-    });
+      $(window).resize(function () {
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W;
+        canvas.height = H;
+      });
+    } catch (err){}
 
   });
 

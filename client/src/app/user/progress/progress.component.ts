@@ -1,6 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 import {animate, keyframes, state, style, transition, trigger} from '@angular/animations';
+import {isNullOrUndefined} from 'util';
+import {Subscription} from 'rxjs/Subscription';
 
 declare const CountUp: any;
 
@@ -30,7 +32,7 @@ declare const CountUp: any;
   ]
 })
 
-export class UserProgressComponent implements OnInit {
+export class UserProgressComponent implements OnInit, OnDestroy {
 
   @Input() progressCount: number;
   @Input() progressDone: number;
@@ -41,6 +43,7 @@ export class UserProgressComponent implements OnInit {
   parsedTime: string;
   showPointAnimation = false;
   pointIncrease: number;
+  subscription: Subscription;
 
   constructor() {
     this.points = 0;
@@ -54,10 +57,17 @@ export class UserProgressComponent implements OnInit {
     /**
      * when the enddate is null the session is still running, so the timer has to increase every second.
      */
-    if(this.endDate === null) {
-      IntervalObservable.create(1000).subscribe(n => this.parsedTime = this.parseTime());
+    if(isNullOrUndefined(this.endDate)) {
+      console.log('I NEED TO',this.startDate,this.endDate);
+      this.subscription = IntervalObservable.create(1000).subscribe(n => this.parsedTime = this.parseTime());
     }
     this.showPointAnimation = false;
+  }
+
+  ngOnDestroy() {
+    if(!isNullOrUndefined(this.subscription)) {
+      this.subscription.unsubscribe();
+    }
   }
 
   /**
@@ -106,14 +116,15 @@ export class UserProgressComponent implements OnInit {
 
       let time = '(';
 
-      if (currentTime.getHours() < 10) {
-        time += '0';
-        time += currentTime.getHours();
-      } else {
-        time += currentTime.getHours();
+      if (currentTime.getHours() > 0) {
+        if (currentTime.getHours() < 10) {
+          time += '0';
+          time += currentTime.getHours();
+        } else {
+          time += currentTime.getHours();
+        }
+        time += ':';
       }
-
-      time += ':';
 
       if (currentTime.getMinutes() < 10) {
         time += '0';
@@ -132,6 +143,7 @@ export class UserProgressComponent implements OnInit {
       }
 
       time += ')';
+      console.log('parsing start',this.startDate,'end',this.endDate, 'time is now ',time);
       return time;
     }
   }
