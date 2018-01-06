@@ -1,48 +1,43 @@
-<ng-container>
-  <div class="mat-title">Gewonnen Info</div>
-  <form role="form" (ngSubmit)="changeEndText(endtext.value)">
-    <div class="form-group">
-      <mat-form-field class="full-width">
+<div class="flex-wrapper">
+  <div class="flex-container">
+    <div class="mat-title">Gewonnen Info</div>
+    <form role="form" (ngSubmit)="changeEndText(endtext.value)">
+      <div class="form-group">
+        <mat-form-field class="full-width">
         <textarea matInput placeholder="Infotext, für Ende der Schnitzeljagd:" matTextareaAutosize
                   matAutosizeMinRows="1"
                   matAutosizeMaxRows="5" type="text" [(value)]="currentWinText" #endtext class="form-control" required
-                  autofocus></textarea>
-      </mat-form-field>
-    </div>
-    <div class="text-right">
+                  autofocus spellcheck="false"></textarea>
+        </mat-form-field>
+      </div>
       <button mat-raised-button color="primary" type="submit">Speichern</button>
-    </div>
-  </form>
-
-  <div class="mat-title">Benutzername ändern</div>
-  <form role="form" (ngSubmit)="changeUserName(email.value)">
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput placeholder="Benutzername" type="text" [(value)]="currentUserName" #email id="inputEmail"
-               class="form-control"
-               required autofocus>
-      </mat-form-field>
-    </div>
-    <div class="text-right">
+    </form>
+    <div class="mat-title">Benutzername ändern</div>
+    <form role="form" (ngSubmit)="changeUserName(email.value)">
+      <div class="form-group">
+        <mat-form-field>
+          <input matInput placeholder="Benutzername" type="text" [(value)]="currentUserName" #email id="inputEmail"
+                 class="form-control"
+                 required autofocus>
+        </mat-form-field>
+      </div>
       <button mat-raised-button color="primary" type="submit">Speichern</button>
-    </div>
-  </form>
-
-  <div class="mat-title">Passwort ändern</div>
-  <form role="form" (ngSubmit)="changePassword(newpassword.value,newpassword2.value)">
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput placeholder="Neues Passwort" type="password" #newpassword class="form-control"
-               placeholder="Neues Passwort" required>
-      </mat-form-field>
-    </div>
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput placeholder="Passwort wiederholen" type="password" #newpassword2 class="form-control" required>
-      </mat-form-field>
-    </div>
-    <div class="text-right">
+    </form>
+    <div class="mat-title">Passwort ändern</div>
+    <form role="form" (ngSubmit)="changePassword(newpassword.value,newpassword2.value)">
+      <div class="form-group">
+        <mat-form-field>
+          <input matInput placeholder="Neues Passwort" type="password" #newpassword class="form-control"
+                 placeholder="Neues Passwort" required>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field>
+          <input matInput placeholder="Passwort wiederholen" type="password" #newpassword2 class="form-control"
+                 required>
+        </mat-form-field>
+      </div>
       <button mat-raised-button color="primary" type="submit">Speichern</button>
-    </div>
-  </form>
-</ng-container>
+    </form>
+  </div>
+</div>

@@ -15,10 +15,10 @@
     </div>
     <div class="dialog-element">
       <mat-form-field>
-      <textarea matInput placeholder="Beschreibung" [(ngModel)]="data.currentQuiz.description" name="description"
-                required matTextareaAutosize matAutosizeMinRows="1"
-                matAutosizeMaxRows="5">
-      </textarea>
+        <textarea matInput placeholder="Beschreibung" [(ngModel)]="data.currentQuiz.description" name="description"
+                  required matTextareaAutosize matAutosizeMinRows="1"
+                  matAutosizeMaxRows="8">
+        </textarea>
       </mat-form-field>
     </div>
     <div class="dialog-element" *ngIf="type!=='multipleChoice'">

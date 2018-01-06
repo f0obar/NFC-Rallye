@@ -1,7 +1,22 @@
-mat-form-field{
-  width: 53%;
+.flex-container {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
-.text-right{
-  text-align: center;
+.flex-wrapper {
+  width: 50%;
+  margin: 0 auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+textarea {
+  resize: none;
+}
+
+button {
+  margin-bottom: 32px;
 }
