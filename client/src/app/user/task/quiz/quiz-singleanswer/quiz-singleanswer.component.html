@@ -1,24 +1,22 @@
 <div class="card">
-  <div>
-    <mat-card>
-      <div class="question-center">
-        <h4 class="mat-h4">{{question.getName()}}</h4>
-      </div>
-      <div class="question">{{question.getQuestion()}}</div>
-      <br>
-      <pre *ngIf="question.codeAvailable()"><code highlight [code]="question.code"></code></pre>
-      <img *ngIf="question?.imageAvailable()" mat-card-image class="img-responsive centered"
-           src="data:{{question.getImage()?.filetype}};base64,{{question.getImage()?.base64}}">
+  <mat-card>
+    <div class="question-center">
+      <h4 class="mat-h4">{{question.getName()}}</h4>
+    </div>
+    <div class="question">{{question.getQuestion()}}</div>
+    <br>
+    <pre *ngIf="question.codeAvailable()"><code highlight [code]="question.code"></code></pre>
+    <img *ngIf="question?.imageAvailable()" mat-card-image class="img-responsive centered"
+         src="data:{{question.getImage()?.filetype}};base64,{{question.getImage()?.base64}}">
 
-
-      <div class="form-group">
-        <mat-form-field>
-          <input matInput placeholder="Antwort" type="text" #answer ng-model="riddle.answer" (keydown.enter)="solveQuestion(answer.value)">
-        </mat-form-field>
-        <i class="material-icons" id="hint" style="color: #333333" (click)="toggleHint()">info</i>
-      </div>
-    </mat-card>
-  </div>
+    <div class="form-group">
+      <mat-form-field>
+        <input matInput placeholder="Antwort" type="text" #answer ng-model="riddle.answer"
+               (keydown.enter)="solveQuestion(answer.value)">
+      </mat-form-field>
+      <i class="material-icons" id="hint" style="color: #333333" (click)="toggleHint()">info</i>
+    </div>
+  </mat-card>
 </div>
 
 <div id="bottom">
