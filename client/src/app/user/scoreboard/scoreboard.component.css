@@ -1,5 +1,9 @@
+.mat-display-1 {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
 .scoreboard {
-  margin-top: 100px;
   background-color: white;
   margin-bottom: 100px;
 }
