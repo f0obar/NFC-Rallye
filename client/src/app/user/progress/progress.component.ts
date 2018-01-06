@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 import {animate, keyframes, state, style, transition, trigger} from '@angular/animations';
 import {isNullOrUndefined} from 'util';
@@ -32,7 +32,7 @@ declare const CountUp: any;
   ]
 })
 
-export class UserProgressComponent implements OnInit, OnDestroy {
+export class UserProgressComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() progressCount: number;
   @Input() progressDone: number;
@@ -54,19 +54,25 @@ export class UserProgressComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    /**
-     * when the enddate is null the session is still running, so the timer has to increase every second.
-     */
-    if(isNullOrUndefined(this.endDate)) {
-      console.log('I NEED TO',this.startDate,this.endDate);
-      this.subscription = IntervalObservable.create(1000).subscribe(n => this.parsedTime = this.parseTime());
-    }
     this.showPointAnimation = false;
   }
 
   ngOnDestroy() {
     if(!isNullOrUndefined(this.subscription)) {
       this.subscription.unsubscribe();
+    }
+  }
+
+  ngOnChanges() {
+    this.parsedTime = this.parseTime();
+    if (isNullOrUndefined(this.subscription)){
+      if(!isNullOrUndefined(this.startDate) && isNullOrUndefined(this.endDate)){
+        this.subscription = IntervalObservable.create(1000).subscribe(n => this.parsedTime = this.parseTime());
+      }
+    } else {
+      if (!isNullOrUndefined(this.endDate)){
+        this.subscription.unsubscribe();
+      }
     }
   }
 

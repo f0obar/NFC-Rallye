@@ -74,7 +74,6 @@ export class UserComponent implements OnInit{
   loggedIn(id: string) {
     localStorage.setItem('sessionID',id);
     this.sessionID = id;
-    console.log('TEST',localStorage.getItem('sessionID'));
     setTimeout(()=>{
       this.getStateFromServer();
       this.gameRunning = true;},500);
@@ -104,6 +103,8 @@ export class UserComponent implements OnInit{
          */
         if (!(isUndefined((data['dates'])['startDate']))) {
           this.startDate = this.parseJsonDateToDate((data['dates'])['startDate']);
+        } else {
+          this.startDate = null;
         }
 
         /**
@@ -111,6 +112,8 @@ export class UserComponent implements OnInit{
          */
         if (!(isUndefined((data['dates'])['endDate']))) {
           this.endDate = this.parseJsonDateToDate((data['dates'])['endDate']);
+        } else {
+          this.endDate = null;
         }
 
         /**
