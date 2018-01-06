@@ -21,10 +21,10 @@ declare const CountUp: any;
       transition('show => hide', animate('0ms ease-out')),
       transition('hide => show',
         animate(1000, keyframes([
-          style({opacity: 0, transform: 'translateX(0)', offset: 0}),
-          style({opacity: 1, transform: 'translateX(25px)', offset: 0.3}),
-          style({opacity: 1, transform: 'translateX(25px)', offset: 0.7}),
-          style({opacity: 0, transform: 'translateX(0px)', offset: 1})
+          style({opacity: 0, transform: 'translateX(-20px)', offset: 0}),
+          style({opacity: 1, transform: 'translateX(0px)', offset: 0.3}),
+          style({opacity: 1, transform: 'translateX(0px)', offset: 0.7}),
+          style({opacity: 0, transform: 'translateX(-20px)', offset: 1})
         ])))
     ])
   ]
@@ -83,7 +83,7 @@ export class UserProgressComponent implements OnInit {
     setTimeout(()=>{
       this.showPointAnimation = false;
       this.points = amount;
-      console.log('Points got increased by',amount);
+      this.pointIncrease = null;
     }, 1000);
   }
 

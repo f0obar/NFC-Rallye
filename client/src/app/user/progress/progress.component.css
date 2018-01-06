@@ -2,8 +2,13 @@
   width: 100%;
 }
 
-.star {
+.points {
   color: white;
+}
+
+.animation {
+  z-index: 1;
+  position: absolute;
 }
 
 .time {
@@ -15,6 +20,7 @@
 }
 
 mat-progress-bar {
+  top: 5px;
   height: 6px;
 }
 
@@ -33,21 +39,11 @@ mat-progress-bar {
 }
 
 mat-toolbar {
-  height: 90px;
+  height: 65px;
 }
 
-#child_1 {
-  position: relative;
-  z-index: 1;
-  top: 16px;
-}
 
-#child_2 {
-  position: relative;
-  z-index: 2;
-  top: 16px;
-  color: white;
-}
+
 
 .container {
   display: flex;
