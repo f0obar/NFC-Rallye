@@ -121,7 +121,7 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
   skipQuestion(): void {
     const d = this.dialog.open(SharedSimpleDialogComponent, {
       data: {
-        title: 'Quiz Überspringen',
+        title: 'Quiz überspringen',
         message: 'Möchtest du wirklich dieses Quiz überspringen? Du kannst nicht zurück kehren, und erhälst keine Punkte.',
         button1: 'Überspringen',
         button2: 'Abbrechen'
