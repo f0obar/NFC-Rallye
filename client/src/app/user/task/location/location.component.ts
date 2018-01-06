@@ -69,7 +69,7 @@ export class UserLocationComponent implements AfterViewInit {
   skip(): void {
     const d = this.dialog.open(SharedSimpleDialogComponent, {
       data: {
-        title: 'Ort Überspringen',
+        title: 'Ort überspringen',
         message: 'Möchtest du wirklich diesen Ort überspringen? Du kannst nicht zurück kehren, und erhälst keine Punkte.',
         button1: 'Überspringen',
         button2: 'Abbrechen'
