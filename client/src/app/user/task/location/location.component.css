@@ -28,13 +28,13 @@ mat-toolbar {
 }
 
 .location-text {
-  height: 60px;
+  padding-top: 16px;
+  padding-bottom: 2px;
 }
 
 .mat-h1 {
   text-align: center;
   vertical-align: middle;
-  line-height: 60px;
 }
 
 .spacer {
