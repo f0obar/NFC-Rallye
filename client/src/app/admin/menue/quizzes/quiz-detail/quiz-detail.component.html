@@ -42,11 +42,11 @@
         <i class="material-icons" (click)="addChoice()">add_circle</i>
       </div>
     </ng-container>
-    <div class="dialog-element">
+    <div class="dialog-element" *ngIf="type!=='multipleChoice'">
       <mat-form-field>
-    <textarea matInput class="hint" placeholder="Hinweis" [(ngModel)]="data.currentQuiz.hint" name="hint"
-              class="form-control" required matTextareaAutosize matAutosizeMinRows="1"
-              matAutosizeMaxRows="5"></textarea>
+        <textarea matInput class="hint" placeholder="Hinweis" [(ngModel)]="data.currentQuiz.hint" name="hint"
+                  class="form-control" required matTextareaAutosize matAutosizeMinRows="1"
+                  matAutosizeMaxRows="5"></textarea>
       </mat-form-field>
     </div>
     <div class="dialog-element">
@@ -66,6 +66,14 @@
     <div class="dialog-element">
       <input [hidden]=true id="input-file-id" accept="image/*" type="file" (change)="handleFileSelect($event)"/>
       <label class="mat-raised-button mat-primary mat-fabmat-mini-fab.mat" for="input-file-id">Bild auswählen</label>
+      <i *ngIf="isImageAvailable()" class="material-icons" (click)="deleteImage()">delete</i>
+    </div>
+    <div class="dialog-element">
+      <mat-form-field>
+        <textarea matInput placeholder="Code" [(ngModel)]="data.currentQuiz.code" name="code"
+                  required matTextareaAutosize matAutosizeMaxRows="5">
+        </textarea>
+      </mat-form-field>
     </div>
   </div>
 </mat-dialog-content>

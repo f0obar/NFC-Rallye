@@ -3,7 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Location} from './location';
 import {QuestionSingleanswer} from './questionsingleanswer';
 import {Router} from '@angular/router';
-import {MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {SharedSimpleDialogComponent} from '../shared/simple-dialog/simple-dialog.component';
 import {isNullOrUndefined, isUndefined} from 'util';
 import {QuestionMultiplechoice} from './questionmc';
@@ -125,9 +125,19 @@ export class UserComponent implements OnInit{
            * @type {QuestionSingleanswer}
            */
           if (dataQuestion['choices'].length === 0){
-            this.currentQuestion = new QuestionSingleanswer(dataQuestion['description'],dataQuestion['question'],dataQuestion['hint'], dataQuestion['image']);
+            this.currentQuestion = new QuestionSingleanswer(
+              dataQuestion['description'],
+              dataQuestion['question'],
+              dataQuestion['hint'],
+              dataQuestion['image'],
+              dataQuestion['code']);
           } else {
-            this.currentQuestion = new QuestionMultiplechoice(dataQuestion['description'],dataQuestion['question'] ,dataQuestion['choices'], dataQuestion['image']);
+            this.currentQuestion = new QuestionMultiplechoice(
+              dataQuestion['description'],
+              dataQuestion['question'],
+              dataQuestion['choices'],
+              dataQuestion['image'],
+              dataQuestion['code']);
           }
           console.log('the new question/location', this.currentQuestion, this.currentLocation);
         } else {

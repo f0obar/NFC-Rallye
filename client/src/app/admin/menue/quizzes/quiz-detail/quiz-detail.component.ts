@@ -1,4 +1,4 @@
-import {Component, Inject, NgModule, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../../locations/admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatSlideToggle} from '@angular/material';
@@ -64,7 +64,8 @@ export class AdminQuizDetailComponent implements OnInit {
       false,
       null,
       'sample name',
-      'sample id');
+      'sample id',
+      '');
   }
 
   /**
@@ -129,6 +130,7 @@ export class AdminQuizDetailComponent implements OnInit {
       if (!isNullOrUndefined(this.selectedAnswerIndex) &&
         this.selectedAnswerIndex > -1 && this.selectedAnswerIndex < this.data.currentQuiz.choices.length) {
         this.data.currentQuiz.answer = this.data.currentQuiz.choices[this.selectedAnswerIndex];
+        this.data.currentQuiz.hint = '';
       } else {
         this.snackBar.open('Keine Antwort eingegeben!', null, {
           duration: 2000,
@@ -147,7 +149,8 @@ export class AdminQuizDetailComponent implements OnInit {
         _id: this.data.currentQuiz._id,
         location: this.data.currentQuiz.location,
         isActive: this.data.currentQuiz.isActive,
-        image: this.data.currentQuiz.image
+        image: this.data.currentQuiz.image,
+        code: this.data.currentQuiz.code
       }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
         () => {
           console.log('successfully edited quiz');
@@ -174,7 +177,8 @@ export class AdminQuizDetailComponent implements OnInit {
         name: this.data.currentQuiz.name,
         location: this.data.currentQuiz.location,
         isActive: this.data.currentQuiz.isActive,
-        image: this.data.currentQuiz.image
+        image: this.data.currentQuiz.image,
+        code: this.data.currentQuiz.code
       }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
         () => {
           console.log('successfully edited quiz');
@@ -261,6 +265,10 @@ export class AdminQuizDetailComponent implements OnInit {
     if (!mc && this.type !== 'singleAnswer') {
       this.convertToSingleAnswer();
     }
+  }
+
+  deleteImage(){
+    this.data.currentQuiz.image = null;
   }
 
   /**

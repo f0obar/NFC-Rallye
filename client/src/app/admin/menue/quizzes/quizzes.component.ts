@@ -68,7 +68,8 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
                 data[d]['isActive'],
                 data[d]['location'],
                 data[d]['name'],
-                data[d]['_id']));
+                data[d]['_id'],
+                data[d]['code']));
           }
         }
         this.dataSource.data = this.quizzes;
