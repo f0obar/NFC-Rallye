@@ -17,11 +17,15 @@ export class AdminQuizDetailComponent implements OnInit {
   locations: Array<AdminLocation>;
   selectedAnswerIndex: number;
 
+  code = '';
+
   @ViewChild('slider')
   slider: MatSlideToggle;
 
   constructor(public dialogRef: MatDialogRef<AdminQuizDetailComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient, public snackBar: MatSnackBar) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private http: HttpClient,
+              public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {

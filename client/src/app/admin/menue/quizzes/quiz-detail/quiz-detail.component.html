@@ -16,8 +16,7 @@
     <div class="dialog-element">
       <mat-form-field>
         <textarea matInput placeholder="Beschreibung" [(ngModel)]="data.currentQuiz.description" name="description"
-                  required matTextareaAutosize matAutosizeMinRows="1"
-                  matAutosizeMaxRows="8">
+                  required matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="8">
         </textarea>
       </mat-form-field>
     </div>
@@ -58,22 +57,32 @@
       </mat-form-field>
     </div>
   </div>
-  <div class="flex-container flex-right">
+  <div class="flex-container flex-middle">
+    <div class="dialog-element image-options">
+      <i class="mat-h2">Bild</i>
+      <input [hidden]=true id="input-file-id" accept="image/*" type="file" (change)="handleFileSelect($event)"/>
+      <label for="input-file-id">
+        <i *ngIf="!isImageAvailable()" class="material-icons">add</i>
+        <i *ngIf="isImageAvailable()" class="material-icons">mode_edit</i>
+      </label>
+      <i *ngIf="isImageAvailable()" class="material-icons" (click)="deleteImage()">delete</i>
+    </div>
     <div class="dialog-element">
       <img *ngIf="isImageAvailable()" class="img-responsive center-block"
            src="data:{{data.currentQuiz.image.filetype}};base64,{{data.currentQuiz.image.base64}}">
     </div>
+  </div>
+  <div class="flex-container flex-right">
     <div class="dialog-element">
-      <input [hidden]=true id="input-file-id" accept="image/*" type="file" (change)="handleFileSelect($event)"/>
-      <label class="mat-raised-button mat-primary mat-fabmat-mini-fab.mat" for="input-file-id">Bild auswählen</label>
-      <i *ngIf="isImageAvailable()" class="material-icons" (click)="deleteImage()">delete</i>
-    </div>
-    <div class="dialog-element">
-      <mat-form-field>
-        <textarea matInput placeholder="Code" [(ngModel)]="data.currentQuiz.code" name="code"
-                  required matTextareaAutosize matAutosizeMaxRows="5">
+      <mat-form-field class="code">
+        <textarea matInput placeholder="Code" [(ngModel)]="code" [(ngModel)]="data.currentQuiz.code" name="code" matTextareaAutosize
+                  matAutosizeMaxRows="20" spellcheck="false">
         </textarea>
       </mat-form-field>
+      <ng-container *ngIf="code">
+        <div class="mat-h3">Preview</div>
+        <pre><code highlight [code]="code"></code></pre>
+      </ng-container>
     </div>
   </div>
 </mat-dialog-content>
