@@ -5,9 +5,9 @@ const LocationSchema = new mongoose.Schema({
   description: String,
   isActive: {type: Boolean, default: false},
   image: Object,
-  lat: Number,
-  lng: Number,
-  lvl: Number,
+  lat: {type: Number, default: 49.1226},
+  lng: {type: Number, default: 9.211},
+  lvl: {type: Number, default: 0},
   heat: {type: Number, default: 0}
 });
 
