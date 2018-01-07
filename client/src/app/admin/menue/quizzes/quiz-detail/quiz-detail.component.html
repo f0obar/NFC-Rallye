@@ -75,13 +75,13 @@
   <div class="flex-container flex-right">
     <div class="dialog-element">
       <mat-form-field class="code">
-        <textarea matInput placeholder="Code" [(ngModel)]="code" [(ngModel)]="data.currentQuiz.code" name="code" matTextareaAutosize
+        <textarea matInput placeholder="Code" [(ngModel)]="data.currentQuiz.code" name="code" matTextareaAutosize
                   matAutosizeMaxRows="20" spellcheck="false">
         </textarea>
       </mat-form-field>
-      <ng-container *ngIf="code">
+      <ng-container *ngIf="data.currentQuiz.code">
         <div class="mat-h3">Preview</div>
-        <pre><code highlight [code]="code"></code></pre>
+        <pre><code highlight [code]="data.currentQuiz.code"></code></pre>
       </ng-container>
     </div>
   </div>

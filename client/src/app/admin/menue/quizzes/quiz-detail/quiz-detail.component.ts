@@ -17,8 +17,6 @@ export class AdminQuizDetailComponent implements OnInit {
   locations: Array<AdminLocation>;
   selectedAnswerIndex: number;
 
-  code = '';
-
   @ViewChild('slider')
   slider: MatSlideToggle;
 
