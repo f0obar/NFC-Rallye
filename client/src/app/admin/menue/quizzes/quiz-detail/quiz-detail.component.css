@@ -1,18 +1,15 @@
-.add-button {
-  margin-bottom: 20px;
-}
-
-.width {
-  width: 100%;
-}
-
 img {
-  max-width: 600px;
-  max-height: 300px;
+  max-height: 400px;
+  display: block;
+  margin: 0 auto;
 }
 
 textarea {
   resize: none;
+}
+
+.tab-content {
+  padding-top: 16px;
 }
 
 mat-dialog-content {
@@ -20,34 +17,32 @@ mat-dialog-content {
   flex-direction: row;
 }
 
-.flex-container {
+.flex-line {
   display: flex;
-  flex-direction: column;
-  padding: 0 16px 0 16px;
-}
-
-.flex-left {
-  width: 400px;
-}
-
-.flex-middle {
-
-}
-
-.flex-right {
-  width: 400px;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .dialog-element {
   margin-bottom: 8px;
 }
 
+.image-options {
+  text-align: center;
+}
+
 .image-options i {
+
   vertical-align: middle !important;
 }
 
 mat-form-field {
   width: 100%;
+}
+
+.cdk-overlay-pane {
+  height: 100%;
 }
 
 .material-icons {

@@ -6,7 +6,7 @@ import {
   MatButtonModule, MatCheckboxModule, MatDialogModule, MatInputModule, MatListModule, MatPaginatorModule,
   MatProgressBarModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule,
   MatSortModule,
-  MatTableModule, MatToolbarModule
+  MatTableModule, MatTabsModule, MatToolbarModule
 } from '@angular/material';
 
 import {AppComponent} from './app.component';
@@ -162,6 +162,7 @@ const routes: Routes = [
     MatIconModule,
     MatSortModule,
     MatRadioModule,
+    MatTabsModule,
     HighlightModule.forRoot({
       theme: 'github-gist',
       path: 'assets/js/highlightjs'
