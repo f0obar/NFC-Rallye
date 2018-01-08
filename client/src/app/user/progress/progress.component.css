@@ -20,30 +20,8 @@
 }
 
 mat-progress-bar {
-  top: 5px;
   height: 6px;
 }
-
-.header {
-  position: fixed;
-  z-index: 100;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #282c87;
-}
-
-.header-spacer {
-  width: 100%;
-  height: 90px;
-}
-
-mat-toolbar {
-  height: 65px;
-}
-
-
-
 
 .container {
   display: flex;

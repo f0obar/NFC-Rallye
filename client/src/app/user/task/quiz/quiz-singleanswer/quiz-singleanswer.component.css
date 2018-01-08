@@ -1,24 +1,16 @@
-#bottom {
-  position: fixed;
-  z-index: 100;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
-
 .material-icons:hover {
   cursor: pointer;
 }
 
-mat-toolbar{
+mat-toolbar {
   background-color: #282C87;
 }
 
-#hint{
+#hint {
   vertical-align: middle;
 }
 
-.container_bottom{
+.container_bottom {
   color: white;
 }
 
@@ -34,19 +26,17 @@ mat-toolbar{
   flex: 1 1 auto;
 }
 
-.question{
-  width:100%;
-  height:100%;
-  font-size:2vh;
-  color:#fff;
-  text-align:center;
-}
-
-.card {
-  margin-top: 0px;
+.question {
+  width: 100%;
+  height: 100%;
+  font-size: 2vh;
+  color: #fff;
   text-align: center;
 }
 
+pre {
+  border: solid 1px #e1e1e1
+}
 
 @media only screen and (min-width: 768px) {
   /* For tablets: */
@@ -81,7 +71,3 @@ mat-toolbar{
     padding-right: 96px;
   }
 }
-
-
-
-

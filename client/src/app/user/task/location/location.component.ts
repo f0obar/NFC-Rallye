@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Location} from '../../location';
 import {UserLocationCameraPopupComponent} from './location-camera-popup/location-camera-popup.component';
 import {UserLocationMapPopupComponent} from '../../../shared/map/location-map-popup.component';
@@ -26,13 +26,13 @@ export class UserLocationComponent implements AfterViewInit {
   @Output()
   locationFound: EventEmitter<any> = new EventEmitter();
 
-  constructor(private http: HttpClient,public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
+  constructor(private http: HttpClient, public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
   }
 
   ngAfterViewInit() {
-    history.pushState(null,null,this.router.url);
+    history.pushState(null, null, this.router.url);
     window.addEventListener('popstate', (event) => {
-      history.pushState(null,null,this.router.url);
+      history.pushState(null, null, this.router.url);
     });
   }
 
@@ -42,6 +42,13 @@ export class UserLocationComponent implements AfterViewInit {
    */
   scannedTag(tag: string): void {
     this.locationFound.emit(tag);
+  }
+
+  openSnackBar(msg: string): void {
+    this.snackBar.open(msg, null, {
+      duration: 2000,
+      horizontalPosition: 'center'
+    });
   }
 
   openCamera() {
@@ -54,10 +61,7 @@ export class UserLocationComponent implements AfterViewInit {
         if ((<string>result).indexOf('/tag/') > -1) {
           this.scannedTag(result);
         } else {
-          this.snackBar.open('QR Code konnte nicht korrekt gescanned werden', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
+          this.openSnackBar('QR Code konnte nicht korrekt gescanned werden');
         }
       }
     });
@@ -80,17 +84,11 @@ export class UserLocationComponent implements AfterViewInit {
         console.log('skipping location');
         this.http.post('/api/game/sessions/' + this.sessionID + '/location', {skip: 'true'}).subscribe(
           (data) => {
-            this.snackBar.open('Ort übersprungen!', null, {
-              duration: 2000,
-              horizontalPosition: 'center'
-            });
+            this.openSnackBar('Ort übersprungen!');
             this.locationSkip.emit();
           },
           (err) => {
-            this.snackBar.open('Es ist ein Fehler aufgetreten.', null, {
-              duration: 2000,
-              horizontalPosition: 'center'
-            });
+            this.openSnackBar('Es ist ein Fehler aufgetreten.');
           });
       }
     });
@@ -111,15 +109,17 @@ export class UserLocationComponent implements AfterViewInit {
    * opens popup dialog for emitting logout output.
    */
   abbrechen() {
-    const deleteSession = this.dialog.open(SharedSimpleDialogComponent, {data: {
+    const deleteSession = this.dialog.open(SharedSimpleDialogComponent, {
+      data: {
         title: 'Schnitzeljagd verlassen',
         message: 'Möchtest du die Session wirklich verlassen? Die Session kann fortgesetzt werden,' +
         ' indem du dich mit deinem Gruppennamen und Passwort erneut anmeldest.',
         button1: 'JA verlassen',
         button2: 'Abbrechen'
-    }});
+      }
+    });
     deleteSession.afterClosed().subscribe(result => {
-      if(result === 'b1') {
+      if (result === 'b1') {
         console.log('user deleted session');
         this.locationLogout.emit();
       }
@@ -127,7 +127,6 @@ export class UserLocationComponent implements AfterViewInit {
   }
 
   help() {
-    const d = this.dialog.open(UserQuizHelpPopupComponent, {
-    });
+    const d = this.dialog.open(UserQuizHelpPopupComponent, {});
   }
 }

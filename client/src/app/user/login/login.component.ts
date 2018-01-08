@@ -29,7 +29,12 @@ export class UserLoginComponent implements OnInit,AfterViewInit {
     });
   }
 
-
+  openSnackBar(msg: string): void {
+    this.snackBar.open(msg, null, {
+      duration: 2000,
+      horizontalPosition: 'center'
+    });
+  }
 
   /**
    * sends the teamname to the server and closes the login screen if the registration was successful.
@@ -41,10 +46,7 @@ export class UserLoginComponent implements OnInit,AfterViewInit {
       this.http.post('/api/game/sessions', {groupName: teamname, password: password}).subscribe(
         (data) => {
           console.log('loginPost data', data['token']);
-          this.snackBar.open('Viel Spaß! :)',null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
+          this.openSnackBar('Viel Spaß! :)');
           this.loginOutput.emit('' + data['token']);
         },
         (err) => {
@@ -52,23 +54,14 @@ export class UserLoginComponent implements OnInit,AfterViewInit {
           if (!isNullOrUndefined(err['error']['error']['suggestion'])){
             this.teamname.nativeElement.value = err['error']['error']['suggestion'];
           }
-          this.snackBar.open(err['error']['error']['message'],null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
+          this.openSnackBar(err['error']['error']['message']);
           console.log('loginPost error', err);
         }
       );
     } else if (teamname.length <= 3) {
-      this.snackBar.open('Gruppenname muss aus mindestens 4 Zeichen bestehen!',null, {
-        duration: 2000,
-        horizontalPosition: 'center'
-      });
+      this.openSnackBar('Gruppenname muss aus mindestens 4 Zeichen bestehen!');
     } else {
-      this.snackBar.open('Bitte ein Passwort eingeben!',null, {
-        duration: 2000,
-        horizontalPosition: 'center'
-      });
+      this.openSnackBar('Bitte ein Passwort eingeben!');
     }
   }
 }

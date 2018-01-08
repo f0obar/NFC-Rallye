@@ -13,7 +13,7 @@ import {QuestionMultiplechoice} from './questionmc';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit{
+export class UserComponent implements OnInit {
 
   points = 0;
   gameRunning: boolean;
@@ -31,7 +31,15 @@ export class UserComponent implements OnInit{
   @ViewChild('progress') progress;
 
 
-  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog,  public snackBar: MatSnackBar) { }
+  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog, public snackBar: MatSnackBar) {
+  }
+
+  openSnackBar(msg: string): void {
+    this.snackBar.open(msg, null, {
+      duration: 2000,
+      horizontalPosition: 'center'
+    });
+  }
 
   /**
    * initializes gamesession and checks for sessionID in local storage. If there is no session id the login page gets displayed.
@@ -41,18 +49,18 @@ export class UserComponent implements OnInit{
     this.sessionID = '';
     this.progressDone = 0;
     this.progressCount = 1;
-    if(!isNullOrUndefined(localStorage.getItem('points'))) {
+    if (!isNullOrUndefined(localStorage.getItem('points'))) {
       this.points = Number(localStorage.getItem('points'));
     }
 
-    if(localStorage.getItem('sessionID') !== null){
+    if (localStorage.getItem('sessionID') !== null) {
       this.sessionID = localStorage.getItem('sessionID');
       this.gameRunning = true;
     }
 
-    if(this.gameRunning === true){
+    if (this.gameRunning === true) {
       this.getStateFromServer();
-      if(this.urlContainsTag()){
+      if (this.urlContainsTag()) {
         this.foundLocation(this.router.url);
       }
     }
@@ -62,27 +70,24 @@ export class UserComponent implements OnInit{
    * checks if the current url contains a valid tag for a location
    * @returns {boolean}
    */
-  urlContainsTag():boolean {
+  urlContainsTag(): boolean {
     const url = this.router.url;
-    if(url.startsWith('/tag')) {
-      return true;
-    } else {
-      return false;
-    }
+    return url.startsWith('/tag');
   }
 
   loggedIn(id: string) {
-    localStorage.setItem('sessionID',id);
+    localStorage.setItem('sessionID', id);
     this.sessionID = id;
-    setTimeout(()=>{
+    setTimeout(() => {
       this.getStateFromServer();
-      this.gameRunning = true;},500);
+      this.gameRunning = true;
+    }, 500);
   }
 
   getStateFromServer() {
     this.http.get('/api/game/sessions/' + this.sessionID).subscribe(
       data => {
-        console.log('data from server',data);
+        console.log('data from server', data);
         const dataLocation = data['location'];
         const dataQuestion = data['riddle'];
         const dataProgress = data['progress'];
@@ -94,7 +99,7 @@ export class UserComponent implements OnInit{
         /**
          * If server transmitted valid points the userscore gets initialized
          */
-        if(!isNullOrUndefined(data['points'])){
+        if (!isNullOrUndefined(data['points'])) {
           this.setPoints(data['points']);
         }
 
@@ -119,15 +124,15 @@ export class UserComponent implements OnInit{
         /**
          * when the session is not finished the current location and question get parsed.
          */
-        if(this.currentTask !== 'won') {
-          this.currentLocation = new Location(dataLocation['name'], 0, dataLocation['image'], dataLocation['lat'],dataLocation['lng']);
+        if (this.currentTask !== 'won') {
+          this.currentLocation = new Location(dataLocation['name'], 0, dataLocation['image'], dataLocation['lat'], dataLocation['lng']);
 
           /**
            * check if Riddle is Singleanswer or Multiple Choice
            * choices array is empty if the riddle is a singleanswer
            * @type {QuestionSingleanswer}
            */
-          if (dataQuestion['choices'].length === 0){
+          if (dataQuestion['choices'].length === 0) {
             this.currentQuestion = new QuestionSingleanswer(
               dataQuestion['description'],
               dataQuestion['question'],
@@ -149,16 +154,18 @@ export class UserComponent implements OnInit{
         }
       },
       (err: HttpErrorResponse) => {
-        console.log('session expired',err);
-        if(err['status']=== 403){
-          const removeOldSession = this.dialog.open(SharedSimpleDialogComponent, {data: {
-            title: 'Session abgelaufen',
-            message: 'Deine Schnitzeljagd Session ist leider abgelaufen',
-            button1: 'Neue Schnitzeljagd starten',
-            button2: 'Abbrechen'
-          }});
+        console.log('session expired', err);
+        if (err['status'] === 403) {
+          const removeOldSession = this.dialog.open(SharedSimpleDialogComponent, {
+            data: {
+              title: 'Session abgelaufen',
+              message: 'Deine Schnitzeljagd Session ist leider abgelaufen',
+              button1: 'Neue Schnitzeljagd starten',
+              button2: 'Abbrechen'
+            }
+          });
           removeOldSession.afterClosed().subscribe(result => {
-            if(result === 'b1') {
+            if (result === 'b1') {
               console.log('user deleted expired session');
               this.clearLocalSession();
             }
@@ -173,17 +180,17 @@ export class UserComponent implements OnInit{
    * when the page refreshes.
    * @param {number} amount
    */
-  setPoints(amount: number){
-      console.log('setPoints called');
-      if (amount < this.points) {
-        this.points = amount;
-      }
-      else if (amount > this.points && amount > Number(localStorage.getItem('points'))) {
-        console.log('DEBUG', this.points, localStorage.getItem('points'), amount);
-        this.progress.increasePoints(amount);
-      }
-      console.log('SETTING', amount);
-      localStorage.setItem('points', '' + amount);
+  setPoints(amount: number) {
+    console.log('setPoints called');
+    if (amount < this.points) {
+      this.points = amount;
+    }
+    else if (amount > this.points && amount > Number(localStorage.getItem('points'))) {
+      console.log('DEBUG', this.points, localStorage.getItem('points'), amount);
+      this.progress.increasePoints(amount);
+    }
+    console.log('SETTING', amount);
+    localStorage.setItem('points', '' + amount);
   }
 
   /**
@@ -193,7 +200,7 @@ export class UserComponent implements OnInit{
    */
   parseJsonDateToDate(data: any): Date {
     const date = new Date(data);
-    console.log('PARSED',date);
+    console.log('PARSED', date);
     return date;
   }
 
@@ -205,34 +212,25 @@ export class UserComponent implements OnInit{
     this.gameRunning = false;
   }
 
-  foundLocation(url: string){
+  foundLocation(url: string) {
     // extract location id:
     const suffix = url.split('/')[url.split('/').length - 1];
-    console.log('SUFFIX',suffix);
+    console.log('SUFFIX', suffix);
 
 
     this.http.post('/api/game/sessions/' + this.sessionID + '/location', {tagID: suffix}).subscribe(
       (data) => {
-        if (data['correctLocation'] === true){
-          this.snackBar.open('Du hast einen Ort gefunden!',null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
+        if (data['correctLocation'] === true) {
+          this.openSnackBar('Du hast einen Ort gefunden!');
           this.router.navigate(['root']);
         } else if (data['correctLocation'] === false) {
-          this.snackBar.open('Das ist der falsche Ort!',null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
+          this.openSnackBar('Das ist der falsche Ort!');
           this.router.navigate(['root']);
         }
         this.getStateFromServer();
       },
       (err) => {
-        this.snackBar.open('Netzwerkfehler, überprüfe deine Verbindung',null, {
-          duration: 2000,
-          horizontalPosition: 'center'
-        });
+        this.openSnackBar('Netzwerkfehler, überprüfe deine Verbindung');
         this.router.navigateByUrl('/tag/' + suffix);
         console.log('scanned tag error', err);
       }

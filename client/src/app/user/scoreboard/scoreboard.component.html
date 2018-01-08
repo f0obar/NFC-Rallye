@@ -1,8 +1,8 @@
-<h1 class="mat-display-1">{{winText}}</h1>
-
-<app-scoreboard [groupName]="groupName">Scoreboard loading</app-scoreboard>
-
-<div id="bottom">
+<div class="page-content">
+  <div class="mat-display-1">{{winText}}</div>
+  <app-scoreboard [groupName]="groupName">Scoreboard loading</app-scoreboard>
+</div>
+<div class="page-footer">
   <mat-toolbar class="container_bottom">
     <i class="material-icons" (click)="abbrechen()">exit_to_app</i>
     <span class="spacer"></span>

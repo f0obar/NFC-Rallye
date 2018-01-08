@@ -1,11 +1,11 @@
-<div *ngIf="isUnsolvedQuiz() == true">
+<ng-container *ngIf="isUnsolvedQuiz() == true">
   <ng-container *ngIf="isQuestionSingleanswer()">
-    <app-user-quiz-singleanswer [location]="location" [question]="question" [sessionID]="sessionID" (quizOutput)="solvedQuiz()" (quizLogout)="loggedOut()" (quizPointEmitter)="passThroughPoints($event)"></app-user-quiz-singleanswer>
+    <app-user-quiz-singleanswer class="sub-page" [location]="location" [question]="question" [sessionID]="sessionID" (quizOutput)="solvedQuiz()" (quizLogout)="loggedOut()" (quizPointEmitter)="passThroughPoints($event)"></app-user-quiz-singleanswer>
   </ng-container>
   <ng-container *ngIf="isQuestionMultiplechoice()">
-    <app-user-quiz-multiplechoice [location]="location" [question]="question" [sessionID]="sessionID" (quizOutput)="solvedQuiz()" (quizLogout)="loggedOut()" (quizPointEmitter)="passThroughPoints($event)"></app-user-quiz-multiplechoice>
+    <app-user-quiz-multiplechoice class="sub-page" [location]="location" [question]="question" [sessionID]="sessionID" (quizOutput)="solvedQuiz()" (quizLogout)="loggedOut()" (quizPointEmitter)="passThroughPoints($event)"></app-user-quiz-multiplechoice>
   </ng-container>
-</div>
-<div *ngIf="isUnsolvedQuiz() == false">
-    <app-user-location [location]="location" [sessionID]="sessionID" (locationLogout)="loggedOut()" (locationSkip)="solvedQuiz()" (locationFound)="locationFound.emit($event)"></app-user-location>
-</div>
+</ng-container>
+<ng-container *ngIf="isUnsolvedQuiz() == false">
+    <app-user-location class="sub-page" [location]="location" [sessionID]="sessionID" (locationLogout)="loggedOut()" (locationSkip)="solvedQuiz()" (locationFound)="locationFound.emit($event)"></app-user-location>
+</ng-container>

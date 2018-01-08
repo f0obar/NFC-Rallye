@@ -8,14 +8,6 @@
   margin-bottom: 100px;
 }
 
-#bottom {
-  position: fixed;
-  z-index: 100;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
-
 mat-toolbar{
   background-color: #282C87;
   text-align: right;
