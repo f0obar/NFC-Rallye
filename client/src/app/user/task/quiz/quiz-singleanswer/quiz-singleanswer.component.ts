@@ -68,7 +68,8 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
     if (isNullOrUndefined(answer) || answer === '') {
       this.snackBar.open('Keine Antwort eingegeben!', null, {
         duration: 2000,
-        horizontalPosition: 'center'
+        horizontalPosition: 'center',
+        panelClass: 'offset-snack-bar'
       });
     } else {
       this.http.post('/api/game/sessions/' + this.sessionID + '/riddle', {answer: answer}).subscribe(
@@ -77,7 +78,8 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
           if (data['correctAnswer'] === true) {
             this.snackBar.open('Richtige Anwort!', null, {
               duration: 2000,
-              horizontalPosition: 'center'
+              horizontalPosition: 'center',
+              panelClass: 'offset-snack-bar'
             });
             if (!isNullOrUndefined(data['points'])) {
               this.quizPointEmitter.emit(data['points']);
@@ -87,7 +89,8 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
             console.log('wrong answer');
             this.snackBar.open('Falsche Antwort', null, {
               duration: 2000,
-              horizontalPosition: 'center'
+              horizontalPosition: 'center',
+              panelClass: 'offset-snack-bar'
             });
           }
         },
@@ -117,7 +120,8 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
           (data) => {
             this.snackBar.open('Quiz übersprungen!', null, {
               duration: 2000,
-              horizontalPosition: 'center'
+              horizontalPosition: 'center',
+              panelClass: 'offset-snack-bar'
             });
             this.quizOutput.emit();
           },

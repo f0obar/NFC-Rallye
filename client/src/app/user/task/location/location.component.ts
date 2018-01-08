@@ -47,7 +47,8 @@ export class UserLocationComponent implements AfterViewInit {
   openSnackBar(msg: string): void {
     this.snackBar.open(msg, null, {
       duration: 2000,
-      horizontalPosition: 'center'
+      horizontalPosition: 'center',
+      panelClass: 'offset-snack-bar'
     });
   }
 

@@ -1,4 +1,6 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild
+} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';

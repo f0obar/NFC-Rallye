@@ -52,10 +52,21 @@ app-user-task {
 /*
  * Snackbar
  */
-.mat-snack-bar-container {
-  height: 104px;
-  z-index: 2;
+
+@media only screen and (min-width: 0) and (max-width: 600px) {
+  .offset-snack-bar {
+    height: 112px;
+    z-index: 2;
+  }
 }
+
+@media only screen and (min-width: 601px) {
+  .offset-snack-bar {
+    height: 128px;
+    z-index: 2;
+  }
+}
+
 
 /*
 mat dialog with bleed

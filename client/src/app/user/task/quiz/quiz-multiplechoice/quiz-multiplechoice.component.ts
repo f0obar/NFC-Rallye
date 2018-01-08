@@ -17,26 +17,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
   @Input() sessionID: string;
   @Input() location: Location;
 
-  code = `public class Program
-{
-  public static void main(String[] args)
-  {
-    int x = 4;
-    int y = 9;
-    int min;
-    
-    if (x < y) {
-      min = x;
-      if (y < x) {
-        min = y;
-      }
-    } else {
-      min = y;
-    }
-    System.out.println("Das Minimum lautet: " +  min);
-  }
-}`;
-
   @Output()
   quizOutput: EventEmitter<any> = new EventEmitter();
 
@@ -71,7 +51,8 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
     if (isNullOrUndefined(answer) || answer === '') {
       this.snackBar.open('Keine Antwort eingegeben!', null, {
         duration: 2000,
-        horizontalPosition: 'center'
+        horizontalPosition: 'center',
+        panelClass: 'offset-snack-bar'
       });
     } else {
       this.http.post('/api/game/sessions/' + this.sessionID + '/riddle', {answer: answer}).subscribe(
@@ -80,7 +61,8 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
           if (data['correctAnswer'] === true) {
             this.snackBar.open('Richtige Anwort!', null, {
               duration: 2000,
-              horizontalPosition: 'center'
+              horizontalPosition: 'center',
+              panelClass: 'offset-snack-bar'
             });
             this.solution = answer;
             if (!isNullOrUndefined(data['points'])) {
@@ -94,7 +76,8 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
             console.log('wrong answer');
             this.snackBar.open('Falsche Antwort', null, {
               duration: 2000,
-              horizontalPosition: 'center'
+              horizontalPosition: 'center',
+              panelClass: 'offset-snack-bar'
             });
             this.usedAnswers.push(answer);
           }
@@ -134,7 +117,8 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
           (data) => {
             this.snackBar.open('Quiz übersprungen!', null, {
               duration: 2000,
-              horizontalPosition: 'center'
+              horizontalPosition: 'center',
+              panelClass: 'offset-snack-bar'
             });
             this.quizOutput.emit();
           },
