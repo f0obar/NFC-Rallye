@@ -116,6 +116,9 @@ export class UserProgressComponent implements OnInit, OnDestroy, OnChanges {
       if (this.endDate !== null) {
         currentTime = new Date(this.endDate.getTime() - this.startDate.getTime());
       } else {
+        if (this.startDate > new Date()){
+          return '';
+        }
         currentTime = new Date((new Date().getTime() - this.startDate.getTime()));
       }
       currentTime = new Date(currentTime.getTime() + (currentTime.getTimezoneOffset() * 60 * 1000));
@@ -149,7 +152,6 @@ export class UserProgressComponent implements OnInit, OnDestroy, OnChanges {
       }
 
       time += ')';
-      console.log('parsing start',this.startDate,'end',this.endDate, 'time is now ',time);
       return time;
     }
   }
