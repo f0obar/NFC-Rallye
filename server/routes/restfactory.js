@@ -1,40 +1,35 @@
-// TODO: Improve errormessages: hide the real messages, write a errorhandler, ...
-
 const express = require("express");
 const authenticator = require("./authMiddleware");
-const SolvedRiddle = require("../models/solvedRiddle");
 const scoreBoardService = require("../services/scoreboardService");
 const gameService = require("../services/gameService");
 
 const bcrypt = require("bcryptjs");
 
 function getEntries(Model) {
-  return function (req, res, next) {
-    Model.find(function (err, entries) {
-      if (err) {
-        res.send(err);
-        return;
-      }
+  return async function (req, res, next) {
+    try {
+      const entries = await Model.find();
       res.send(entries);
-    });
+    } catch (err) {
+      res.send(err);
+    }
   };
 }
 
 function getEntry(Model) {
-  return function (req, res, next) {
+  return async function (req, res, next) {
     const id = req.params.id;
-    Model.findById(id, function (err, entry) {
-      if (err) {
-        res.send(err);
-        return;
-      }
+    try {
+      const entry = await Model.findById(id);
       res.send(entry);
-    });
+    } catch (err) {
+      res.send(err);
+    }
   };
 }
 
 function createEntry(Model) {
-  return function (req, res, next) {
+  return async function (req, res, next) {
     const model = new Model();
     Model.schema.eachPath(function (path) {
       if (req.body[path]) {
@@ -42,13 +37,12 @@ function createEntry(Model) {
       }
     });
 
-    model.save(function (err) {
-      if (err) {
-        res.send(err);
-        return;
-      }
+    try {
+      await model.save();
       res.send({message: Model.modelName + " created"});
-    });
+    } catch (err) {
+      res.send(err);
+    }
   };
 }
 
@@ -58,12 +52,9 @@ function updateEntry(Model) {
     console.log("req", req.body);
     const id = req.params.id;
 
-    Model.findById(id, function (err, entry) {
+    try {
+      const entry = await Model.findById(id);
       console.log("entry", entry);
-      if (err) {
-        res.send(err);
-        return;
-      }
       Model.schema.eachPath(function (path) {
         if (req.body.hasOwnProperty(path)) {
           if (path === "password") {
@@ -73,14 +64,15 @@ function updateEntry(Model) {
           }
         }
       });
-      entry.save(function (err) {
-        if (err) {
-          res.send(err);
-          return;
-        }
+      try {
+        await entry.save();
         res.send({message: Model.modelName + " updated"});
-      });
-    });
+      } catch (err) {
+        res.send(err);
+      }
+    } catch (err) {
+      res.send(err);
+    }
   };
 }
 
@@ -117,7 +109,6 @@ function buildRouter(Model) {
     .get(getEntry(Model))
     .put(updateEntry(Model))
     .delete(deleteEntry(Model));
-
   return router;
 }
 
