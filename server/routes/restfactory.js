@@ -9,8 +9,8 @@ const gameService = require("../services/gameService");
 const bcrypt = require("bcryptjs");
 
 function getEntries(Model) {
-  return function(req, res, next) {
-    Model.find(function(err, entries) {
+  return function (req, res, next) {
+    Model.find(function (err, entries) {
       if (err) {
         res.send(err);
         return;
@@ -21,9 +21,9 @@ function getEntries(Model) {
 }
 
 function getEntry(Model) {
-  return function(req, res, next) {
+  return function (req, res, next) {
     const id = req.params.id;
-    Model.findById(id, function(err, entry) {
+    Model.findById(id, function (err, entry) {
       if (err) {
         res.send(err);
         return;
@@ -34,37 +34,37 @@ function getEntry(Model) {
 }
 
 function createEntry(Model) {
-  return function(req, res, next) {
+  return function (req, res, next) {
     const model = new Model();
-    Model.schema.eachPath(function(path) {
+    Model.schema.eachPath(function (path) {
       if (req.body[path]) {
         model[path] = req.body[path];
       }
     });
 
-    model.save(function(err) {
+    model.save(function (err) {
       if (err) {
         res.send(err);
         return;
       }
-      res.send({ message: Model.modelName + " created" });
+      res.send({message: Model.modelName + " created"});
     });
   };
 }
 
 function updateEntry(Model) {
-  return async function(req, res, next) {
+  return async function (req, res, next) {
     console.log("id", req.params);
     console.log("req", req.body);
     const id = req.params.id;
 
-    Model.findById(id, function(err, entry) {
+    Model.findById(id, function (err, entry) {
       console.log("entry", entry);
       if (err) {
         res.send(err);
         return;
       }
-      Model.schema.eachPath(function(path) {
+      Model.schema.eachPath(function (path) {
         if (req.body.hasOwnProperty(path)) {
           if (path === "password") {
             entry["password"] = bcrypt.hashSync(req.body["password"], 10);
@@ -73,33 +73,34 @@ function updateEntry(Model) {
           }
         }
       });
-      entry.save(function(err) {
+      entry.save(function (err) {
         if (err) {
           res.send(err);
           return;
         }
-        res.send({ message: Model.modelName + " updated" });
+        res.send({message: Model.modelName + " updated"});
       });
     });
   };
 }
 
 function deleteEntry(Model) {
-  return async function(req, res, next) {
+  return async function (req, res, next) {
     const id = req.params.id;
-    if (Model.modelName === "PlaySession") {
-      try {
+    try {
+      if (Model.modelName === "PlaySession") {
         await gameService.deleteSession(id, true);
-      } catch (err) {
-        console.error(err);
+      } else {
+        await Model.remove({_id: id})
       }
+    } catch (err) {
+      console.error(err);
     }
     try {
       await scoreBoardService.pushScoreboard();
-      res.send({ message: Model.modelName + " deleted" });
+      res.send({message: Model.modelName + " deleted"});
     } catch (err) {
       res.send(err);
-      return;
     }
   };
 }
