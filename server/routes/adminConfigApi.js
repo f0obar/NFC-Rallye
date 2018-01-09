@@ -78,7 +78,7 @@ router.get('/:key', async function (req, res, next) {
   if (allowedKeys.get.indexOf(key) !== -1) {
     try {
       const value = await Config.get(key);
-      res.send(value);
+      res.send({result: value});
     } catch (err) {
       res.status(500);
       res.send(err);
