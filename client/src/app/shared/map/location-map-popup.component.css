@@ -1,2 +1,9 @@
+.flex-container {
+  display: flex;
+  padding: 16px;
+  justify-content: flex-start;
+}
 
-
+.floor-selection {
+  margin-left: auto;
+}
