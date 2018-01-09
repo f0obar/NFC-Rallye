@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {AdminTag} from '../admin-tag';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../../locations/admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
 import {AdminAuthService} from '../../../services/admin-auth.service';
+import {AdminRestService} from '../../../services/admin-rest.service';
 
 @Component({
   selector: 'app-admin-tag-detail',
@@ -17,7 +17,7 @@ export class AdminTagDetailComponent implements OnInit {
   locations: Array<AdminLocation>;
 
   constructor(public dialogRef: MatDialogRef<AdminTagDetailComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient, public snackBar: MatSnackBar,public  authService: AdminAuthService) {
+              @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar,public  authService: AdminAuthService, private restService: AdminRestService) {
   }
 
   ngOnInit() {
@@ -44,8 +44,8 @@ export class AdminTagDetailComponent implements OnInit {
 
   loadLocations() {
     console.log('loading current locations from server');
-    this.http.get('/api/admin/locations', {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
-      (data) => {
+    this.restService.getEntries('/api/admin/locations').subscribe(data => {
+      if(!isNullOrUndefined(data)){
         this.locations = [];
         console.log('loaded current locations', data);
         for (const d in data) {
@@ -58,15 +58,11 @@ export class AdminTagDetailComponent implements OnInit {
                 data[d]['_id'],
                 data[d]['lat'],
                 data[d]['lng'],
-                data[d]['lvl']+''));
+                data[d]['lvl'] + ''));
           }
         }
-        console.log('initialized array', this.locations);
-      },
-      (err) => {
-        console.log('loaded current locations error', err);
       }
-    );
+    });
   }
 
   submit() {
@@ -78,50 +74,26 @@ export class AdminTagDetailComponent implements OnInit {
       });
     } else {
       if (this.createNewEntry === false) {
-        this.http.put('/api/admin/tags/' + this.data.currentTag._id, {
+        this.restService.saveExistingEntry('/api/admin/tags/' + this.data.currentTag._id, {
           alias: this.data.currentTag.alias,
           location: this.data.currentTag.location,
           tagID: this.data.currentTag.tagID,
           _id: this.data.currentTag._id
-        }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
-          () => {
-            console.log('successfully edited quiz');
-            this.snackBar.open('Erfolgreich gespeichert!', null, {
-              duration: 2000,
-              horizontalPosition: 'center'
-            });
+        }).subscribe(data => {
+          if(data === true){
             this.dialogRef.close();
-          },
-          (err) => {
-            this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-              duration: 2000,
-              horizontalPosition: 'center'
-            });
-            console.log('error editing quiz', err);
           }
-        );
+        });
       } else {
-        this.http.post('/api/admin/tags', {
+        this.restService.saveNewEntry('/api/admin/tags',{
           alias: this.data.currentTag.alias,
           location: this.data.currentTag.location,
           tagID: this.data.currentTag.tagID
-        }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
-          () => {
-            console.log('successfully edited quiz');
-            this.snackBar.open('Erfolgreich gespeichert!', null, {
-              duration: 2000,
-              horizontalPosition: 'center'
-            });
+        }).subscribe(data => {
+          if(data === true){
             this.dialogRef.close();
-          },
-          (err) => {
-            this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-              duration: 2000,
-              horizontalPosition: 'center'
-            });
-            console.log('error editing quiz', err);
           }
-        );
+        });
       }
       console.log('saving quiz detail', this.data.currentTag);
     }

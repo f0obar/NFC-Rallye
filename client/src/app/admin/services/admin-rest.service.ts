@@ -10,12 +10,19 @@ export class AdminRestService {
 
   constructor(public http: HttpClient,private snackBar: MatSnackBar,private authService: AdminAuthService) { }
 
-  public getEntryies(url: string): any {
-    return this.http.get(url, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).map(
+  public getEntries(url: string): any {
+    return this.http.get(url, {headers: new HttpHeaders().set(AdminRestService.NAME_ADMIN_AUTH, this.authService.getAdminToken())}).map(
       (data) => {
         return data;
       },
       (err) => {
+        if (err['status']===403){
+          this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
+            duration: 2000,
+            horizontalPosition: 'center'
+          });
+          this.authService.logout();
+        }
         this.snackBar.open('Fehler beim Laden der Resource', null, {
           duration: 2000,
           horizontalPosition: 'center'

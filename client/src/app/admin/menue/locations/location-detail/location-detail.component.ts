@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
 import {AdminAuthService} from '../../../services/admin-auth.service';
+import {AdminRestService} from '../../../services/admin-rest.service';
 
 @Component({
   selector: 'app-admin-location-detail',
@@ -16,7 +16,7 @@ export class AdminLocationDetailComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AdminLocationDetailComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient, public snackBar: MatSnackBar, public authService: AdminAuthService) {
+    @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar, public authService: AdminAuthService, private restService: AdminRestService) {
   }
 
   ngOnInit() {
@@ -43,52 +43,28 @@ export class AdminLocationDetailComponent implements OnInit {
 
   submit() {
     if (this.createNewEntry === false) {
-      this.http.put('/api/admin/locations/' + this.data.currentLocation._id, {
+      this.restService.saveExistingEntry('/api/admin/locations/' + this.data.currentLocation._id,{
         description: this.data.currentLocation.description,
         image: this.data.currentLocation.image,
         isActive: this.data.currentLocation.isActive,
         name: this.data.currentLocation.name,
         _id: this.data.currentLocation._id
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
-        (data) => {
-          console.log('successfully edited location');
-          this.snackBar.open('Erfolgreich gespeichert!', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
+      }).subscribe(data => {
+        if(data === true){
           this.dialogRef.close();
-        },
-        (err) => {
-          this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-          console.log('error editing location', err);
         }
-      );
+      });
     } else {
-      this.http.post('/api/admin/locations', {
+      this.restService.saveNewEntry('/api/admin/locations',{
         description: this.data.currentLocation.description,
         image: this.data.currentLocation.image,
         isActive: this.data.currentLocation.isActive,
         name: this.data.currentLocation.name
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
-        (data) => {
-          this.snackBar.open('Erfolgreich gespeichert!', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-          console.log('successfully added new location');
+      }).subscribe(data => {
+        if(data === true){
           this.dialogRef.close();
-        },
-        (err) => {
-          this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-          console.log('error editing location', err);
         }
-      );
+      });
     }
   }
 

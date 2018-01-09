@@ -1,10 +1,10 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {AdminQuiz} from './admin-quiz';
 import {AdminQuizDetailComponent} from './quiz-detail/quiz-detail.component';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {AdminAuthService} from '../../services/admin-auth.service';
+import {AdminRestService} from '../../services/admin-rest.service';
 
 @Component({
   selector: 'app-admin-quizzes',
@@ -20,7 +20,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private http: HttpClient, private dialog: MatDialog,public  authService: AdminAuthService) {
+  constructor(private dialog: MatDialog,public  authService: AdminAuthService, private restService: AdminRestService) {
   }
 
   public quizzes: Array<AdminQuiz>;
@@ -53,32 +53,26 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
    */
   loadQuizzesFromServer() {
     console.log('loading current quizzes from server');
-    this.http.get('/api/admin/riddles', {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
-      (data) => {
-        this.quizzes = [];
-        console.log('loaded current quizzes', data);
-        for (const d in data) {
-          if (data.hasOwnProperty(d)) {
-            this.quizzes.push(
-              new AdminQuiz(data[d]['answer'],
-                data[d]['choices'],
-                data[d]['description'],
-                data[d]['hint'],
-                data[d]['image'],
-                data[d]['isActive'],
-                data[d]['location'],
-                data[d]['name'],
-                data[d]['_id'],
-                data[d]['code']));
-          }
+    this.restService.getEntries('/api/admin/riddles').subscribe(data => {
+      this.quizzes = [];
+      console.log('loaded current quizzes', data);
+      for (const d in data) {
+        if (data.hasOwnProperty(d)) {
+          this.quizzes.push(
+            new AdminQuiz(data[d]['answer'],
+              data[d]['choices'],
+              data[d]['description'],
+              data[d]['hint'],
+              data[d]['image'],
+              data[d]['isActive'],
+              data[d]['location'],
+              data[d]['name'],
+              data[d]['_id'],
+              data[d]['code']));
         }
-        this.dataSource.data = this.quizzes;
-        console.log('initialized array', this.quizzes);
-      },
-      (err) => {
-        console.log('loaded current quizzes error', err);
       }
-    );
+      this.dataSource.data = this.quizzes;
+    });
   }
 
   /**
@@ -132,15 +126,12 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
         console.log('delete quiz', quiz._id);
-        this.http.delete('/api/admin/riddles/' + quiz._id, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
-          () => {
+        this.restService.deleteEntry('/api/admin/riddles/' + quiz._id).subscribe(data => {
+          if(data === true){
             console.log('successfully deleted quiz', quiz._id);
             this.loadQuizzesFromServer();
-          },
-          (err) => {
-            console.log('error deleting quiz', err);
           }
-        );
+        });
       }
     });
   }

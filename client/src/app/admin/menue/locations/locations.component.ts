@@ -55,7 +55,7 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
    */
   loadLocationsFromServer() {
     console.log('loading current locations from server');
-    this.restService.getEntryies('/api/admin/locations').subscribe(data => {
+    this.restService.getEntries('/api/admin/locations').subscribe(data => {
       if(!isNullOrUndefined(data)){
         this.locations = [];
         for (const d in data) {
