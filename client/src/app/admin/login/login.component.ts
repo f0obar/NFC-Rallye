@@ -1,6 +1,5 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {MatSnackBar} from '@angular/material';
+import {Component, OnInit,} from '@angular/core';
+import {AdminAuthService} from '../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -9,10 +8,7 @@ import {MatSnackBar} from '@angular/material';
 })
 export class AdminLoginComponent implements OnInit {
 
-  @Output()
-  loginOutput: EventEmitter<any> = new EventEmitter();
-
-  constructor(private http: HttpClient, public snackBar: MatSnackBar) { }
+  constructor(private  authService: AdminAuthService) { }
 
   ngOnInit() {
   }
@@ -24,19 +20,6 @@ export class AdminLoginComponent implements OnInit {
    * @param keeploggedin
    */
   submitLogin(name: string, password: string, keeploggedin: boolean) {
-    console.log('admin login', name, password);
-    this.http.post('/api/admin/session/', {username: name, password: password}).subscribe(
-      (data) => {
-        console.log('loginPost data', data);
-        this.loginOutput.emit({token: data['token'], keep: keeploggedin});
-      },
-      (err) => {
-        this.snackBar.open('Wrong Username or Password',null, {
-          duration: 2000,
-          horizontalPosition: 'center'
-        });
-        console.log('loginPost error', err);
-      }
-    );
+    this.authService.login(name,password,keeploggedin);
   }
 }

@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {AdminAuthService} from '../../../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-status-detail',
@@ -8,7 +9,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
   styleUrls: ['./status-detail.component.css']
 })
 export class AdminStatusDetailComponent implements OnInit {
-  constructor(public dialogRef: MatDialogRef<AdminStatusDetailComponent>,@Inject(MAT_DIALOG_DATA,) public data: any, private http: HttpClient) { }
+  constructor(public dialogRef: MatDialogRef<AdminStatusDetailComponent>,@Inject(MAT_DIALOG_DATA,) public data: any, private http: HttpClient,public  authService: AdminAuthService) { }
 
   ngOnInit() {
 
@@ -30,7 +31,7 @@ export class AdminStatusDetailComponent implements OnInit {
       this.http.put('/api/admin/playsessions/' + this.data.playSession.session_id, {
         password: password,
         groupName: this.data.playSession.sessionGroupName,
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+      }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
         (data) => {
           this.dialogRef.close();
         },
@@ -42,7 +43,7 @@ export class AdminStatusDetailComponent implements OnInit {
       console.log('dont need to hash new pw');
       this.http.put('/api/admin/playsessions/' + this.data.playSession.session_id, {
         groupName: this.data.playSession.sessionGroupName,
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+      }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
         (data) => {
           this.dialogRef.close();
         },

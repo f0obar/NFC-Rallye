@@ -1,5 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {AdminAuthService} from '../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-menue',
@@ -11,12 +12,7 @@ export class AdminMenueComponent implements OnInit {
   public menueItems: Array<string>;
   currentSelection = '';
 
-  @Input() adminToken: string;
-
-  @Output()
-  menueLogout: EventEmitter<any> = new EventEmitter();
-
-  constructor(private router: Router) {
+  constructor(private router: Router, public  authService: AdminAuthService) {
     this.menueItems = [];
     this.menueItems.push('Status');
     this.menueItems.push('Konfiguration');
@@ -76,9 +72,5 @@ export class AdminMenueComponent implements OnInit {
         break;
       }
     }
-  }
-
-  logout(): void {
-    this.menueLogout.emit();
   }
 }

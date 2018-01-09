@@ -4,6 +4,7 @@ import {AdminTagDetailComponent} from './tag-detail/tag-detail.component';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {AdminTag} from './admin-tag';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
+import {AdminAuthService} from '../../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-tags',
@@ -11,9 +12,8 @@ import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-
   styleUrls: ['./tags.component.css']
 })
 export class AdminTagsComponent implements OnInit, AfterViewInit {
-  @Input() adminToken: string;
 
-  constructor(private http: HttpClient, private dialog: MatDialog) {
+  constructor(private http: HttpClient, private dialog: MatDialog,public  authService: AdminAuthService) {
   }
 
   public tags: Array<AdminTag>;
@@ -52,7 +52,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
 
   loadTagsFromServer() {
     console.log('loading current tags from server');
-    this.http.get('/api/admin/tags', {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
+    this.http.get('/api/admin/tags', {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
       (data) => {
         this.tags = [];
         console.log('loaded current tags', data);
@@ -81,8 +81,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     console.log('add location');
     const edit = this.dialog.open(AdminTagDetailComponent, {
       data: {
-        currentTag: null,
-        adminToken: this.adminToken
+        currentTag: null
       }
     });
     edit.afterClosed().subscribe(() => {
@@ -99,8 +98,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     if (((event['path'])[0])['className'] !== 'material-icons') {
       const edit = this.dialog.open(AdminTagDetailComponent, {
         data: {
-          currentTag: tag,
-          adminToken: this.adminToken
+          currentTag: tag
         }
       });
       edit.afterClosed().subscribe(() => {
@@ -121,7 +119,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
         console.log('delete quiz', tag._id);
-        this.http.delete('/api/admin/tags/' + tag._id, {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
+        this.http.delete('/api/admin/tags/' + tag._id, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
           () => {
             console.log('successfully deleted Tag', tag._id);
             this.loadTagsFromServer();

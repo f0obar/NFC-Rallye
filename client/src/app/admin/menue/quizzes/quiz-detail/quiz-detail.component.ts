@@ -4,6 +4,7 @@ import {AdminLocation} from '../../locations/admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatSlideToggle} from '@angular/material';
 import {AdminQuiz} from '../admin-quiz';
 import {isNullOrUndefined} from 'util';
+import {AdminAuthService} from '../../../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-quiz-detail',
@@ -23,7 +24,8 @@ export class AdminQuizDetailComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<AdminQuizDetailComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private http: HttpClient,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              public  authService: AdminAuthService) {
   }
 
   ngOnInit() {

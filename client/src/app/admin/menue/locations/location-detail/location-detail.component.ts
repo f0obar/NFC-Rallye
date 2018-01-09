@@ -2,7 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
-import {isNullOrUndefined} from "util";
+import {isNullOrUndefined} from 'util';
+import {AdminAuthService} from '../../../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-location-detail',
@@ -15,7 +16,7 @@ export class AdminLocationDetailComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AdminLocationDetailComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient, public snackBar: MatSnackBar) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient, public snackBar: MatSnackBar, public authService: AdminAuthService) {
   }
 
   ngOnInit() {
@@ -37,7 +38,7 @@ export class AdminLocationDetailComponent implements OnInit {
       filesize: '',
       filetype: '',
       base64: '',
-    }, true, 'sample name', '12345','49.1226','9.211',"0");
+    }, true, 'sample name', '12345','49.1226','9.211','0');
   }
 
   submit() {
@@ -48,7 +49,7 @@ export class AdminLocationDetailComponent implements OnInit {
         isActive: this.data.currentLocation.isActive,
         name: this.data.currentLocation.name,
         _id: this.data.currentLocation._id
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+      }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
         (data) => {
           console.log('successfully edited location');
           this.snackBar.open('Erfolgreich gespeichert!', null, {
@@ -71,7 +72,7 @@ export class AdminLocationDetailComponent implements OnInit {
         image: this.data.currentLocation.image,
         isActive: this.data.currentLocation.isActive,
         name: this.data.currentLocation.name
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+      }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
         (data) => {
           this.snackBar.open('Erfolgreich gespeichert!', null, {
             duration: 2000,

@@ -1,6 +1,6 @@
-<ng-container *ngIf="authenticated == false">
-  <app-admin-login (loginOutput)="loggedIn($event)">Login Loading</app-admin-login>
+<ng-container *ngIf="authService.isLoggedIn() == false">
+  <app-admin-login>Login Loading</app-admin-login>
 </ng-container>
-<ng-container *ngIf="authenticated == true">
-  <app-admin-menue (menueLogout)="logout()" [adminToken]="adminToken">Menue Loading</app-admin-menue>
+<ng-container *ngIf="authService.isLoggedIn() == true">
+  <app-admin-menue>Menue Loading</app-admin-menue>
 </ng-container>

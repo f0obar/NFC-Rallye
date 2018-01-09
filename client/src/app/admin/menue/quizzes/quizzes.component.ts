@@ -3,7 +3,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {AdminQuiz} from './admin-quiz';
 import {AdminQuizDetailComponent} from './quiz-detail/quiz-detail.component';
-import {SharedSimpleDialogComponent} from "../../../shared/simple-dialog/simple-dialog.component";
+import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
+import {AdminAuthService} from '../../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-quizzes',
@@ -11,7 +12,6 @@ import {SharedSimpleDialogComponent} from "../../../shared/simple-dialog/simple-
   styleUrls: ['./quizzes.component.css']
 })
 export class AdminQuizzesComponent implements OnInit, AfterViewInit {
-  @Input() adminToken: string;
 
   displayedColumns = ['type','isActive','name', 'description','_id', 'edit'];
 
@@ -20,7 +20,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private http: HttpClient, private dialog: MatDialog) {
+  constructor(private http: HttpClient, private dialog: MatDialog,public  authService: AdminAuthService) {
   }
 
   public quizzes: Array<AdminQuiz>;
@@ -53,7 +53,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
    */
   loadQuizzesFromServer() {
     console.log('loading current quizzes from server');
-    this.http.get('/api/admin/riddles', {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
+    this.http.get('/api/admin/riddles', {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
       (data) => {
         this.quizzes = [];
         console.log('loaded current quizzes', data);
@@ -89,8 +89,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
     console.log('add quiz');
     const edit = this.dialog.open(AdminQuizDetailComponent, {
       data: {
-        currentQuiz: null,
-        adminToken: this.adminToken
+        currentQuiz: null
       }
     });
     edit.afterClosed().subscribe(() => {
@@ -108,8 +107,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
     if (((event['path'])[0])['className'] !== 'material-icons') {
       const edit = this.dialog.open(AdminQuizDetailComponent, {
         data: {
-          currentQuiz: quiz,
-          adminToken: this.adminToken
+          currentQuiz: quiz
         }
       });
       edit.afterClosed().subscribe(() => {
@@ -134,7 +132,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
         console.log('delete quiz', quiz._id);
-        this.http.delete('/api/admin/riddles/' + quiz._id, {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
+        this.http.delete('/api/admin/riddles/' + quiz._id, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
           () => {
             console.log('successfully deleted quiz', quiz._id);
             this.loadQuizzesFromServer();

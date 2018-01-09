@@ -4,7 +4,7 @@
       <ng-container *ngFor="let entry of menueItems">
         <mat-list-item (click)="sidenav.close(); selectEntry(entry)"> {{entry}} </mat-list-item>
       </ng-container>
-      <mat-list-item id="logout" (click)="logout()"> Logout </mat-list-item>
+      <mat-list-item id="logout" (click)="authService.logout()"> Logout </mat-list-item>
     </mat-list>
 
   </mat-sidenav>
@@ -13,10 +13,10 @@
     <h1 class="mat-display-2">{{currentSelection}}</h1>
   </mat-toolbar>
   <div class="sidenav-content" (click)="sidenav.close()">
-    <app-admin-status *ngIf="currentSelection=='Status'" [adminToken]="adminToken"></app-admin-status>
-    <app-admin-configuration *ngIf="currentSelection=='Konfiguration'" [adminToken]="adminToken"></app-admin-configuration>
-    <app-admin-locations *ngIf="currentSelection=='Orte'" [adminToken]="adminToken"></app-admin-locations>
-    <app-admin-quizzes *ngIf="currentSelection=='Rätsel'" [adminToken]="adminToken"></app-admin-quizzes>
-    <app-admin-tags *ngIf="currentSelection=='Tags'" [adminToken]="adminToken"></app-admin-tags>
+    <app-admin-status *ngIf="currentSelection=='Status'"></app-admin-status>
+    <app-admin-configuration *ngIf="currentSelection=='Konfiguration'"></app-admin-configuration>
+    <app-admin-locations *ngIf="currentSelection=='Orte'"></app-admin-locations>
+    <app-admin-quizzes *ngIf="currentSelection=='Rätsel'"></app-admin-quizzes>
+    <app-admin-tags *ngIf="currentSelection=='Tags'"></app-admin-tags>
   </div>
 </mat-sidenav-container>

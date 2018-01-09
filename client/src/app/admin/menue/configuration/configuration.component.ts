@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import {MatSnackBar} from '@angular/material';
+import {AdminAuthService} from '../../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-configuration',
@@ -10,12 +11,10 @@ import {MatSnackBar} from '@angular/material';
 })
 export class AdminConfigurationComponent implements OnInit {
 
-  @Input() adminToken: string;
-
   currentWinText: string;
   currentUserName: string;
 
-  constructor(private http: HttpClient, public snackBar: MatSnackBar) {
+  constructor(private http: HttpClient, public snackBar: MatSnackBar,public  authService: AdminAuthService) {
     this.currentWinText = 'There seems to be a problem with the internet connection';
     this.currentUserName = 'There seems to be a problem with the internet connection';
   }
@@ -30,7 +29,7 @@ export class AdminConfigurationComponent implements OnInit {
     this.http.put(
       '/api/admin/config/winText',
       {winText: text},
-      {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).map((res: Response) => res.json()).subscribe(
+      {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).map((res: Response) => res.json()).subscribe(
       (data) => {
         console.log('changed end text', data);
         this.snackBar.open('Erfolgreich gespeichert!', null, {
@@ -60,7 +59,7 @@ export class AdminConfigurationComponent implements OnInit {
     this.http.put(
       '/api/admin/config/username',
       {username: name},
-      {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).map((res: Response) => res.json()).subscribe(
+      {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).map((res: Response) => res.json()).subscribe(
       () => {
         console.log('changed end text');
         this.snackBar.open('Erfolgreich gespeichert!', null, {
@@ -101,7 +100,7 @@ export class AdminConfigurationComponent implements OnInit {
       this.http.put('/api/admin/config/password', {
         password: newpassword,
         passwordRepeat: newpassword2
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).map((res: Response) => res.json()).subscribe(
+      }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).map((res: Response) => res.json()).subscribe(
         (data) => {
           console.log('changed end text', data);
           this.snackBar.open('Erfolgreich gespeichert!', null, {
@@ -131,7 +130,7 @@ export class AdminConfigurationComponent implements OnInit {
     console.log('loading current win text');
     this.http.get(
       '/api/admin/config/winText',
-      {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).map((res: Response) => res.json()).subscribe(
+      {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).map((res: Response) => res.json()).subscribe(
       (data) => {
         console.log('current win text', data);
         this.currentWinText = data['text'];
@@ -148,7 +147,7 @@ export class AdminConfigurationComponent implements OnInit {
     console.log('loading current win text');
     this.http.get(
       '/api/admin/config/username',
-      {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).map((res: Response) => res.json()).subscribe(
+      {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).map((res: Response) => res.json()).subscribe(
       (data) => {
         console.log('current win text', data);
         this.currentUserName = data['text'];

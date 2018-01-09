@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../../locations/admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
+import {AdminAuthService} from '../../../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-tag-detail',
@@ -16,7 +17,7 @@ export class AdminTagDetailComponent implements OnInit {
   locations: Array<AdminLocation>;
 
   constructor(public dialogRef: MatDialogRef<AdminTagDetailComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient, public snackBar: MatSnackBar) {
+              @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient, public snackBar: MatSnackBar,public  authService: AdminAuthService) {
   }
 
   ngOnInit() {
@@ -43,7 +44,7 @@ export class AdminTagDetailComponent implements OnInit {
 
   loadLocations() {
     console.log('loading current locations from server');
-    this.http.get('/api/admin/locations', {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+    this.http.get('/api/admin/locations', {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
       (data) => {
         this.locations = [];
         console.log('loaded current locations', data);
@@ -82,7 +83,7 @@ export class AdminTagDetailComponent implements OnInit {
           location: this.data.currentTag.location,
           tagID: this.data.currentTag.tagID,
           _id: this.data.currentTag._id
-        }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+        }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
           () => {
             console.log('successfully edited quiz');
             this.snackBar.open('Erfolgreich gespeichert!', null, {
@@ -104,7 +105,7 @@ export class AdminTagDetailComponent implements OnInit {
           alias: this.data.currentTag.alias,
           location: this.data.currentTag.location,
           tagID: this.data.currentTag.tagID
-        }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+        }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
           () => {
             console.log('successfully edited quiz');
             this.snackBar.open('Erfolgreich gespeichert!', null, {
@@ -128,8 +129,8 @@ export class AdminTagDetailComponent implements OnInit {
 
   generateID() {
     this.data.currentTag.tagID = this.data.currentTag.alias + '-';
-    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    for (var i = 0; i < 10; i++) {
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    for (let i = 0; i < 10; i++) {
       this.data.currentTag.tagID += possible.charAt(Math.floor(Math.random() * possible.length));
     }
   }
