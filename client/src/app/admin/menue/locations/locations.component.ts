@@ -1,11 +1,12 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocationDetailComponent} from './location-detail/location-detail.component';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {AdminLocation} from './admin-location';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {UserLocationMapPopupComponent} from '../../../shared/map/location-map-popup.component';
 import {AdminAuthService} from '../../services/admin-auth.service';
+import {AdminRestService} from '../../services/admin-rest.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-admin-locations',
@@ -14,7 +15,7 @@ import {AdminAuthService} from '../../services/admin-auth.service';
 })
 export class AdminLocationsComponent implements OnInit, AfterViewInit {
 
-  constructor(private http: HttpClient, private dialog: MatDialog,public  authService: AdminAuthService) {
+  constructor(private dialog: MatDialog,public  authService: AdminAuthService, private restService: AdminRestService) {
   }
 
   public locations : Array<AdminLocation>;
@@ -54,10 +55,9 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
    */
   loadLocationsFromServer() {
     console.log('loading current locations from server');
-    this.http.get('/api/admin/locations', {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
-      (data) => {
+    this.restService.getEntryies('/api/admin/locations').subscribe(data => {
+      if(!isNullOrUndefined(data)){
         this.locations = [];
-        console.log('loaded current locations', data);
         for (const d in data) {
           if (data.hasOwnProperty(d)) {
             this.locations.push(
@@ -72,12 +72,8 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
           }
         }
         this.dataSource.data = this.locations;
-        console.log('initialized array', this.locations);
-      },
-      (err) => {
-        console.log('loaded current locations error', err);
       }
-    );
+    });
   }
 
   /**
@@ -145,15 +141,12 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
         console.log('delete location', location._id);
-        this.http.delete('/api/admin/locations/' + location._id, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
-          () => {
-            console.log('successfully deleted location', location._id);
+
+        this.restService.deleteEntry('/api/admin/locations/' + location._id).subscribe(data => {
+          if(data === true){
             this.loadLocationsFromServer();
-          },
-          (err) => {
-            console.log('error deleting location', err);
           }
-        );
+        });
       }
     });
   }

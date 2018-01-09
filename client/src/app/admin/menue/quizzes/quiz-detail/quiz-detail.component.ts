@@ -101,7 +101,7 @@ export class AdminQuizDetailComponent implements OnInit {
    */
   loadLocations() {
     console.log('loading current locations from server');
-    this.http.get('/api/admin/locations', {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+    this.http.get('/api/admin/locations', {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
       (data) => {
         this.locations = [];
         console.log('loaded current locations', data);
@@ -155,7 +155,7 @@ export class AdminQuizDetailComponent implements OnInit {
         isActive: this.data.currentQuiz.isActive,
         image: this.data.currentQuiz.image,
         code: this.data.currentQuiz.code
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+      }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
         () => {
           console.log('successfully edited quiz');
           this.snackBar.open('Erfolgreich gespeichert!', null, {
@@ -183,7 +183,7 @@ export class AdminQuizDetailComponent implements OnInit {
         isActive: this.data.currentQuiz.isActive,
         image: this.data.currentQuiz.image,
         code: this.data.currentQuiz.code
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
+      }, {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).subscribe(
         () => {
           console.log('successfully edited quiz');
           this.snackBar.open('Erfolgreich gespeichert!', null, {
