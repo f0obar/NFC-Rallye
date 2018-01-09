@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {MatDialog, MatTableDataSource} from "@angular/material";
-import {SharedSimpleDialogComponent} from "../../shared/simple-dialog/simple-dialog.component";
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {MatDialog, MatTableDataSource} from '@angular/material';
+import {SharedSimpleDialogComponent} from '../../shared/simple-dialog/simple-dialog.component';
+import {UserDialogService} from '../services/user-dialog.service';
 
 @Component({
   selector: 'app-user-scoreboard',
@@ -16,7 +17,7 @@ export class UserScoreboardComponent implements OnInit {
   @Output()
   scoreboardOutput: EventEmitter<any> = new EventEmitter();
 
-  constructor(private http: HttpClient,public dialog: MatDialog) { }
+  constructor(private http: HttpClient,public dialog: MatDialog,private dialogService: UserDialogService) { }
 
 
   ngOnInit() {
@@ -26,7 +27,7 @@ export class UserScoreboardComponent implements OnInit {
    * deletes the local session when the user accepts the dialog
    */
   abbrechen() {
-    const deleteSession = this.dialog.open(SharedSimpleDialogComponent, {data: {
+    const deleteSession = this.dialogService.open(SharedSimpleDialogComponent, {data: {
       title: 'Schnitzeljagd beenden',
       message: 'Möchtest du die Schnitzeljagd wirklich beenden?',
       button1: 'JA BEENDEN',

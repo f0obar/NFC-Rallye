@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {HttpClient} from '@angular/common/http';
 import {UserQuizHelpPopupComponent} from '../quiz/quiz-help-popup/quiz-help-popup.component';
+import {UserDialogService} from '../../services/user-dialog.service';
 
 @Component({
   selector: 'app-user-location',
@@ -26,7 +27,7 @@ export class UserLocationComponent implements AfterViewInit {
   @Output()
   locationFound: EventEmitter<any> = new EventEmitter();
 
-  constructor(private http: HttpClient, public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router) {
+  constructor(private http: HttpClient, public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router,private dialogService: UserDialogService) {
   }
 
   ngAfterViewInit() {
@@ -53,7 +54,7 @@ export class UserLocationComponent implements AfterViewInit {
   }
 
   openCamera() {
-    const d = this.dialog.open(UserLocationCameraPopupComponent);
+    const d = this.dialogService.open(UserLocationCameraPopupComponent,{});
     d.afterClosed().subscribe(result => {
       // Force stop the stream
       d.componentInstance.stopStream();
@@ -72,7 +73,7 @@ export class UserLocationComponent implements AfterViewInit {
    * skips the current location
    */
   skip(): void {
-    const d = this.dialog.open(SharedSimpleDialogComponent, {
+    const d = this.dialogService.open(SharedSimpleDialogComponent, {
       data: {
         title: 'Ort überspringen',
         message: 'Möchtest du wirklich diesen Ort überspringen? Du kannst nicht zurück kehren, und erhälst keine Punkte.',
@@ -96,7 +97,7 @@ export class UserLocationComponent implements AfterViewInit {
   }
 
   openMap() {
-    const d = this.dialog.open(UserLocationMapPopupComponent, {
+    const d = this.dialogService.open(UserLocationMapPopupComponent, {
       maxWidth: '98vw',
       panelClass: 'app-full-bleed-dialog',
       data: {
@@ -110,7 +111,7 @@ export class UserLocationComponent implements AfterViewInit {
    * opens popup dialog for emitting logout output.
    */
   abbrechen() {
-    const deleteSession = this.dialog.open(SharedSimpleDialogComponent, {
+    const deleteSession = this.dialogService.open(SharedSimpleDialogComponent, {
       data: {
         title: 'Schnitzeljagd verlassen',
         message: 'Möchtest du die Session wirklich verlassen? Die Session kann fortgesetzt werden,' +
@@ -128,6 +129,6 @@ export class UserLocationComponent implements AfterViewInit {
   }
 
   help() {
-    const d = this.dialog.open(UserQuizHelpPopupComponent, {});
+    const d = this.dialogService.open(UserQuizHelpPopupComponent, {});
   }
 }
