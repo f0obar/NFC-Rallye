@@ -60,27 +60,18 @@ export class AdminConfigurationComponent implements OnInit {
     console.log('loading current win text');
     this.restService.getEntries('/api/admin/config/winText').subscribe(data=>{
       if(!isNullOrUndefined(data)) {
-        this.currentWinText = data['text'];
+        this.currentWinText = data['result'];
       }
     });
   }
 
 
   loadCurrentUserName() {
-    /*
     console.log('loading current win text');
-    this.http.get(
-      '/api/admin/config/username',
-      {headers: new HttpHeaders().set('X-Auth-Token', this.authService.getAdminToken())}).map((res: Response) => res.json()).subscribe(
-      (data) => {
-        console.log('current win text', data);
-        this.currentUserName = data['text'];
-      },
-      (err) => {
-        console.log('current win text error', err);
-        this.currentUserName = err['error']['text'];
+    this.restService.getEntries('/api/admin/config/username').subscribe(data=>{
+      if(!isNullOrUndefined(data)) {
+        this.currentUserName = data['result'];
       }
-    );
-    */
+    });
   }
 }
