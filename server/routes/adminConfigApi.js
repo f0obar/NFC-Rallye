@@ -52,7 +52,7 @@ function setField(field, validator, converter) {
     try {
       await Config.set(field, convert(keys[field]));
       res.status(200);
-      res.end();
+      res.send({"changed" : true});
     } catch (err) {
       res.status(500);
       res.send(err);
