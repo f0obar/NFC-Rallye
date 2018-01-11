@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {AdminAuthService} from './admin-auth.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class AdminRestService {
@@ -10,26 +12,13 @@ export class AdminRestService {
 
   constructor(public http: HttpClient,private snackBar: MatSnackBar,private authService: AdminAuthService) { }
 
+
   public getEntries(url: string): any {
     return this.http.get(url, {headers: new HttpHeaders().set(AdminRestService.NAME_ADMIN_AUTH, this.authService.getAdminToken())}).map(
       (data) => {
         return data;
-      },
-      (err) => {
-        if (err['status']===401){
-          this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-          this.authService.logout();
-        }
-        this.snackBar.open('Fehler beim Laden der Resource', null, {
-          duration: 2000,
-          horizontalPosition: 'center'
-        });
-        return null;
       }
-    );
+    ).catch((e: any) => Observable.throw(this.handleError(e)));
   }
 
   public saveExistingEntry(url: string, body: any): any {
@@ -41,24 +30,8 @@ export class AdminRestService {
           horizontalPosition: 'center'
         });
         return true;
-      },
-      (err) => {
-        if (err['status']===401){
-          this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-          this.authService.logout();
-        } else {
-          this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-        }
-        console.log('error saving existing entry', err);
-        return false;
       }
-    );
+    ).catch((e: any) => Observable.throw(this.handleError(e)));
   }
 
   public saveNewEntry(url: string, body: any): any {
@@ -70,24 +43,8 @@ export class AdminRestService {
           horizontalPosition: 'center'
         });
         return true;
-      },
-      (err) => {
-        if (err['status']===401){
-          this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-          this.authService.logout();
-        } else {
-          this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-        }
-        console.log('error saving new entry', err);
-        return false;
       }
-    );
+    ).catch((e: any) => Observable.throw(this.handleError(e)));
   }
 
 
@@ -100,23 +57,22 @@ export class AdminRestService {
         });
         console.log('deleting successful', data);
         return true;
-      },
-      (err) => {
-        if (err['status']===401){
-          this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-          this.authService.logout();
-        } else {
-          this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
-        }
-        return false;
       }
-    );
+    ).catch((e: any) => Observable.throw(this.handleError(e)));
   }
 
+  private handleError(error: any) {
+    if (error['status']===401){
+      this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
+        duration: 2000,
+        horizontalPosition: 'center'
+      });
+      this.authService.logout();
+    } else {
+      this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
+        duration: 2000,
+        horizontalPosition: 'center'
+      });
+    }
+  }
 }
