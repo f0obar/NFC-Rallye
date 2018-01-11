@@ -6,6 +6,7 @@ import {isNullOrUndefined} from 'util';
 import {SharedSimpleDialogComponent} from '../../../../shared/simple-dialog/simple-dialog.component';
 import {UserQuizHelpPopupComponent} from '../quiz-help-popup/quiz-help-popup.component';
 import {Router} from '@angular/router';
+import {UserDialogService} from "../../../services/user-dialog.service";
 
 @Component({
   selector: 'app-user-quiz-multiplechoice',
@@ -29,7 +30,7 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
   usedAnswers = [];
   solution = '';
 
-  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog,private router: Router) {
+  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog,private router: Router, private dialogService: UserDialogService) {
   }
 
   ngOnInit() {
@@ -102,7 +103,7 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
    * skips the current question
    */
   skipQuestion(): void {
-    const d = this.dialog.open(SharedSimpleDialogComponent, {
+    const d = this.dialogService.open(SharedSimpleDialogComponent, {
       data: {
         title: 'Quiz überspringen',
         message: 'Möchtest du wirklich dieses Quiz überspringen? Du kannst nicht zurück kehren, und erhälst keine Punkte.',
@@ -134,7 +135,7 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
    * deletes the local session when the user accepts the dialog
    */
   abbrechen() {
-    const deleteSession = this.dialog.open(SharedSimpleDialogComponent, {data: {
+    const deleteSession = this.dialogService.open(SharedSimpleDialogComponent, {data: {
         title: 'Schnitzeljagd verlassen',
         message: 'Möchtest du die Session wirklich verlassen? Die Session kann fortgesetzt werden,' +
         ' indem du dich mit deinem Gruppennamen und Passwort erneut anmeldest.',
@@ -150,7 +151,7 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
   }
 
   help() {
-    const d = this.dialog.open(UserQuizHelpPopupComponent, {
+    const d = this.dialogService.open(UserQuizHelpPopupComponent, {
 
     });
   }

@@ -8,6 +8,7 @@ import {UserQuizHintPopupComponent} from '../quiz-hint-popup/quiz-hint-popup.com
 import {SharedSimpleDialogComponent} from '../../../../shared/simple-dialog/simple-dialog.component';
 import {UserQuizHelpPopupComponent} from '../quiz-help-popup/quiz-help-popup.component';
 import {Router} from '@angular/router';
+import {UserDialogService} from '../../../services/user-dialog.service';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
   @Output()
   quizPointEmitter: EventEmitter<any> = new EventEmitter();
 
-  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog,private router: Router) {
+  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog,private router: Router,private dialogService: UserDialogService) {
   }
 
   ngAfterViewInit() {
@@ -52,7 +53,7 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
    * opens popup dialog for the hint
    */
   toggleHint() {
-    const d = this.dialog.open(UserQuizHintPopupComponent, {
+    const d = this.dialogService.open(UserQuizHintPopupComponent, {
       data: {
         hint: this.question.getHint()
       }
@@ -105,7 +106,7 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
    * skips the current question
    */
   skipQuestion(): void {
-    const d = this.dialog.open(SharedSimpleDialogComponent, {
+    const d = this.dialogService.open(SharedSimpleDialogComponent, {
       data: {
         title: 'Quiz überspringen',
         message: 'Möchtest du wirklich dieses Quiz überspringen? Du kannst nicht zurück kehren, und erhälst keine Punkte.',
@@ -137,7 +138,7 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
    * deletes the local session when the user accepts the dialog
    */
   abbrechen() {
-    const deleteSession = this.dialog.open(SharedSimpleDialogComponent, {data: {
+    const deleteSession = this.dialogService.open(SharedSimpleDialogComponent, {data: {
         title: 'Schnitzeljagd verlassen',
         message: 'Möchtest du die Session wirklich verlassen? Die Session kann fortgesetzt werden,' +
         ' indem du dich mit deinem Gruppennamen und Passwort erneut anmeldest.',
@@ -154,7 +155,7 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
 
 
   help() {
-    const d = this.dialog.open(UserQuizHelpPopupComponent, {
+    const d = this.dialogService.open(UserQuizHelpPopupComponent, {
 
     });
   }

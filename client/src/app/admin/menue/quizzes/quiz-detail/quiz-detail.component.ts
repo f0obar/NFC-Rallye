@@ -1,9 +1,10 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AdminLocation} from '../../locations/admin-location';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar, MatSlideToggle} from '@angular/material';
 import {AdminQuiz} from '../admin-quiz';
 import {isNullOrUndefined} from 'util';
+import {AdminAuthService} from '../../../services/admin-auth.service';
+import {AdminRestService} from '../../../services/admin-rest.service';
 
 @Component({
   selector: 'app-admin-quiz-detail',
@@ -22,8 +23,9 @@ export class AdminQuizDetailComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<AdminQuizDetailComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private http: HttpClient,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              public  authService: AdminAuthService,
+              private restService: AdminRestService) {
   }
 
   ngOnInit() {
@@ -99,8 +101,8 @@ export class AdminQuizDetailComponent implements OnInit {
    */
   loadLocations() {
     console.log('loading current locations from server');
-    this.http.get('/api/admin/locations', {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
-      (data) => {
+    this.restService.getEntries('/api/admin/locations').subscribe(data => {
+      if (!isNullOrUndefined(data)) {
         this.locations = [];
         console.log('loaded current locations', data);
         for (const d in data) {
@@ -116,12 +118,8 @@ export class AdminQuizDetailComponent implements OnInit {
                 data[d]['lvl'] + ''));
           }
         }
-        console.log('initialized array', this.locations);
-      },
-      (err) => {
-        console.log('loaded current locations error', err);
       }
-    );
+    });
   }
 
   /**
@@ -142,7 +140,7 @@ export class AdminQuizDetailComponent implements OnInit {
       }
     }
     if (this.createNewEntry === false) {
-      this.http.put('/api/admin/riddles/' + this.data.currentQuiz._id, {
+      this.restService.saveExistingEntry('/api/admin/riddles/' + this.data.currentQuiz._id,{
         answer: this.data.currentQuiz.answer,
         choices: this.data.currentQuiz.choices,
         description: this.data.currentQuiz.description,
@@ -153,25 +151,13 @@ export class AdminQuizDetailComponent implements OnInit {
         isActive: this.data.currentQuiz.isActive,
         image: this.data.currentQuiz.image,
         code: this.data.currentQuiz.code
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
-        () => {
-          console.log('successfully edited quiz');
-          this.snackBar.open('Erfolgreich gespeichert!', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
+      }).subscribe(data => {
+        if (data === true){
           this.dialogRef.close();
-        },
-        (err) => {
-          console.log('error editing quiz', err);
-          this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
         }
-      );
+      });
     } else {
-      this.http.post('/api/admin/riddles', {
+      this.restService.saveNewEntry('/api/admin/riddles',{
         answer: this.data.currentQuiz.answer,
         choices: this.data.currentQuiz.choices,
         description: this.data.currentQuiz.description,
@@ -181,23 +167,11 @@ export class AdminQuizDetailComponent implements OnInit {
         isActive: this.data.currentQuiz.isActive,
         image: this.data.currentQuiz.image,
         code: this.data.currentQuiz.code
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
-        () => {
-          console.log('successfully edited quiz');
-          this.snackBar.open('Erfolgreich gespeichert!', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
+      }).subscribe(data => {
+        if (data === true){
           this.dialogRef.close();
-        },
-        (err) => {
-          console.log('error editing quiz', err);
-          this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-            duration: 2000,
-            horizontalPosition: 'center'
-          });
         }
-      );
+      });
     }
     console.log('saving quiz detail', this.data.currentQuiz);
   }

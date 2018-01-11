@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {AdminAuthService} from '../../../services/admin-auth.service';
+import {AdminRestService} from '../../../services/admin-rest.service';
 
 @Component({
   selector: 'app-admin-status-detail',
@@ -8,7 +9,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
   styleUrls: ['./status-detail.component.css']
 })
 export class AdminStatusDetailComponent implements OnInit {
-  constructor(public dialogRef: MatDialogRef<AdminStatusDetailComponent>,@Inject(MAT_DIALOG_DATA,) public data: any, private http: HttpClient) { }
+  constructor(public dialogRef: MatDialogRef<AdminStatusDetailComponent>,@Inject(MAT_DIALOG_DATA,) public data: any,public  authService: AdminAuthService, private restService: AdminRestService) { }
 
   ngOnInit() {
 
@@ -26,30 +27,22 @@ export class AdminStatusDetailComponent implements OnInit {
    */
   submit(password: string) {
     if(password.length > 0){
-      console.log('need to hash new pw');
-      this.http.put('/api/admin/playsessions/' + this.data.playSession.session_id, {
+      this.restService.saveExistingEntry('/api/admin/playsessions/' + this.data.playSession.session_id,{
         password: password,
         groupName: this.data.playSession.sessionGroupName,
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
-        (data) => {
+      }).subscribe(data => {
+        if(data === true){
           this.dialogRef.close();
-        },
-        (err) => {
-          console.log('error editing location', err);
         }
-      );
+      });
     } else {
-      console.log('dont need to hash new pw');
-      this.http.put('/api/admin/playsessions/' + this.data.playSession.session_id, {
-        groupName: this.data.playSession.sessionGroupName,
-      }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
-        (data) => {
+      this.restService.saveExistingEntry('/api/admin/playsessions/' + this.data.playSession.session_id,{
+        groupName: this.data.playSession.sessionGroupName
+      }).subscribe(data => {
+        if(data === true){
           this.dialogRef.close();
-        },
-        (err) => {
-          console.log('error editing location', err);
         }
-      );
+      });
     }
   }
 }

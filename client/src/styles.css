@@ -45,7 +45,7 @@ app-user-task {
 }
 
 .page-footer {
-  z-index: 100;
+  z-index: 2000;
   flex: 0 0 auto;
 }
 

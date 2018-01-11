@@ -1,9 +1,10 @@
-import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {isNullOrUndefined} from 'util';
 import {AdminStatusDetailComponent} from './status-detail/status-detail.component';
+import {AdminAuthService} from '../../services/admin-auth.service';
+import {AdminRestService} from '../../services/admin-rest.service';
 
 
 @Component({
@@ -12,9 +13,6 @@ import {AdminStatusDetailComponent} from './status-detail/status-detail.componen
   styleUrls: ['./status.component.css']
 })
 export class AdminStatusComponent implements OnInit, AfterViewInit {
-
-  @Input() adminToken: string;
-
   public activePlaySessions: Array<PlaySession>;
 
   displayedColumns = ['name', 'location','time','lastActive','points', 'progress','edit'];
@@ -22,7 +20,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource();
 
 
-  constructor(private http: HttpClient, public dialog: MatDialog, private cdRef : ChangeDetectorRef) {
+  constructor(public dialog: MatDialog, private cdRef : ChangeDetectorRef,public  authService: AdminAuthService, private restService: AdminRestService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -62,20 +60,16 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
 
   deleteSession(playSession: PlaySession) {
     console.log('deleting session', playSession.session_id);
-    this.http.delete('/api/admin/playsessions/' + playSession.session_id, {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
-      (data) => {
-        console.log('delete session successfull', data);
+    this.restService.deleteEntry('/api/admin/playsessions/' + playSession.session_id).subscribe(data => {
+      if(data === true){
         for (let index = 0; index < this.activePlaySessions.length; index++) {
           if (this.activePlaySessions[index].session_id === playSession.session_id) {
             this.activePlaySessions.splice(index, 1);
           }
         }
         this.dataSource.data = this.activePlaySessions;
-      },
-      (err) => {
-        console.log('delete session error', err);
       }
-    );
+    });
   }
 
   deleteSessionWithDialog(playSession: PlaySession) {
@@ -177,8 +171,8 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
 
   loadSessions() {
     console.log('loading current play sessions');
-    this.http.get('/api/admin/playsessions', {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
-      (data) => {
+    this.restService.getEntries('/api/admin/playsessions').subscribe(data => {
+      if(!isNullOrUndefined(data)){
         this.activePlaySessions = [];
         for (const d in data) {
           if (data.hasOwnProperty(d)) {
@@ -219,20 +213,15 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
         }
         this.resolveAlias(this.activePlaySessions);
         this.dataSource.data = this.activePlaySessions;
-        console.log('current play sessions', this.activePlaySessions);
-      },
-      (err) => {
-        console.log('current play sessions error', err);
       }
-    );
+    });
   }
 
   openDetail(playSession: PlaySession,event: any) {
     if (((event['path'])[0])['className'] !== 'material-icons') {
       const d = this.dialog.open(AdminStatusDetailComponent, {
         data: {
-          playSession: playSession,
-          adminToken: this.adminToken
+          playSession: playSession
         }
       });
     }
@@ -244,18 +233,14 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
 
   resolveAlias(playSessions: PlaySession[]){
     let locationNames;
-
-    this.http.get('/api/admin/locationnames', {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
-      (data) => {
+    this.restService.getEntries('/api/admin/locationnames').subscribe(data => {
+      if(!isNullOrUndefined(data)){
         locationNames = data['locations'];
         for (const playSession of playSessions){
           playSession.setLocationAlias(locationNames[playSession.sessionLocation]);
         }
-      },
-      (err) => {
-        console.log('current play sessions error', err);
       }
-    );
+    });
   }
 }
 

@@ -46,6 +46,10 @@ import {UserQuizHelpPopupComponent} from './user/task/quiz/quiz-help-popup/quiz-
 
 import {WebSocketService} from './scoreboard/services/websocket.service';
 import {HighlightModule} from 'ngx-highlightjs';
+import {AdminAuthService} from './admin/services/admin-auth.service';
+import {AdminRestService} from './admin/services/admin-rest.service';
+import {UserDialogService} from "./user/services/user-dialog.service";
+
 
 const routes: Routes = [
   {
@@ -179,7 +183,12 @@ const routes: Routes = [
     UserQuizHelpPopupComponent,
     AdminStatusDetailComponent
   ],
-  providers: [WebSocketService],
+  providers: [
+    WebSocketService,
+    AdminAuthService,
+    AdminRestService,
+    UserDialogService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,9 +1,11 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {AdminTagDetailComponent} from './tag-detail/tag-detail.component';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {AdminTag} from './admin-tag';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
+import {AdminAuthService} from '../../services/admin-auth.service';
+import {AdminRestService} from '../../services/admin-rest.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-admin-tags',
@@ -11,9 +13,8 @@ import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-
   styleUrls: ['./tags.component.css']
 })
 export class AdminTagsComponent implements OnInit, AfterViewInit {
-  @Input() adminToken: string;
 
-  constructor(private http: HttpClient, private dialog: MatDialog) {
+  constructor(private dialog: MatDialog,public  authService: AdminAuthService, private restService: AdminRestService) {
   }
 
   public tags: Array<AdminTag>;
@@ -52,8 +53,8 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
 
   loadTagsFromServer() {
     console.log('loading current tags from server');
-    this.http.get('/api/admin/tags', {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
-      (data) => {
+    this.restService.getEntries('/api/admin/tags').subscribe(data =>{
+      if(!isNullOrUndefined(data)){
         this.tags = [];
         console.log('loaded current tags', data);
         for (const d in data) {
@@ -66,12 +67,8 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
           }
         }
         this.dataSource.data = this.tags;
-        console.log('initialized array', this.tags);
-      },
-      (err) => {
-        console.log('loaded current tags error', err);
       }
-    );
+    });
   }
 
   /**
@@ -81,8 +78,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     console.log('add location');
     const edit = this.dialog.open(AdminTagDetailComponent, {
       data: {
-        currentTag: null,
-        adminToken: this.adminToken
+        currentTag: null
       }
     });
     edit.afterClosed().subscribe(() => {
@@ -99,8 +95,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     if (((event['path'])[0])['className'] !== 'material-icons') {
       const edit = this.dialog.open(AdminTagDetailComponent, {
         data: {
-          currentTag: tag,
-          adminToken: this.adminToken
+          currentTag: tag
         }
       });
       edit.afterClosed().subscribe(() => {
@@ -121,15 +116,11 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
         console.log('delete quiz', tag._id);
-        this.http.delete('/api/admin/tags/' + tag._id, {headers: new HttpHeaders().set('X-Auth-Token', this.adminToken)}).subscribe(
-          () => {
-            console.log('successfully deleted Tag', tag._id);
+        this.restService.deleteEntry('/api/admin/tags/' + tag._id).subscribe(data => {
+          if(data === true){
             this.loadTagsFromServer();
-          },
-          (err) => {
-            console.log('error deleting Tag//', err);
           }
-        );
+        });
       }
     });
   }

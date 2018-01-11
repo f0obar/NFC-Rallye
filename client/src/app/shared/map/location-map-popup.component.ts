@@ -2,6 +2,7 @@ import {AfterViewInit, Component, Inject, HostListener} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {AdminRestService} from '../../admin/services/admin-rest.service';
 
 declare const L;
 
@@ -32,7 +33,7 @@ export class UserLocationMapPopupComponent implements AfterViewInit {
   rendered = false;
 
   constructor(public dialogRef: MatDialogRef<UserLocationMapPopupComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar,private http: HttpClient) {
+              @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar,private http: HttpClient, private restServive: AdminRestService) {
     this.resizeMap();
     this.rendered = true;
   }
@@ -107,27 +108,16 @@ export class UserLocationMapPopupComponent implements AfterViewInit {
    */
   submit() {
     console.log('location',this.data.location);
-    this.http.put('/api/admin/locations/' + this.data.location._id, {
-      lat: this.data.location.latitude,
-      lng: this.data.location.longitude,
-      lvl: this.data.location.level
-    }, {headers: new HttpHeaders().set('X-Auth-Token', this.data.adminToken)}).subscribe(
-      () => {
-        console.log('successfully edited quiz');
-        this.snackBar.open('Erfolgreich gespeichert!', null, {
-          duration: 2000,
-          horizontalPosition: 'center'
-        });
+    this.restServive.saveExistingEntry('/api/admin/locations/' + this.data.location._id,
+      {
+        lat: this.data.location.latitude,
+        lng: this.data.location.longitude,
+        lvl: this.data.location.level
+      }).subscribe(data => {
+      if(data === true){
         this.dialogRef.close();
-      },
-      (err) => {
-        console.log('error editing quiz', err);
-        this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
-          duration: 2000,
-          horizontalPosition: 'center'
-        });
       }
-    );
+    });
   }
 
   /**
