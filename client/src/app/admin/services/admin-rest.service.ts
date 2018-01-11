@@ -16,7 +16,7 @@ export class AdminRestService {
         return data;
       },
       (err) => {
-        if (err['status']===403){
+        if (err['status']===401){
           this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
             duration: 2000,
             horizontalPosition: 'center'
@@ -43,7 +43,7 @@ export class AdminRestService {
         return true;
       },
       (err) => {
-        if (err['status']===403){
+        if (err['status']===401){
           this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
             duration: 2000,
             horizontalPosition: 'center'
@@ -72,7 +72,7 @@ export class AdminRestService {
         return true;
       },
       (err) => {
-        if (err['status']===403){
+        if (err['status']===401){
           this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
             duration: 2000,
             horizontalPosition: 'center'
@@ -102,7 +102,7 @@ export class AdminRestService {
         return true;
       },
       (err) => {
-        if (err['status']===403){
+        if (err['status']===401){
           this.snackBar.open('Unauthorized, bitte erneut anmelden!', null, {
             duration: 2000,
             horizontalPosition: 'center'
