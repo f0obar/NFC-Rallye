@@ -36,11 +36,11 @@
                 <input matInput placeholder="Antwortmöglichkeit" [(ngModel)]="data.currentQuiz.choices[i]"
                        class="form-control">
               </mat-form-field>
-              <i class="material-icons" (click)="removeChoice(entry)">delete</i>
+              <i class="mdi mdi-delete" (click)="removeChoice(entry)"></i>
             </div>
           </mat-radio-group>
           <div class="dialog-element">
-            <i class="material-icons" (click)="addChoice()">add</i>
+            <i class="mdi mdi-plus" (click)="addChoice()"></i>
           </div>
         </ng-container>
         <div class="dialog-element" *ngIf="type!=='multipleChoice'">
@@ -65,10 +65,10 @@
         <div class="dialog-element image-options">
           <input [hidden]=true id="input-file-id" accept="image/*" type="file" (change)="handleFileSelect($event)"/>
           <label for="input-file-id">
-            <i *ngIf="!isImageAvailable()" class="material-icons">add</i>
-            <i *ngIf="isImageAvailable()" class="material-icons">mode_edit</i>
+            <i *ngIf="!isImageAvailable()" class="mdi mdi-plus"></i>
+            <i *ngIf="isImageAvailable()" class="mdi mdi-pencil"></i>
           </label>
-          <i *ngIf="isImageAvailable()" class="material-icons" (click)="deleteImage()">delete</i>
+          <i *ngIf="isImageAvailable()" class="mdi mdi-delete" (click)="deleteImage()"></i>
         </div>
         <div class="dialog-element">
           <img *ngIf="isImageAvailable()" class="img-responsive center-block"

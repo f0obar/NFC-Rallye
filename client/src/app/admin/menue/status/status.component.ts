@@ -218,7 +218,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
   }
 
   openDetail(playSession: PlaySession,event: any) {
-    if (((event['path'])[0])['className'] !== 'material-icons') {
+    if (((event['path'])[0])['className'] !== 'mdi') {
       const d = this.dialog.open(AdminStatusDetailComponent, {
         data: {
           playSession: playSession

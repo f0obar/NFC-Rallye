@@ -20,14 +20,6 @@ code {
   text-align: left;
 }
 
-.material-icons:hover {
-  cursor: pointer;
-}
-
-.container_bottom {
-  color: white;
-}
-
 #hint_icon {
   color: #333333;
 }

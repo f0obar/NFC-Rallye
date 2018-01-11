@@ -4,13 +4,12 @@
   justify-content: space-between;
 }
 
-.material-icons {
+.mdi {
   color: #282c87;
 }
 
-.material-icons:hover {
+.mdi:hover {
   color: #383dbb;
-  cursor: pointer;
 }
 
 .mat-row:hover {

@@ -8,13 +8,12 @@
   overflow: auto;
 }
 
-.material-icons {
+.mdi {
   color: #282c87;
 }
 
-.material-icons:hover {
+.mdi:hover {
   color: #383dbb;
-  cursor: pointer;
 }
 
 .progress {

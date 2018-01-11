@@ -1,7 +1,16 @@
-.icon {
-  vertical-align: middle;
-  font-size: small;
+.icon-text {
+  display: flex;
+  justify-content: flex-start;
 }
-.icon i {
-  vertical-align: middle;
+
+.icon-text div {
+  padding-left: 8px;
+}
+
+.mdi {
+  color: #282c87;
+}
+
+.mdi:hover {
+  cursor: default;
 }

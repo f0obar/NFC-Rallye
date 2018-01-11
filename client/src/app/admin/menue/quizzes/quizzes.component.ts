@@ -98,7 +98,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
   editQuiz(quiz: AdminQuiz,event: any) {
     console.log('edit quiz', quiz._id);
     // catch icon click
-    if (((event['path'])[0])['className'] !== 'material-icons') {
+    if (((event['path'])[0])['className'] !== 'mdi') {
       const edit = this.dialog.open(AdminQuizDetailComponent, {
         data: {
           currentQuiz: quiz

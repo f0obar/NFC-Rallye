@@ -31,8 +31,8 @@
       <ng-container matColumnDef="edit">
         <mat-header-cell *matHeaderCellDef> edit</mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <i class="material-icons" (click)="openMap(element)">place</i>
-          <i class="material-icons" (click)="deleteLocation(element)">delete</i>
+          <i class="mdi mdi-map-marker" (click)="openMap(element)"></i>
+          <i class="mdi mdi-delete" (click)="deleteLocation(element)"></i>
         </mat-cell>
       </ng-container>
 

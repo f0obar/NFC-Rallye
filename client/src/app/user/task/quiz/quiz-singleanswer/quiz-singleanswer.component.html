@@ -14,20 +14,20 @@
         <input matInput placeholder="Antwort" type="text" #answer ng-model="riddle.answer"
                (keydown.enter)="solveQuestion(answer.value)">
       </mat-form-field>
-      <i class="material-icons" id="hint" style="color: #333333" (click)="toggleHint()">info</i>
+      <i class="mdi mdi-information-outline" id="hint" style="color: #282c87" (click)="toggleHint()"></i>
     </div>
   </mat-card>
 </div>
 
 <div class="page-footer">
   <mat-toolbar class="container_bottom">
-    <i class="material-icons" (click)="abbrechen()">exit_to_app</i>
+    <i class="mdi mdi-exit-to-app" (click)="abbrechen()"></i>
     <span class="spacer"></span>
-    <i class="material-icons" (click)="help()">help_outline</i>
+    <i class="mdi mdi-help-circle-outline" (click)="help()"></i>
     <span class="spacer"></span>
-    <i class="material-icons" (click)="skipQuestion()">skip_next</i>
+    <i class="mdi mdi-skip-next" (click)="skipQuestion()"></i>
     <span class="spacer"></span>
-    <i class="material-icons" (click)="solveQuestion(answer.value)">done</i>
+    <i class="mdi mdi-check" (click)="solveQuestion(answer.value)"></i>
   </mat-toolbar>
 </div>
 
