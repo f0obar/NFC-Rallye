@@ -92,7 +92,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
    */
   editTag(tag: AdminTag,event: any) {
     console.log('edit tag', tag._id);
-    if (((event['path'])[0])['className'] !== 'mdi') {
+    if (((event['path'])[0])['localName'] !== 'i') {
       const edit = this.dialog.open(AdminTagDetailComponent, {
         data: {
           currentTag: tag

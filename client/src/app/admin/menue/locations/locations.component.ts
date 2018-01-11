@@ -113,7 +113,7 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
   editLocation(location: AdminLocation,event: any) {
     console.log('edit location', location._id,event);
     // catch icon click
-    if (((event['path'])[0])['className'] !== 'mdi') {
+    if (((event['path'])[0])['localName'] !== 'i') {
       const edit = this.dialog.open(AdminLocationDetailComponent, {
         data: {
           currentLocation: location
