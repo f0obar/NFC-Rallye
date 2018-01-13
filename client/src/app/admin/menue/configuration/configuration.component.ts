@@ -12,65 +12,78 @@ import {isNullOrUndefined} from 'util';
   styleUrls: ['./configuration.component.css']
 })
 export class AdminConfigurationComponent implements OnInit {
+  winText: string;
+  locations: number;
+  userName: string;
+  password: string;
+  passwordRepeat: string;
 
-  currentWinText: string;
-  currentUserName: string;
-
-  constructor(private http: HttpClient, public snackBar: MatSnackBar,public  authService: AdminAuthService, private restService: AdminRestService) {
-    this.currentWinText = 'There seems to be a problem with the internet connection';
-    this.currentUserName = 'There seems to be a problem with the internet connection';
+  constructor(private http: HttpClient, public snackBar: MatSnackBar,
+              public  authService: AdminAuthService, private restService: AdminRestService) {
+    this.winText = 'There seems to be a problem with the internet connection';
+    this.userName = 'There seems to be a problem with the internet connection';
+    this.password = '';
+    this.passwordRepeat = '';
   }
 
   ngOnInit() {
     this.loadCurrentWinText();
     this.loadCurrentUserName();
+    this.loadCurrentLocations();
   }
 
-  changeEndText(text: string) {
-    console.log('changeEndText', text);
-    this.restService.saveExistingEntry('/api/admin/config/winText',{winText: text}).subscribe();
+  saveWinText() {
+    this.restService.saveExistingEntry('/api/admin/config/winText', {winText: this.winText}).subscribe();
   }
 
-  changeUserName(name: string) {
-    console.log('changeUserName', name);
-    this.restService.saveExistingEntry('/api/admin/config/username',{username: name}).subscribe();
+  saveLocations() {
+    this.restService.saveExistingEntry('/api/admin/config/locations', {locations: this.locations}).subscribe();
   }
 
-  changePassword(newpassword: string, newpassword2: string) {
-    console.log('changePassword');
-    if (newpassword.length === 0) {
+  saveUserName() {
+    this.restService.saveExistingEntry('/api/admin/config/username', {username: this.userName}).subscribe();
+  }
+
+  savePassword() {
+    if (this.password.length === 0) {
       this.snackBar.open('Passwort darf nicht leer sein!', null, {
         duration: 2000,
         horizontalPosition: 'center'
       });
-    } else if (newpassword !== newpassword2) {
+    } else if (this.password !== this.passwordRepeat) {
       this.snackBar.open('Passwörter stimmen nicht überein!', null, {
         duration: 2000,
         horizontalPosition: 'center'
       });
     } else {
-      this.restService.saveExistingEntry('/api/admin/config/password',{
-        password: newpassword,
-        passwordRepeat: newpassword2
+      this.restService.saveExistingEntry('/api/admin/config/password', {
+        password: this.password,
+        passwordRepeat: this.passwordRepeat
       }).subscribe();
     }
   }
 
   loadCurrentWinText() {
-    console.log('loading current win text');
-    this.restService.getEntries('/api/admin/config/winText').subscribe(data=>{
-      if(!isNullOrUndefined(data)) {
-        this.currentWinText = data['result'];
+    this.restService.getEntries('/api/admin/config/winText').subscribe(data => {
+      if (!isNullOrUndefined(data)) {
+        this.winText = data['result'];
       }
     });
   }
 
 
   loadCurrentUserName() {
-    console.log('loading current win text');
-    this.restService.getEntries('/api/admin/config/username').subscribe(data=>{
-      if(!isNullOrUndefined(data)) {
-        this.currentUserName = data['result'];
+    this.restService.getEntries('/api/admin/config/username').subscribe(data => {
+      if (!isNullOrUndefined(data)) {
+        this.userName = data['result'];
+      }
+    });
+  }
+
+  loadCurrentLocations() {
+    this.restService.getEntries('/api/admin/config/locations').subscribe(data => {
+      if (!isNullOrUndefined(data)) {
+        this.locations = data['result'];
       }
     });
   }

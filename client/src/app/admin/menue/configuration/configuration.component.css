@@ -9,14 +9,14 @@
   margin: 0 auto;
 }
 
+.configButton {
+  margin-bottom: 32px;
+}
+
 mat-form-field {
   width: 100%;
 }
 
 textarea {
   resize: none;
-}
-
-button {
-  margin-bottom: 32px;
 }

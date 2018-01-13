@@ -7,6 +7,7 @@ const SolvedRiddle = require("../models/solvedRiddle");
 
 const UserException = require("../exceptions/userexception");
 
+const _ = require("lodash");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const Filter = require("bad-words");
@@ -129,7 +130,8 @@ async function createSession(groupName, password) {
     })
     .filter(uniqueFilter("location"));
 
-  console.log("activeTags", activeTags);
+  // console.log("activeTags", activeTags);
+
   let locationCount = activeTags.length;
 
   const riddles = await Riddle.find()
@@ -158,7 +160,6 @@ async function createSession(groupName, password) {
   // console.log("inactiveRiddles", inactiveRiddles);
 
   const riddlecount = nonLocationRiddles.length + locationRiddles.length;
-  //TODO way more complicated then this
   /**
    * starts new session only when enough quizzes are available
    */
@@ -249,6 +250,10 @@ async function deleteSession(_token, findById) {
 }
 
 async function advanceState(playSession) {
+  // Fix if locations field does not exist in db yet
+  if (!await Config.get("locations")) {
+    await Config.set("locations", 8);
+  }
   console.log("Advance state of session:", playSession._id);
   playSession.lastUpdated = new Date();
   playSession.task = "findLocation";
@@ -263,8 +268,8 @@ async function advanceState(playSession) {
     .filter(uniqueFilter("location"));
 
   if (!playSession.locationCount) {
-    playSession.locationCount = activeTags.length;
-    playSession.locationsToVisit = activeTags.map(function(tag) {
+    playSession.locationCount = await Config.get("locations");
+    playSession.locationsToVisit = _.sampleSize(activeTags, playSession.locationCount).map(function(tag) {
       return tag.location._id;
     });
   }

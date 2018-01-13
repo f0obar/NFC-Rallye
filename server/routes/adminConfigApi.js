@@ -6,15 +6,30 @@ const bcrypt = require('bcryptjs');
 const authenticator = require('./authMiddleware');
 
 const Config = require('../models/config');
+const Tag = require("../models/tag");
 
 const allowedKeys = {
-  get: ['username', 'winText'],
-  set: ['username', 'winText', 'password']
+  get: ['username', 'winText', 'locations'],
+  set: ['username', 'winText', 'password', 'locations']
 };
 
 const setter = {
   username: setField('username'),
   winText: setField('winText'),
+  locations: setField(
+    'locations',
+    async function (keys) {
+      const locations = parseInt(keys.locations, 10);
+      if (isNaN(locations)) {
+        return 'Location count is not a string'
+      }
+      const tags = await Tag.find();
+      if (locations > tags.length) {
+        return 'Location count too high'
+      }
+      return true;
+    }
+  ),
   password: setField(
     'password',
     function (keys) {
@@ -39,20 +54,20 @@ function setField(field, validator, converter) {
 
   return async function (keys, res) {
     if (!keys[field] || keys[field].length < 1) {
-      res.status(404);
-      res.send('No ' + field + ' given.');
+      res.status(400);
+      res.send({result: 'No ' + field + ' given.'});
       return;
     }
-    const valid = isValid(keys);
+    const valid = await isValid(keys);
     if (valid !== true) {
-      res.status(404);
-      res.send(valid);
+      res.status(400);
+      res.send({result: valid});
       return;
     }
     try {
       await Config.set(field, convert(keys[field]));
       res.status(200);
-      res.send({"changed" : true});
+      res.send({"changed": true});
     } catch (err) {
       res.status(500);
       res.send(err);
@@ -69,7 +84,7 @@ router.put('/:key', function (req, res, next) {
     setter[key](keys, res);
   } else {
     res.status(401);
-    res.send('Setting  key "' + key + '" is not allowed');
+    res.send({result: 'Setting  key "' + key + '" is not allowed'});
   }
 });
 
@@ -81,7 +96,8 @@ router.get('/:key', async function (req, res, next) {
       res.send({result: value});
     } catch (err) {
       res.status(500);
-      res.send(err);
+      console.error(err);
+      res.send({result: 'Internal Server Error'});
     }
   }
 });

@@ -27,6 +27,7 @@ async function createSession(req, res, next) {
       // empty db, lets fill it
       await Config.set('username', 'admin');
       await Config.set('password', '$2a$10$PmhJPXOKQFCZqvMZKF0Y2.oT1HKg4oSWIEJn4Z4fhqN81xrZVEgDO');
+      await Config.set('locations', 8);
       await createSession(req, res, next);
     } else {
       if (data.username === username && bcrypt.compareSync(password, data.password)) {
