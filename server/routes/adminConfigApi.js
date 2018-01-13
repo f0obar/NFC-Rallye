@@ -24,6 +24,9 @@ const setter = {
         return 'Location count is not a string'
       }
       const tags = await Tag.find();
+      if (locations <= 0) {
+        return 'Location count has to be higher than 0'
+      }
       if (locations > tags.length) {
         return 'Location count too high'
       }
