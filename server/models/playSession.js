@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const PlaySessionSchema = new Schema({
   lastUpdated: Date,
-  groupName: { type: String, unique: true },
+  groupName: { type: String, unique: true, required: true },
   password: String,
   token: { type: String, unique: true },
   startDate: Date,
