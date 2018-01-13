@@ -136,10 +136,10 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
    */
   abbrechen() {
     const deleteSession = this.dialogService.open(SharedSimpleDialogComponent, {data: {
-        title: 'Schnitzeljagd verlassen',
+        title: 'Rallye verlassen',
         message: 'Möchtest du die Session wirklich verlassen? Die Session kann fortgesetzt werden,' +
         ' indem du dich mit deinem Gruppennamen und Passwort erneut anmeldest.',
-        button1: 'JA verlassen',
+        button1: 'Ja verlassen',
         button2: 'Abbrechen'
     }});
     deleteSession.afterClosed().subscribe(result => {

@@ -117,8 +117,8 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
   deleteQuiz(quiz: AdminQuiz) {
     const d = this.dialog.open(SharedSimpleDialogComponent, {
       data: {
-        title: 'Quiz Löschen',
-        message: 'Möchtest du wirklich dieses Quiz löschen?',
+        title: 'Rätsel Löschen',
+        message: 'Möchtest du wirklich dieses Rätsel löschen?',
         button1: 'Löschen',
         button2: 'Abbrechen'
       }

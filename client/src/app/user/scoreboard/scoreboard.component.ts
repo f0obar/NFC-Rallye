@@ -28,9 +28,9 @@ export class UserScoreboardComponent implements OnInit {
    */
   abbrechen() {
     const deleteSession = this.dialogService.open(SharedSimpleDialogComponent, {data: {
-      title: 'Schnitzeljagd beenden',
-      message: 'Möchtest du die Schnitzeljagd wirklich beenden?',
-      button1: 'JA BEENDEN',
+      title: 'Rallye beenden',
+      message: 'Möchtest du die Rallye wirklich beenden?',
+      button1: 'Ja beenden',
       button2: 'Abbrechen'
     }});
     deleteSession.afterClosed().subscribe(result => {

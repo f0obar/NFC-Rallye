@@ -43,7 +43,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
     const d = this.dialog.open(SharedSimpleDialogComponent, {
       data: {
         title: 'ALLE SESSIONS LÖSCHEN',
-        message: 'Möchtest du wirklich alle aktiven Schnitzeljagd Sessions löschen?',
+        message: 'Möchtest du wirklich alle aktiven Rallye Sessions löschen?',
         button1: 'Löschen',
         button2: 'Abbrechen'
       }

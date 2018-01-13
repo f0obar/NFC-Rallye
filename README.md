@@ -1,4 +1,4 @@
-# NFC-Schnitzeljagd
+# NFC-Rallye
 
 ## Table of Contents
 * [Install](#install)

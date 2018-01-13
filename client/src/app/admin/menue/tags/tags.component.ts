@@ -107,7 +107,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
   deleteTag(tag: AdminTag) {
     const d = this.dialog.open(SharedSimpleDialogComponent, {
       data: {
-        title: 'Quiz Löschen',
+        title: 'Tag Löschen',
         message: 'Möchtest du wirklich diesen Tag löschen?',
         button1: 'Löschen',
         button2: 'Abbrechen'

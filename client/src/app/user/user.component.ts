@@ -159,8 +159,8 @@ export class UserComponent implements OnInit {
           const removeOldSession = this.dialog.open(SharedSimpleDialogComponent, {
             data: {
               title: 'Session abgelaufen',
-              message: 'Deine Schnitzeljagd Session ist leider abgelaufen',
-              button1: 'Neue Schnitzeljagd starten',
+              message: 'Deine Rallye Session ist leider abgelaufen',
+              button1: 'Neue Rallye starten',
               button2: 'Abbrechen'
             }
           });
