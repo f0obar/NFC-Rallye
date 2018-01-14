@@ -42,7 +42,7 @@ async function startPlaySession(req, res, next) {
 
 async function deletePlaySession(req, res, next) {
   try {
-    await gameService.destroySession(req.params.token);
+    await gameService.deleteSession(req.params.token);
     await scoreBoardService.pushScoreboard();
     res.send({ deleted: true });
   } catch (err) {
