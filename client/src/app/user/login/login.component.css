@@ -1,23 +1,20 @@
-.order{
-  margin-top: 10%;
-}
-
 img {
   width: 50%;
   height: 50%;
 }
 
 .centered {
+  padding-top: 8px;
   display: block;
   margin: 0 auto;
   text-align: center;
 }
 
-@media only screen and (min-width: 768px) {
-  .order{
-    margin-top: 10%;
-  }
+.mat-display-2 {
+  margin: 0 0 32px;
+}
 
+@media only screen and (min-width: 768px) {
   img {
     width: 300px;
     height: 300px;
@@ -30,7 +27,6 @@ img {
   form mat-form-field {
     width: 400px;
   }
-
 
   form button {
     width: 150px;

@@ -33,6 +33,7 @@ mat-toolbar {
 
 .mat-card {
   padding: 0;
+  display: inline-block;
 }
 
 @media only screen and (min-width: 768px) {
