@@ -43,11 +43,9 @@ export class UserLoginComponent implements OnInit,AfterViewInit {
    * @param {string} teamname
    */
   submitLogin(teamname: string, password: string ) {
-    console.log('clicked login button',teamname);
     if (teamname.length > 3 && password.length > 0) {
       this.http.post('/api/game/sessions', {groupName: teamname, password: password}).subscribe(
         (data) => {
-          console.log('loginPost data', data['token']);
           this.openSnackBar('Viel Spaß! :)');
           this.loginOutput.emit('' + data['token']);
         },
@@ -57,7 +55,7 @@ export class UserLoginComponent implements OnInit,AfterViewInit {
             this.teamname.nativeElement.value = err['error']['error']['suggestion'];
           }
           this.openSnackBar(err['error']['error']['message']);
-          console.log('loginPost error', err);
+          console.log('login error', err);
         }
       );
     } else if (teamname.length <= 3) {

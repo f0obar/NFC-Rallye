@@ -79,9 +79,7 @@ export class UserLocationMapPopupComponent implements AfterViewInit {
           .on('dragend', () => {
             const coord = String(myMarker.getLatLng()).split(',');
             const lat = coord[0].split('(')[1];
-            console.log('LAT',lat);
             const lng = coord[1].split(')')[0];
-            console.log('LNG',lng);
 
             this.data.location.latitude = lat;
             this.data.location.longitude = lng;
@@ -92,9 +90,7 @@ export class UserLocationMapPopupComponent implements AfterViewInit {
           .on('dragend', () => {
             const coord = String(myMarker.getLatLng()).split(',');
             const lat = (coord[0].split('('))[1];
-            console.log('LAT',lat);
             const lng = (coord[1].split(')'))[0];
-            console.log('LNG',lng);
 
             this.data.location.latitude = lat;
             this.data.location.longitude = lng;
@@ -107,7 +103,6 @@ export class UserLocationMapPopupComponent implements AfterViewInit {
    * submits new / edited quiz to the server using rest api
    */
   submit() {
-    console.log('location',this.data.location);
     this.restServive.saveExistingEntry('/api/admin/locations/' + this.data.location._id,
       {
         lat: this.data.location.latitude,

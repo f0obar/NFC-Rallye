@@ -22,11 +22,9 @@ export class AdminTagDetailComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.currentTag != null) {
-      console.log('tag detail initialized with location', this.data.currentTag);
       this.pageHeader = 'Vorhandenen Tag Bearbeiten';
       this.createNewEntry = false;
     } else {
-      console.log('tag detail initialized without location');
       this.loadDefaults();
       this.pageHeader = 'Neuen Tag Hinzufügen';
       this.createNewEntry = true;
@@ -43,10 +41,8 @@ export class AdminTagDetailComponent implements OnInit {
   }
 
   loadLocations() {
-    console.log('loading current locations from server');
     this.restService.getEntries('/api/admin/locations').then(data => {
         this.locations = [];
-        console.log('loaded current locations', data);
         for (const d in data) {
           if (data.hasOwnProperty(d)) {
             this.locations.push(
@@ -65,7 +61,6 @@ export class AdminTagDetailComponent implements OnInit {
   }
 
   submit() {
-    console.log('TEST', this.data.currentTag.location);
     if (isNullOrUndefined(this.data.currentTag.location)) {
       this.snackBar.open('Wähle einen zugehörigen Ort aus!', null, {
         duration: 2000,
@@ -92,7 +87,6 @@ export class AdminTagDetailComponent implements OnInit {
         }).catch(e => {
         });
       }
-      console.log('saving quiz detail', this.data.currentTag);
     }
   }
 

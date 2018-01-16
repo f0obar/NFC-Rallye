@@ -75,7 +75,6 @@ export class UserLocationCameraPopupComponent implements OnInit, AfterContentIni
 
   handleSuccess(stream): void {
     const videoTracks = stream.getVideoTracks();
-    console.log(videoTracks);
     this.video.srcObject = stream;
 
     qrcode.callback = this.read.bind(this);

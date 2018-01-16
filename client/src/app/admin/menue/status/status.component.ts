@@ -59,7 +59,6 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
   }
 
   deleteSession(playSession: PlaySession) {
-    console.log('deleting session', playSession.session_id);
 
     this.restService.deleteEntry('/api/admin/playsessions/' + playSession.session_id).then(data => {
       for (let index = 0; index < this.activePlaySessions.length; index++) {
@@ -171,7 +170,6 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
   }
 
   loadSessions() {
-    console.log('loading current play sessions');
     this.restService.getEntries('/api/admin/playsessions').then(data => {
         this.activePlaySessions = [];
         for (const d in data) {

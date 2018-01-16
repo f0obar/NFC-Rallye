@@ -36,12 +36,10 @@ qrcode.decode = function (context, width, height) {
     try {
       qrcode.result = qrcode.process();
       if (qrcode.callback) {
-        //console.log(qrcode.result);
         qrcode.callback(qrcode.result);
       }
     } catch (e) {
       // No QR Code detected yet
-      // console.log(e);
     }
   }
 };
@@ -57,7 +55,6 @@ qrcode.decode_url = function (s) {
     escaped = escape(s);
   }
   catch (e) {
-    // console.log(e);
     escaped = s;
   }
   var ret = "";
@@ -65,7 +62,6 @@ qrcode.decode_url = function (s) {
     ret = decodeURIComponent(escaped);
   }
   catch (e) {
-    // console.log(e);
     ret = escaped;
   }
   return ret;

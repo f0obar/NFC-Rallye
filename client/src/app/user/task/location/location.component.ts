@@ -122,7 +122,6 @@ export class UserLocationComponent implements AfterViewInit {
     });
     deleteSession.afterClosed().subscribe(result => {
       if (result === 'b1') {
-        console.log('user deleted session');
         this.locationLogout.emit();
       }
     });

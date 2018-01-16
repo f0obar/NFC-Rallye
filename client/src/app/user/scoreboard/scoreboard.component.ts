@@ -35,7 +35,6 @@ export class UserScoreboardComponent implements OnInit {
     }});
     deleteSession.afterClosed().subscribe(result => {
       if(result === 'b1') {
-        console.log('user deleted session');
         this.scoreboardOutput.emit();
       }
     });

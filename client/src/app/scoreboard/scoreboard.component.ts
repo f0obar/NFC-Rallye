@@ -95,7 +95,6 @@ export class ScoreboardComponent implements OnInit, AfterViewInit {
         this.updateScoreboard(data);
       },
       (err: HttpErrorResponse) => {
-        console.log('session expired', err);
       }
     );
   }

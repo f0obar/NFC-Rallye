@@ -54,7 +54,6 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
    * loads all locations from the server
    */
   loadLocationsFromServer() {
-    console.log('loading current locations from server');
     this.restService.getEntries('/api/admin/locations').then(data => {
         this.locations = [];
         for (const d in data) {
@@ -79,7 +78,6 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
    * opens a new popup dialog
    */
   addLocation() {
-    console.log('add location');
     const edit = this.dialog.open(AdminLocationDetailComponent, {
       data: {
         currentLocation: null
@@ -110,7 +108,6 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
    * @param {AdminLocation} location
    */
   editLocation(location: AdminLocation,event: any) {
-    console.log('edit location', location._id,event);
     // catch icon click
     if (((event['path'])[0])['localName'] !== 'i') {
       const edit = this.dialog.open(AdminLocationDetailComponent, {
@@ -139,8 +136,6 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
     });
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
-        console.log('delete location', location._id);
-
         this.restService.deleteEntry('/api/admin/locations/' + location._id).then(data => {
           this.loadLocationsFromServer();
         }).catch(e => {

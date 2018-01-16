@@ -52,10 +52,8 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
 
 
   loadTagsFromServer() {
-    console.log('loading current tags from server');
     this.restService.getEntries('/api/admin/tags').then(data =>{
         this.tags = [];
-        console.log('loaded current tags', data);
         for (const d in data) {
           if (data.hasOwnProperty(d)) {
             this.tags.push(
@@ -74,7 +72,6 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
    * opens new popup dialog
    */
   addTag() {
-    console.log('add location');
     const edit = this.dialog.open(AdminTagDetailComponent, {
       data: {
         currentTag: null
@@ -90,7 +87,6 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
    * @param {AdminTag} tag
    */
   editTag(tag: AdminTag,event: any) {
-    console.log('edit tag', tag._id);
     if (((event['path'])[0])['localName'] !== 'i') {
       const edit = this.dialog.open(AdminTagDetailComponent, {
         data: {
@@ -114,7 +110,6 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     });
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
-        console.log('delete quiz', tag._id);
         this.restService.deleteEntry('/api/admin/tags/' + tag._id).then(data => {
           this.loadTagsFromServer();
         }).catch(e => {

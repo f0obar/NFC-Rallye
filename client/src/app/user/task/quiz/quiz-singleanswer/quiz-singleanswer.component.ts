@@ -42,7 +42,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
   }
 
   ngOnInit() {
-    console.log('QuizComponent got initialized with', this.question);
   }
 
   ngOnChanges() {
@@ -65,7 +64,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
    * @param {string} answer
    */
   solveQuestion(answer: string) {
-    console.log('clicked solvebutton', answer);
     if (isNullOrUndefined(answer) || answer === '') {
       this.snackBar.open('Keine Antwort eingegeben!', null, {
         duration: 2000,
@@ -75,7 +73,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
     } else {
       this.http.post('/api/game/sessions/' + this.sessionID + '/riddle', {answer: answer}).subscribe(
         (data) => {
-          console.log('submit answer data', data);
           if (data['correctAnswer'] === true) {
             this.snackBar.open('Richtige Anwort!', null, {
               duration: 2000,
@@ -87,7 +84,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
             }
             this.quizOutput.emit();
           } else {
-            console.log('wrong answer');
             this.snackBar.open('Falsche Antwort', null, {
               duration: 2000,
               horizontalPosition: 'center',
@@ -116,7 +112,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
     });
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
-        console.log('skipping question');
         this.http.post('/api/game/sessions/' + this.sessionID + '/riddle', {skip: 'true'}).subscribe(
           (data) => {
             this.snackBar.open('Quiz übersprungen!', null, {
@@ -127,7 +122,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
             this.quizOutput.emit();
           },
           (err) => {
-            console.log('skip error', err);
           }
         );
       }
@@ -147,7 +141,6 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
     }});
     deleteSession.afterClosed().subscribe(result => {
       if(result === 'b1') {
-        console.log('user deleted session');
         this.quizLogout.emit();
       }
     });

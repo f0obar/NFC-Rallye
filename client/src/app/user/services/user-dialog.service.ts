@@ -7,7 +7,6 @@ export class UserDialogService {
   constructor(private dialog: MatDialog,private snackBar: MatSnackBar) { }
 
   public open(component: any,config: any): any {
-    console.log('it should work');
     this.dialog.closeAll();
     this.snackBar.dismiss();
     try {

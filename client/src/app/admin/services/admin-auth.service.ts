@@ -49,7 +49,7 @@ export class AdminAuthService {
           duration: 2000,
           horizontalPosition: 'center'
         });
-        console.log('loginPost error', err);
+        console.log('login error', err);
       }
     );
   }
@@ -57,7 +57,6 @@ export class AdminAuthService {
   public logout() {
     this.http.delete('/api/admin/session/' + this.adminToken,{headers: new HttpHeaders().set(AdminAuthService.NAME_ADMIN_AUTH, this.adminToken)}).subscribe(
       (data) => {
-        console.log('logout successfull', data);
       },
       (err) => {}
     );

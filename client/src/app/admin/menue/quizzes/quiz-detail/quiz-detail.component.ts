@@ -30,11 +30,9 @@ export class AdminQuizDetailComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.currentQuiz != null) {
-      console.log('location detail initialized with location', this.data.currentQuiz);
       this.pageHeader = 'Vorhandenes Quiz Bearbeiten';
       this.createNewEntry = false;
     } else {
-      console.log('location detail initialized without location');
       this.loadDefaults();
       this.pageHeader = 'Neues Quiz Hinzufügen';
       this.createNewEntry = true;
@@ -100,10 +98,8 @@ export class AdminQuizDetailComponent implements OnInit {
    * loads locations from server to populate the list of locations in the dialog to select corresponding location
    */
   loadLocations() {
-    console.log('loading current locations from server');
     this.restService.getEntries('/api/admin/locations').then(data => {
         this.locations = [];
-        console.log('loaded current locations', data);
         for (const d in data) {
           if (data.hasOwnProperty(d)) {
             this.locations.push(
@@ -170,7 +166,6 @@ export class AdminQuizDetailComponent implements OnInit {
       }).catch(e => {
       });
     }
-    console.log('saving quiz detail', this.data.currentQuiz);
   }
 
   /**
@@ -187,10 +182,6 @@ export class AdminQuizDetailComponent implements OnInit {
   handleFileSelect(evt) {
     const files = evt.target.files;
     const file = files[0];
-
-    console.log('filename', file.name);
-    console.log('filesize', file.size);
-    console.log('filetype', file.type);
 
     this.data.currentQuiz.image = new Object();
     this.data.currentQuiz.image.filename = file.name;

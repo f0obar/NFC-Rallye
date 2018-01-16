@@ -52,10 +52,8 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
    * loads all quizzes in the database from the server to display them in the list
    */
   loadQuizzesFromServer() {
-    console.log('loading current quizzes from server');
     this.restService.getEntries('/api/admin/riddles').then(data => {
       this.quizzes = [];
-      console.log('loaded current quizzes', data);
       for (const d in data) {
         if (data.hasOwnProperty(d)) {
           this.quizzes.push(
@@ -81,7 +79,6 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
    * Current Quiz is null and Popup dialog handles this and initializes default values.
    */
   addQuiz() {
-    console.log('add quiz');
     const edit = this.dialog.open(AdminQuizDetailComponent, {
       data: {
         currentQuiz: null
@@ -97,7 +94,6 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
    * @param {AdminQuiz} quiz to edit.
    */
   editQuiz(quiz: AdminQuiz,event: any) {
-    console.log('edit quiz', quiz._id);
     // catch icon click
     if (((event['path'])[0])['localName'] !== 'i') {
       const edit = this.dialog.open(AdminQuizDetailComponent, {
@@ -126,9 +122,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
     });
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
-        console.log('delete quiz', quiz._id);
         this.restService.deleteEntry('/api/admin/riddles/' + quiz._id).then(data => {
-          console.log('successfully deleted quiz', quiz._id);
           this.loadQuizzesFromServer();
         }).catch(e => {
         });

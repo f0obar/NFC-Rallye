@@ -87,8 +87,6 @@ export class UserProgressComponent implements OnInit, OnDestroy, OnChanges {
     const numAnim = new CountUp('points', this.points, amount);
     if (!numAnim.error) {
       numAnim.start();
-    } else {
-      console.error(numAnim.error);
     }
 
     const audio = new Audio();

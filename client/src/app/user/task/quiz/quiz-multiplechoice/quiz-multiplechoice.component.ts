@@ -6,7 +6,7 @@ import {isNullOrUndefined} from 'util';
 import {SharedSimpleDialogComponent} from '../../../../shared/simple-dialog/simple-dialog.component';
 import {UserQuizHelpPopupComponent} from '../quiz-help-popup/quiz-help-popup.component';
 import {Router} from '@angular/router';
-import {UserDialogService} from "../../../services/user-dialog.service";
+import {UserDialogService} from '../../../services/user-dialog.service';
 
 @Component({
   selector: 'app-user-quiz-multiplechoice',
@@ -34,7 +34,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit() {
-    console.log('QuizComponent got initialized with', this.question);
   }
 
   ngAfterViewInit() {
@@ -48,7 +47,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
    * @param {string} answer
    */
   solveQuestion(answer: string) {
-    console.log('clicked solvebutton', answer);
     if (isNullOrUndefined(answer) || answer === '') {
       this.snackBar.open('Keine Antwort eingegeben!', null, {
         duration: 2000,
@@ -58,7 +56,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
     } else {
       this.http.post('/api/game/sessions/' + this.sessionID + '/riddle', {answer: answer}).subscribe(
         (data) => {
-          console.log('submit answer data', data);
           if (data['correctAnswer'] === true) {
             this.snackBar.open('Richtige Anwort!', null, {
               duration: 2000,
@@ -74,7 +71,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
               this.quizOutput.emit();
             }, 2000);
           } else {
-            console.log('wrong answer');
             this.snackBar.open('Falsche Antwort', null, {
               duration: 2000,
               horizontalPosition: 'center',
@@ -113,7 +109,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
     });
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
-        console.log('skipping question');
         this.http.post('/api/game/sessions/' + this.sessionID + '/riddle', {skip: 'true'}).subscribe(
           (data) => {
             this.snackBar.open('Quiz übersprungen!', null, {
@@ -124,7 +119,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
             this.quizOutput.emit();
           },
           (err) => {
-            console.log('skip error', err);
           }
         );
       }
@@ -144,7 +138,6 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
     }});
     deleteSession.afterClosed().subscribe(result => {
       if(result === 'b1') {
-        console.log('user deleted session');
         this.quizLogout.emit();
       }
     });
