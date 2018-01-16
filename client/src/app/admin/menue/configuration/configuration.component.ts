@@ -33,15 +33,18 @@ export class AdminConfigurationComponent implements OnInit {
   }
 
   saveWinText() {
-    this.restService.saveExistingEntry('/api/admin/config/winText', {winText: this.winText}).subscribe();
+    this.restService.saveExistingEntry('/api/admin/config/winText', {winText: this.winText}).then().catch(e => {
+    });
   }
 
   saveLocations() {
-    this.restService.saveExistingEntry('/api/admin/config/locations', {locations: this.locations}).subscribe();
+    this.restService.saveExistingEntry('/api/admin/config/locations', {locations: this.locations}).then().catch(e => {
+    });
   }
 
   saveUserName() {
-    this.restService.saveExistingEntry('/api/admin/config/username', {username: this.userName}).subscribe();
+    this.restService.saveExistingEntry('/api/admin/config/username', {username: this.userName}).then().catch(e => {
+    });
   }
 
   savePassword() {
@@ -59,32 +62,30 @@ export class AdminConfigurationComponent implements OnInit {
       this.restService.saveExistingEntry('/api/admin/config/password', {
         password: this.password,
         passwordRepeat: this.passwordRepeat
-      }).subscribe();
+      }).then().catch(e => {
+      });
     }
   }
 
   loadCurrentWinText() {
-    this.restService.getEntries('/api/admin/config/winText').subscribe(data => {
-      if (!isNullOrUndefined(data)) {
+    this.restService.getEntries('/api/admin/config/winText').then(data => {
         this.winText = data['result'];
-      }
-    });
+    }).catch(e => {
+    });;
   }
 
 
   loadCurrentUserName() {
-    this.restService.getEntries('/api/admin/config/username').subscribe(data => {
-      if (!isNullOrUndefined(data)) {
+    this.restService.getEntries('/api/admin/config/username').then(data => {
         this.userName = data['result'];
-      }
+    }).catch(e => {
     });
   }
 
   loadCurrentLocations() {
-    this.restService.getEntries('/api/admin/config/locations').subscribe(data => {
-      if (!isNullOrUndefined(data)) {
-        this.locations = data['result'];
-      }
+    this.restService.getEntries('/api/admin/config/locations').then(data => {
+      this.locations = data['result'];
+    }).catch(e => {
     });
   }
 }

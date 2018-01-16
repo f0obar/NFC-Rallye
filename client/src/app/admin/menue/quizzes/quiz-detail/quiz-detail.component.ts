@@ -101,8 +101,7 @@ export class AdminQuizDetailComponent implements OnInit {
    */
   loadLocations() {
     console.log('loading current locations from server');
-    this.restService.getEntries('/api/admin/locations').subscribe(data => {
-      if (!isNullOrUndefined(data)) {
+    this.restService.getEntries('/api/admin/locations').then(data => {
         this.locations = [];
         console.log('loaded current locations', data);
         for (const d in data) {
@@ -118,7 +117,7 @@ export class AdminQuizDetailComponent implements OnInit {
                 data[d]['lvl'] + ''));
           }
         }
-      }
+    }).catch(e => {
     });
   }
 
@@ -151,10 +150,9 @@ export class AdminQuizDetailComponent implements OnInit {
         isActive: this.data.currentQuiz.isActive,
         image: this.data.currentQuiz.image,
         code: this.data.currentQuiz.code
-      }).subscribe(data => {
-        if (data === true){
+      }).then(data => {
           this.dialogRef.close();
-        }
+      }).catch(e => {
       });
     } else {
       this.restService.saveNewEntry('/api/admin/riddles',{
@@ -167,10 +165,9 @@ export class AdminQuizDetailComponent implements OnInit {
         isActive: this.data.currentQuiz.isActive,
         image: this.data.currentQuiz.image,
         code: this.data.currentQuiz.code
-      }).subscribe(data => {
-        if (data === true){
-          this.dialogRef.close();
-        }
+      }).then(data => {
+        this.dialogRef.close();
+      }).catch(e => {
       });
     }
     console.log('saving quiz detail', this.data.currentQuiz);

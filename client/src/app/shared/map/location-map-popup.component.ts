@@ -113,11 +113,10 @@ export class UserLocationMapPopupComponent implements AfterViewInit {
         lat: this.data.location.latitude,
         lng: this.data.location.longitude,
         lvl: this.data.location.level
-      }).subscribe(data => {
-      if(data === true){
+      }).then(data => {
         this.dialogRef.close();
-      }
-    });
+    }).catch(e => {
+    });;
   }
 
   /**

@@ -49,10 +49,9 @@ export class AdminLocationDetailComponent implements OnInit {
         isActive: this.data.currentLocation.isActive,
         name: this.data.currentLocation.name,
         _id: this.data.currentLocation._id
-      }).subscribe(data => {
-        if(data === true){
+      }).then(data => {
           this.dialogRef.close();
-        }
+      }).catch(e => {
       });
     } else {
       this.restService.saveNewEntry('/api/admin/locations',{
@@ -60,10 +59,9 @@ export class AdminLocationDetailComponent implements OnInit {
         image: this.data.currentLocation.image,
         isActive: this.data.currentLocation.isActive,
         name: this.data.currentLocation.name
-      }).subscribe(data => {
-        if(data === true){
-          this.dialogRef.close();
-        }
+      }).then(data => {
+        this.dialogRef.close();
+      }).catch(e => {
       });
     }
   }

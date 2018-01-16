@@ -60,17 +60,18 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
 
   deleteSession(playSession: PlaySession) {
     console.log('deleting session', playSession.session_id);
-    this.restService.deleteEntry('/api/admin/playsessions/' + playSession.session_id).subscribe(data => {
-      if(data === true){
-        for (let index = 0; index < this.activePlaySessions.length; index++) {
-          if (this.activePlaySessions[index].session_id === playSession.session_id) {
-            this.activePlaySessions.splice(index, 1);
-          }
+
+    this.restService.deleteEntry('/api/admin/playsessions/' + playSession.session_id).then(data => {
+      for (let index = 0; index < this.activePlaySessions.length; index++) {
+        if (this.activePlaySessions[index].session_id === playSession.session_id) {
+          this.activePlaySessions.splice(index, 1);
         }
-        this.dataSource.data = this.activePlaySessions;
       }
+      this.dataSource.data = this.activePlaySessions;
+    }).catch(e => {
     });
   }
+
 
   deleteSessionWithDialog(playSession: PlaySession) {
     const d = this.dialog.open(SharedSimpleDialogComponent, {
@@ -171,8 +172,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
 
   loadSessions() {
     console.log('loading current play sessions');
-    this.restService.getEntries('/api/admin/playsessions').subscribe(data => {
-      if(!isNullOrUndefined(data)){
+    this.restService.getEntries('/api/admin/playsessions').then(data => {
         this.activePlaySessions = [];
         for (const d in data) {
           if (data.hasOwnProperty(d)) {
@@ -213,7 +213,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
         }
         this.resolveAlias(this.activePlaySessions);
         this.dataSource.data = this.activePlaySessions;
-      }
+    }).catch(e => {
     });
   }
 
@@ -233,13 +233,12 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
 
   resolveAlias(playSessions: PlaySession[]){
     let locationNames;
-    this.restService.getEntries('/api/admin/locationnames').subscribe(data => {
-      if(!isNullOrUndefined(data)){
+    this.restService.getEntries('/api/admin/locationnames').then(data => {
         locationNames = data['locations'];
         for (const playSession of playSessions){
           playSession.setLocationAlias(locationNames[playSession.sessionLocation]);
         }
-      }
+    }).catch(e => {
     });
   }
 }

@@ -30,18 +30,16 @@ export class AdminStatusDetailComponent implements OnInit {
       this.restService.saveExistingEntry('/api/admin/playsessions/' + this.data.playSession.session_id,{
         password: password,
         groupName: this.data.playSession.sessionGroupName,
-      }).subscribe(data => {
-        if(data === true){
+      }).then(data => {
           this.dialogRef.close();
-        }
+      }).catch(e => {
       });
     } else {
       this.restService.saveExistingEntry('/api/admin/playsessions/' + this.data.playSession.session_id,{
         groupName: this.data.playSession.sessionGroupName
-      }).subscribe(data => {
-        if(data === true){
+      }).then(data => {
           this.dialogRef.close();
-        }
+      }).catch(e => {
       });
     }
   }

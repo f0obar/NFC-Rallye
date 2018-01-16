@@ -53,7 +53,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
    */
   loadQuizzesFromServer() {
     console.log('loading current quizzes from server');
-    this.restService.getEntries('/api/admin/riddles').subscribe(data => {
+    this.restService.getEntries('/api/admin/riddles').then(data => {
       this.quizzes = [];
       console.log('loaded current quizzes', data);
       for (const d in data) {
@@ -72,6 +72,7 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
         }
       }
       this.dataSource.data = this.quizzes;
+    }).catch(e => {
     });
   }
 
@@ -126,11 +127,10 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
         console.log('delete quiz', quiz._id);
-        this.restService.deleteEntry('/api/admin/riddles/' + quiz._id).subscribe(data => {
-          if(data === true){
-            console.log('successfully deleted quiz', quiz._id);
-            this.loadQuizzesFromServer();
-          }
+        this.restService.deleteEntry('/api/admin/riddles/' + quiz._id).then(data => {
+          console.log('successfully deleted quiz', quiz._id);
+          this.loadQuizzesFromServer();
+        }).catch(e => {
         });
       }
     });

@@ -55,8 +55,7 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
    */
   loadLocationsFromServer() {
     console.log('loading current locations from server');
-    this.restService.getEntries('/api/admin/locations').subscribe(data => {
-      if(!isNullOrUndefined(data)){
+    this.restService.getEntries('/api/admin/locations').then(data => {
         this.locations = [];
         for (const d in data) {
           if (data.hasOwnProperty(d)) {
@@ -72,7 +71,7 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
           }
         }
         this.dataSource.data = this.locations;
-      }
+    }).catch(e => {
     });
   }
 
@@ -142,10 +141,9 @@ export class AdminLocationsComponent implements OnInit, AfterViewInit {
       if (result === 'b1') {
         console.log('delete location', location._id);
 
-        this.restService.deleteEntry('/api/admin/locations/' + location._id).subscribe(data => {
-          if(data === true){
-            this.loadLocationsFromServer();
-          }
+        this.restService.deleteEntry('/api/admin/locations/' + location._id).then(data => {
+          this.loadLocationsFromServer();
+        }).catch(e => {
         });
       }
     });

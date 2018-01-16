@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {isNullOrUndefined} from 'util';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 
 @Injectable()
 export class AdminAuthService {
@@ -11,7 +11,7 @@ export class AdminAuthService {
   private adminToken = null;
 
 
-  constructor(private http: HttpClient, public snackBar: MatSnackBar) {
+  constructor(private http: HttpClient, public snackBar: MatSnackBar,private dialog: MatDialog) {
     if (localStorage.getItem(AdminAuthService.NAME_ADMIN_TOKEN) !== null) {
       this.http.get('/api/admin/playsessions',
         {headers: new HttpHeaders().set(AdminAuthService.NAME_ADMIN_AUTH,
@@ -59,12 +59,11 @@ export class AdminAuthService {
       (data) => {
         console.log('logout successfull', data);
       },
-      (err) => {
-        console.log('logout error', err);
-      }
+      (err) => {}
     );
 
     localStorage.removeItem(AdminAuthService.NAME_ADMIN_TOKEN);
     this.adminToken = null;
+    this.dialog.closeAll();
   }
 }

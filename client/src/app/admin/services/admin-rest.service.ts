@@ -13,16 +13,19 @@ export class AdminRestService {
   constructor(public http: HttpClient, private snackBar: MatSnackBar, private authService: AdminAuthService) {
   }
 
-  public getEntries(url: string): any {
+  public getEntries(url: string): Promise<Object> {
     return this.http.get(url,
       {headers: new HttpHeaders().set(AdminRestService.NAME_ADMIN_AUTH, this.authService.getAdminToken())}).map(
       (data) => {
         return data;
       }
-    ).catch((e: any) => Observable.throw(this.handleError(e)));
+    ).catch((e: any) => {
+      this.handleError(e);
+      return null;
+    }).toPromise();
   }
 
-  public saveExistingEntry(url: string, body: any): any {
+  public saveExistingEntry(url: string, body: any): Promise<Object> {
     return this.http.put(url, body,
       {headers: new HttpHeaders().set(AdminRestService.NAME_ADMIN_AUTH, this.authService.getAdminToken())}).map(
       () => {
@@ -32,10 +35,13 @@ export class AdminRestService {
         });
         return true;
       }
-    ).catch((e: any) => Observable.throw(this.handleError(e)));
+    ).catch((e: any) => {
+      this.handleError(e);
+      return null;
+    }).toPromise();
   }
 
-  public saveNewEntry(url: string, body: any): any {
+  public saveNewEntry(url: string, body: any): Promise<Object> {
     return this.http.post(url, body,
       {headers: new HttpHeaders().set(AdminRestService.NAME_ADMIN_AUTH, this.authService.getAdminToken())}).map(
       () => {
@@ -45,11 +51,14 @@ export class AdminRestService {
         });
         return true;
       }
-    ).catch((e: any) => Observable.throw(this.handleError(e)));
+    ).catch((e: any) => {
+      this.handleError(e);
+      return null;
+    }).toPromise();
   }
 
 
-  public deleteEntry(url: string): any {
+  public deleteEntry(url: string): Promise<Object> {
     return this.http.delete(url,
       {headers: new HttpHeaders().set(AdminRestService.NAME_ADMIN_AUTH, this.authService.getAdminToken())}).map(
       () => {
@@ -59,8 +68,12 @@ export class AdminRestService {
         });
         return true;
       }
-    ).catch((e: any) => Observable.throw(this.handleError(e)));
+    ).catch((e: any) => {
+      this.handleError(e);
+      return null;
+    }).toPromise();
   }
+
 
   private handleError(error: any) {
     if (error['status'] === 400 && error.error.result) {

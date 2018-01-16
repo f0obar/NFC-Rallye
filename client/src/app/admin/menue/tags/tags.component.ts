@@ -53,8 +53,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
 
   loadTagsFromServer() {
     console.log('loading current tags from server');
-    this.restService.getEntries('/api/admin/tags').subscribe(data =>{
-      if(!isNullOrUndefined(data)){
+    this.restService.getEntries('/api/admin/tags').then(data =>{
         this.tags = [];
         console.log('loaded current tags', data);
         for (const d in data) {
@@ -67,7 +66,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
           }
         }
         this.dataSource.data = this.tags;
-      }
+    }).catch(e => {
     });
   }
 
@@ -116,10 +115,9 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
     d.afterClosed().subscribe(result => {
       if (result === 'b1') {
         console.log('delete quiz', tag._id);
-        this.restService.deleteEntry('/api/admin/tags/' + tag._id).subscribe(data => {
-          if(data === true){
-            this.loadTagsFromServer();
-          }
+        this.restService.deleteEntry('/api/admin/tags/' + tag._id).then(data => {
+          this.loadTagsFromServer();
+        }).catch(e => {
         });
       }
     });
