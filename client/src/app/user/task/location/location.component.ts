@@ -27,7 +27,11 @@ export class UserLocationComponent implements AfterViewInit {
   @Output()
   locationFound: EventEmitter<any> = new EventEmitter();
 
-  constructor(private http: HttpClient, public dialog: MatDialog, public snackBar: MatSnackBar, private router: Router,private dialogService: UserDialogService) {
+  constructor(private http: HttpClient,
+              public dialog: MatDialog,
+              public snackBar: MatSnackBar,
+              private router: Router,
+              private dialogService: UserDialogService) {
   }
 
   ngAfterViewInit() {

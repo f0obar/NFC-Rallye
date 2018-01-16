@@ -30,7 +30,11 @@ export class UserQuizMultiplechoiceComponent implements OnInit,AfterViewInit {
   usedAnswers = [];
   solution = '';
 
-  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog,private router: Router, private dialogService: UserDialogService) {
+  constructor(private http: HttpClient,
+              public snackBar: MatSnackBar,
+              public dialog: MatDialog,
+              private router: Router,
+              private dialogService: UserDialogService) {
   }
 
   ngOnInit() {

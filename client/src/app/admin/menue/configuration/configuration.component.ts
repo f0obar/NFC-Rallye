@@ -1,10 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import {MatSnackBar} from '@angular/material';
 import {AdminAuthService} from '../../services/admin-auth.service';
 import {AdminRestService} from '../../services/admin-rest.service';
-import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-admin-configuration',
@@ -71,7 +70,7 @@ export class AdminConfigurationComponent implements OnInit {
     this.restService.getEntries('/api/admin/config/winText').then(data => {
         this.winText = data['result'];
     }).catch(e => {
-    });;
+    });
   }
 
 

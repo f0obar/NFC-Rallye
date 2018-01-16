@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {AdminAuthService} from './admin-auth.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material';
-import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
@@ -88,7 +87,8 @@ export class AdminRestService {
       });
       this.authService.logout();
     } else {
-      this.snackBar.open('Ein Fehler ist Aufgetreten', null, {
+      console.log('TEST',error);
+      this.snackBar.open('Ein Fehler ist Aufgetreten: ' + error['statusText'] , null, {
         duration: 2000,
         horizontalPosition: 'center'
       });

@@ -17,7 +17,10 @@ export class AdminTagDetailComponent implements OnInit {
   locations: Array<AdminLocation>;
 
   constructor(public dialogRef: MatDialogRef<AdminTagDetailComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar,public  authService: AdminAuthService, private restService: AdminRestService) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public snackBar: MatSnackBar,
+              public  authService: AdminAuthService,
+              private restService: AdminRestService) {
   }
 
   ngOnInit() {

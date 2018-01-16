@@ -20,7 +20,10 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource();
 
 
-  constructor(public dialog: MatDialog, private cdRef : ChangeDetectorRef,public  authService: AdminAuthService, private restService: AdminRestService) {
+  constructor(public dialog: MatDialog,
+              private cdRef : ChangeDetectorRef,
+              public  authService: AdminAuthService,
+              private restService: AdminRestService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -174,6 +177,7 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
         this.activePlaySessions = [];
         for (const d in data) {
           if (data.hasOwnProperty(d)) {
+            console.log('TEST',data[d]);
             const playSession =
               new PlaySession(data[d]['groupName'],
                 null,
@@ -248,7 +252,8 @@ export class PlaySession {
               public sessionLocation: string,
               public sessionLocationCount: string,
               public sessionLocationsToVisit: Array<string>,
-              public sessionRiddle: string, public task: string,
+              public sessionRiddle: string,
+              public task: string,
               public sessionUsedRiddles: Array<string>,
               public session_id: string,
               public startDate: Date,

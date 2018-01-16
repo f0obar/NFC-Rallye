@@ -16,7 +16,10 @@ export class AdminLocationDetailComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AdminLocationDetailComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar, public authService: AdminAuthService, private restService: AdminRestService) {
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public snackBar: MatSnackBar,
+    public authService: AdminAuthService,
+    private restService: AdminRestService) {
   }
 
   ngOnInit() {
@@ -92,7 +95,9 @@ export class AdminLocationDetailComponent implements OnInit {
   /**
    * checks if there is a valid image
    */
-  isImageAvailable():boolean {
-    return  !isNullOrUndefined(this.data.currentLocation.image) &&!isNullOrUndefined(this.data.currentLocation.image.filetype) && this.data.currentLocation.image.filetype != "";
+  isImageAvailable(): boolean {
+    return !isNullOrUndefined(this.data.currentLocation.image)
+      && !isNullOrUndefined(this.data.currentLocation.image.filetype)
+      && this.data.currentLocation.image.filetype !== '';
   }
 }

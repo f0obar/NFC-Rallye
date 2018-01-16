@@ -31,7 +31,11 @@ export class UserQuizSingleanswerComponent implements OnInit, OnChanges, AfterVi
   @Output()
   quizPointEmitter: EventEmitter<any> = new EventEmitter();
 
-  constructor(private http: HttpClient, public snackBar: MatSnackBar, public dialog: MatDialog,private router: Router,private dialogService: UserDialogService) {
+  constructor(private http: HttpClient,
+              public snackBar: MatSnackBar,
+              public dialog: MatDialog,
+              private router: Router,
+              private dialogService: UserDialogService) {
   }
 
   ngAfterViewInit() {

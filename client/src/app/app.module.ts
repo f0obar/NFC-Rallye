@@ -48,7 +48,7 @@ import {WebSocketService} from './scoreboard/services/websocket.service';
 import {HighlightModule} from 'ngx-highlightjs';
 import {AdminAuthService} from './admin/services/admin-auth.service';
 import {AdminRestService} from './admin/services/admin-rest.service';
-import {UserDialogService} from "./user/services/user-dialog.service";
+import {UserDialogService} from './user/services/user-dialog.service';
 
 
 const routes: Routes = [

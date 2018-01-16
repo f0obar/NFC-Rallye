@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, Inject, HostListener} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {isNullOrUndefined} from 'util';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {AdminRestService} from '../../admin/services/admin-rest.service';
 
 declare const L;
@@ -28,12 +28,15 @@ export class UserLocationMapPopupComponent implements AfterViewInit {
   mapStyles = {
     'width': '400px',
     'height' : '300px'
-  }
+  };
 
   rendered = false;
 
   constructor(public dialogRef: MatDialogRef<UserLocationMapPopupComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public snackBar: MatSnackBar,private http: HttpClient, private restServive: AdminRestService) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public snackBar: MatSnackBar,
+              private http: HttpClient,
+              private restServive: AdminRestService) {
     this.resizeMap();
     this.rendered = true;
   }
@@ -111,7 +114,7 @@ export class UserLocationMapPopupComponent implements AfterViewInit {
       }).then(data => {
         this.dialogRef.close();
     }).catch(e => {
-    });;
+    });
   }
 
   /**

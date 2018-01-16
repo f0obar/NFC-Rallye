@@ -9,7 +9,9 @@ import {AdminRestService} from '../../../services/admin-rest.service';
   styleUrls: ['./status-detail.component.css']
 })
 export class AdminStatusDetailComponent implements OnInit {
-  constructor(public dialogRef: MatDialogRef<AdminStatusDetailComponent>,@Inject(MAT_DIALOG_DATA,) public data: any,public  authService: AdminAuthService, private restService: AdminRestService) { }
+  constructor(public dialogRef: MatDialogRef<AdminStatusDetailComponent>,@Inject(MAT_DIALOG_DATA,) public data: any,
+              public  authService: AdminAuthService,
+              private restService: AdminRestService) { }
 
   ngOnInit() {
 

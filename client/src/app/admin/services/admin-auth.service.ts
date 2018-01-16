@@ -55,7 +55,8 @@ export class AdminAuthService {
   }
 
   public logout() {
-    this.http.delete('/api/admin/session/' + this.adminToken,{headers: new HttpHeaders().set(AdminAuthService.NAME_ADMIN_AUTH, this.adminToken)}).subscribe(
+    this.http.delete('/api/admin/session/' + this.adminToken,
+      {headers: new HttpHeaders().set(AdminAuthService.NAME_ADMIN_AUTH, this.adminToken)}).subscribe(
       (data) => {
       },
       (err) => {}
