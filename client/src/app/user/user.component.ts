@@ -37,7 +37,8 @@ export class UserComponent implements OnInit {
   openSnackBar(msg: string): void {
     this.snackBar.open(msg, null, {
       duration: 2000,
-      horizontalPosition: 'center'
+      horizontalPosition: 'center',
+      panelClass: 'offset-snack-bar'
     });
   }
 
@@ -87,7 +88,6 @@ export class UserComponent implements OnInit {
   getStateFromServer() {
     this.http.get('/api/game/sessions/' + this.sessionID).subscribe(
       data => {
-        console.log('data from server', data);
         const dataLocation = data['location'];
         const dataQuestion = data['riddle'];
         const dataProgress = data['progress'];
@@ -147,7 +147,6 @@ export class UserComponent implements OnInit {
               dataQuestion['image'],
               dataQuestion['code']);
           }
-          console.log('the new question/location', this.currentQuestion, this.currentLocation);
         } else {
           this.groupName = data['groupName'];
           this.winText = data['winText'];
@@ -181,15 +180,12 @@ export class UserComponent implements OnInit {
    * @param {number} amount
    */
   setPoints(amount: number) {
-    console.log('setPoints called');
     if (amount < this.points) {
       this.points = amount;
     }
     else if (amount > this.points && amount > Number(localStorage.getItem('points'))) {
-      console.log('DEBUG', this.points, localStorage.getItem('points'), amount);
       this.progress.increasePoints(amount);
     }
-    console.log('SETTING', amount);
     localStorage.setItem('points', '' + amount);
   }
 
@@ -220,11 +216,10 @@ export class UserComponent implements OnInit {
       (data) => {
         if (data['correctLocation'] === true) {
           this.openSnackBar('Du hast einen Ort gefunden!');
-          this.router.navigate(['root']);
         } else {
           this.openSnackBar('Das ist der falsche Ort!');
-          this.router.navigate(['root']);
         }
+        this.router.navigate(['root']);
         this.getStateFromServer();
       },
       (err) => {

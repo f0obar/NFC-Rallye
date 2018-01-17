@@ -30,7 +30,6 @@ export class UserTaskComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('TaskComponent got initialized with',this.question,this.location);
   }
 
   isUnsolvedQuiz(): boolean {
