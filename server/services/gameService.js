@@ -6,6 +6,7 @@ const Location = require("../models/location");
 const SolvedRiddle = require("../models/solvedRiddle");
 
 const UserException = require("../exceptions/userexception");
+const scoreBoardService = require("../services/scoreboardService");
 
 const _ = require("lodash");
 const bcrypt = require("bcryptjs");
@@ -104,6 +105,7 @@ async function checkLocation(token, tagID, skip) {
       session.task = "solveRiddle";
       session.points += LOCATION_VISIT_POINTS;
       await session.save();
+      await scoreBoardService.pushScoreboard();
       return { correctLocation: true, points: session.points };
     } else {
       return { correctLocation: false, points: session.points };

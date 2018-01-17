@@ -150,7 +150,6 @@ async function sessionDeleter() {
     });
   } catch (err) {
     console.log("ERROR: " + err);
-    return;
   }
 }
 
