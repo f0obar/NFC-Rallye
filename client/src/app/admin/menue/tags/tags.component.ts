@@ -5,7 +5,6 @@ import {AdminTag} from './admin-tag';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {AdminAuthService} from '../../services/admin-auth.service';
 import {AdminRestService} from '../../services/admin-rest.service';
-import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-admin-tags',
@@ -14,17 +13,15 @@ import {isNullOrUndefined} from 'util';
 })
 export class AdminTagsComponent implements OnInit, AfterViewInit {
 
-  constructor(private dialog: MatDialog,public  authService: AdminAuthService, private restService: AdminRestService) {
-    if (this.port === '80' ||this.port === '443') {
-      this.port = '';
-    } else {
+  constructor(private dialog: MatDialog, public  authService: AdminAuthService, private restService: AdminRestService) {
+    if (this.port !== '') {
       this.port = ':' + this.port;
     }
   }
 
   public tags: Array<AdminTag>;
 
-  displayedColumns = ['tagID','alias', 'location','url', 'edit'];
+  displayedColumns = ['tagID', 'alias', 'location', 'url', 'edit'];
 
   dataSource = new MatTableDataSource();
   hostname = window.location.hostname;
@@ -58,18 +55,18 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
 
 
   loadTagsFromServer() {
-    this.restService.getEntries('/api/admin/tags').then(data =>{
-        this.tags = [];
-        for (const d in data) {
-          if (data.hasOwnProperty(d)) {
-            this.tags.push(
-              new AdminTag(data[d]['alias'],
-                data[d]['location'],
-                data[d]['tagID'],
-                data[d]['_id']));
-          }
+    this.restService.getEntries('/api/admin/tags').then(data => {
+      this.tags = [];
+      for (const d in data) {
+        if (data.hasOwnProperty(d)) {
+          this.tags.push(
+            new AdminTag(data[d]['alias'],
+              data[d]['location'],
+              data[d]['tagID'],
+              data[d]['_id']));
         }
-        this.dataSource.data = this.tags;
+      }
+      this.dataSource.data = this.tags;
     }).catch(e => {
     });
   }
@@ -92,7 +89,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
    * opens new popup dialog with existing tag
    * @param {AdminTag} tag
    */
-  editTag(tag: AdminTag,event: any) {
+  editTag(tag: AdminTag, event: any) {
     if (((event['path'])[0])['localName'] !== 'i') {
       const edit = this.dialog.open(AdminTagDetailComponent, {
         data: {

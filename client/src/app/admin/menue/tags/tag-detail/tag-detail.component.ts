@@ -23,9 +23,7 @@ export class AdminTagDetailComponent implements OnInit {
               public snackBar: MatSnackBar,
               public  authService: AdminAuthService,
               private restService: AdminRestService) {
-    if (this.port === '80' ||this.port === '443') {
-      this.port = '';
-    } else {
+    if (this.port !== '') {
       this.port = ':' + this.port;
     }
   }
@@ -52,20 +50,20 @@ export class AdminTagDetailComponent implements OnInit {
 
   loadLocations() {
     this.restService.getEntries('/api/admin/locations').then(data => {
-        this.locations = [];
-        for (const d in data) {
-          if (data.hasOwnProperty(d)) {
-            this.locations.push(
-              new AdminLocation(data[d]['description'],
-                data[d]['image'],
-                data[d]['isActive'],
-                data[d]['name'],
-                data[d]['_id'],
-                data[d]['lat'],
-                data[d]['lng'],
-                data[d]['lvl'] + ''));
-          }
+      this.locations = [];
+      for (const d in data) {
+        if (data.hasOwnProperty(d)) {
+          this.locations.push(
+            new AdminLocation(data[d]['description'],
+              data[d]['image'],
+              data[d]['isActive'],
+              data[d]['name'],
+              data[d]['_id'],
+              data[d]['lat'],
+              data[d]['lng'],
+              data[d]['lvl'] + ''));
         }
+      }
     }).catch(e => {
     });
   }
@@ -84,11 +82,11 @@ export class AdminTagDetailComponent implements OnInit {
           tagID: this.data.currentTag.tagID,
           _id: this.data.currentTag._id
         }).then(data => {
-            this.dialogRef.close();
+          this.dialogRef.close();
         }).catch(e => {
         });
       } else {
-        this.restService.saveNewEntry('/api/admin/tags',{
+        this.restService.saveNewEntry('/api/admin/tags', {
           alias: this.data.currentTag.alias,
           location: this.data.currentTag.location,
           tagID: this.data.currentTag.tagID
