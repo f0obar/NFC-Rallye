@@ -200,7 +200,6 @@ export class UserComponent implements OnInit {
    */
   parseJsonDateToDate(data: any): Date {
     const date = new Date(data);
-    console.log('PARSED', date);
     return date;
   }
 
@@ -215,7 +214,6 @@ export class UserComponent implements OnInit {
   foundLocation(url: string) {
     // extract location id:
     const suffix = url.split('/')[url.split('/').length - 1];
-    console.log('SUFFIX', suffix);
 
 
     this.http.post('/api/game/sessions/' + this.sessionID + '/location', {tagID: suffix}).subscribe(
@@ -223,7 +221,7 @@ export class UserComponent implements OnInit {
         if (data['correctLocation'] === true) {
           this.openSnackBar('Du hast einen Ort gefunden!');
           this.router.navigate(['root']);
-        } else if (data['correctLocation'] === false) {
+        } else {
           this.openSnackBar('Das ist der falsche Ort!');
           this.router.navigate(['root']);
         }
