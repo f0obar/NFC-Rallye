@@ -5,6 +5,7 @@ import {AdminTag} from './admin-tag';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {AdminAuthService} from '../../services/admin-auth.service';
 import {AdminRestService} from '../../services/admin-rest.service';
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-admin-tags',
@@ -90,7 +91,10 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
    * @param {AdminTag} tag
    */
   editTag(tag: AdminTag, event: any) {
-    if (((event['path'])[0])['localName'] !== 'i') {
+    if ((!isNullOrUndefined(event['path'])
+        && ((event['path'])[0])['localName'] !== 'i')
+      || ((!isNullOrUndefined(event['explicitOriginalTarget'])
+        && (event['explicitOriginalTarget'])['localName'] !== 'i'))) {
       const edit = this.dialog.open(AdminTagDetailComponent, {
         data: {
           currentTag: tag

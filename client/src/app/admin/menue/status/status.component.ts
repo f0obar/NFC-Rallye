@@ -220,7 +220,10 @@ export class AdminStatusComponent implements OnInit, AfterViewInit {
   }
 
   openDetail(playSession: PlaySession,event: any) {
-    if (((event['path'])[0])['localName'] !== 'i') {
+    if ((!isNullOrUndefined(event['path'])
+        && ((event['path'])[0])['localName'] !== 'i')
+      || ((!isNullOrUndefined(event['explicitOriginalTarget'])
+        && (event['explicitOriginalTarget'])['localName'] !== 'i'))) {
       const d = this.dialog.open(AdminStatusDetailComponent, {
         data: {
           playSession: playSession

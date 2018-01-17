@@ -5,6 +5,7 @@ import {AdminQuizDetailComponent} from './quiz-detail/quiz-detail.component';
 import {SharedSimpleDialogComponent} from '../../../shared/simple-dialog/simple-dialog.component';
 import {AdminAuthService} from '../../services/admin-auth.service';
 import {AdminRestService} from '../../services/admin-rest.service';
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-admin-quizzes',
@@ -95,7 +96,10 @@ export class AdminQuizzesComponent implements OnInit, AfterViewInit {
    */
   editQuiz(quiz: AdminQuiz,event: any) {
     // catch icon click
-    if (((event['path'])[0])['localName'] !== 'i') {
+    if ((!isNullOrUndefined(event['path'])
+        && ((event['path'])[0])['localName'] !== 'i')
+      || ((!isNullOrUndefined(event['explicitOriginalTarget'])
+        && (event['explicitOriginalTarget'])['localName'] !== 'i'))) {
       const edit = this.dialog.open(AdminQuizDetailComponent, {
         data: {
           currentQuiz: quiz
