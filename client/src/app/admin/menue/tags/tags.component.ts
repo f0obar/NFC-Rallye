@@ -15,6 +15,11 @@ import {isNullOrUndefined} from 'util';
 export class AdminTagsComponent implements OnInit, AfterViewInit {
 
   constructor(private dialog: MatDialog,public  authService: AdminAuthService, private restService: AdminRestService) {
+    if (this.port === '80' ||this.port === '443') {
+      this.port = '';
+    } else {
+      this.port = ':' + this.port;
+    }
   }
 
   public tags: Array<AdminTag>;
@@ -23,6 +28,7 @@ export class AdminTagsComponent implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource();
   hostname = window.location.hostname;
+  port = window.location.port;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

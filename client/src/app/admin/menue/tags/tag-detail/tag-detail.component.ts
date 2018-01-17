@@ -15,12 +15,19 @@ export class AdminTagDetailComponent implements OnInit {
   pageHeader: string;
   createNewEntry: boolean;
   locations: Array<AdminLocation>;
+  hostname = window.location.hostname;
+  port = window.location.port;
 
   constructor(public dialogRef: MatDialogRef<AdminTagDetailComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               public snackBar: MatSnackBar,
               public  authService: AdminAuthService,
               private restService: AdminRestService) {
+    if (this.port === '80' ||this.port === '443') {
+      this.port = '';
+    } else {
+      this.port = ':' + this.port;
+    }
   }
 
   ngOnInit() {
